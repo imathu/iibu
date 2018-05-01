@@ -1,0 +1,17 @@
+env:
+  browser: true
+  es6: true
+  jest: true
+  node: true
+extends: 'airbnb'
+plugins:
+  - import
+  - node
+  - react
+parser: babel-eslint
+settings:
+  import/resolver:
+    node:
+      moduleDirectory:
+        - node_modules
+        - src

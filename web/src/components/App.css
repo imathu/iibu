@@ -1,0 +1,13 @@
+.App {
+  text-align: center;
+}
+
+.admin-content {
+  width: 70%;
+  margin: auto;
+  margin-top: 10px;
+}
+
+.navigation {
+  background-color: lightblue;
+}
