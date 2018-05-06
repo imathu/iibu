@@ -5,7 +5,7 @@ import { Table, List } from 'semantic-ui-react';
 
 import { db } from '../../firebase';
 
-const Questions = props => (
+const Questions = ({ data }) => (
   <div>
     <h1>Fragebogen</h1>
     <Table celled padded size="small">
@@ -18,15 +18,15 @@ const Questions = props => (
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {!!props.data && Object.keys(props.data).map(id => (
+        {!!data && Object.keys(data).map(id => (
           <Table.Row key={id}>
             <Table.Cell>{id}</Table.Cell>
-            <Table.Cell>{props.data[id].context}</Table.Cell>
-            <Table.Cell>{props.data[id].scores}</Table.Cell>
+            <Table.Cell>{data[id].context}</Table.Cell>
+            <Table.Cell>{data[id].scores}</Table.Cell>
             <Table.Cell>
               <List>
-                <List.Item key={props.data[id].de.he}>de: {props.data[id].de.he}</List.Item>
-                <List.Item key={props.data[id].en.he}>en: {props.data[id].en.he}</List.Item>
+                <List.Item key={data[id].de.he}>de: {data[id].de.he}</List.Item>
+                <List.Item key={data[id].en.he}>en: {data[id].en.he}</List.Item>
               </List>
             </Table.Cell>
           </Table.Row>
@@ -38,6 +38,8 @@ const Questions = props => (
 Questions.propTypes = {
   data: PropTypes.shape({}).isRequired,
 };
+
+// export default Questions;
 
 const dbFunction = db.onceGetQuestions;
 export default withLoader(dbFunction, 'projectId')(Questions);

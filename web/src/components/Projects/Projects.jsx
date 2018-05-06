@@ -2,6 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Table } from 'semantic-ui-react';
 import withLoader from 'components/withLoader';
+import withAuthorization from 'components/withAuthorization';
 
 import { db } from '../../firebase';
 
@@ -33,4 +34,5 @@ Projects.propTypes = {
 
 const dbFunction = db.onceGetProjects;
 
-export default withLoader(dbFunction)(Projects);
+const authCondition = authUser => !!authUser;
+export default withAuthorization(authCondition)(withLoader(dbFunction)(Projects));

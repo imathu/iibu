@@ -5,7 +5,7 @@ import { Table } from 'semantic-ui-react';
 
 import { db } from '../../firebase';
 
-const Clients = props => (
+const Clients = ({ data }) => (
   <div>
     <h1>Clients</h1>
     <Table celled padded size="small">
@@ -18,12 +18,12 @@ const Clients = props => (
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {!!props.data && Object.keys(props.data).map(id => (
+        {!!data && Object.keys(data).map(id => (
           <Table.Row key={id}>
-            <Table.Cell>{props.data[id].name}</Table.Cell>
-            <Table.Cell>{props.data[id].firstname}</Table.Cell>
-            <Table.Cell>{props.data[id].email}</Table.Cell>
-            <Table.Cell>{props.data[id].gender}</Table.Cell>
+            <Table.Cell>{data[id].name}</Table.Cell>
+            <Table.Cell>{data[id].firstname}</Table.Cell>
+            <Table.Cell>{data[id].email}</Table.Cell>
+            <Table.Cell>{data[id].gender}</Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>
@@ -34,6 +34,7 @@ Clients.propTypes = {
   data: PropTypes.shape({}).isRequired,
 };
 
-const dbFunction = db.onceGetClients;
+// export default Clients;
 
+const dbFunction = db.onceGetClients;
 export default withLoader(dbFunction, 'projectId')(Clients);

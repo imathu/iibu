@@ -1,7 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+} from 'react-router-dom';
 
-import { Navigation } from 'components/Navigation';
+import Navigation from 'components/Navigation';
 import LandingPage from 'components/Landing';
 import ProjectsPage from 'components/Projects/Projects';
 import ProjectPage from 'components/Projects/Project';
@@ -9,9 +12,14 @@ import AdminPage from 'components/Admin/Admin';
 
 import * as routes from 'constants/routes';
 
+import withAuthentication from 'components/withAuthentication';
+
+import SignUpPage from 'components/SignUp';
+import SignInPage from 'components/SignIn';
+// import PasswordForgetPage from 'components/PasswordForget';
+
 import 'semantic-ui-css/semantic.min.css';
 import './App.css';
-
 
 const App = () => (
   <Router>
@@ -25,7 +33,7 @@ const App = () => (
       <Route
         exact
         path={routes.PROJECTS}
-        component={() => <ProjectsPage />}
+        component={props => <ProjectsPage {...props} />}
       />
       <Route
         path={routes.ADMIN}
@@ -35,8 +43,18 @@ const App = () => (
         path={routes.PROJECT}
         component={props => <ProjectPage {...props} />}
       />
+      <Route
+        path={routes.SIGN_IN}
+        component={() => <SignInPage />}
+      />
+      <Route
+        path={routes.SIGN_UP}
+        component={() => <SignUpPage />}
+      />
     </div>
   </Router>
 );
 
-export default App;
+// export default(App);
+
+export default withAuthentication(App);

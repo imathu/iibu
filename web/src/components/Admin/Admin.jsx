@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
-import { Grid, Menu, Segment } from 'semantic-ui-react';
+import { Grid, Menu } from 'semantic-ui-react';
+import withAuthorization from 'components/withAuthorization';
 
 import * as routes from 'constants/routes';
 import Roles from './Roles';
@@ -25,28 +26,26 @@ export const Admin = () => (
           />
         </Menu>
       </Grid.Column>
-
       <Grid.Column stretched width={12}>
-        <Segment>
-          <Route
-            path={routes.ADMIN}
-            exact
-            component={props => <Roles {...props} />}
-          />
-          <Route
-            path={routes.ADMIN_ROLES}
-            exact
-            component={props => <Roles {...props} />}
-          />
-          <Route
-            path={routes.ADMIN_CONTEXTS}
-            exact
-            component={props => <Contexts {...props} />}
-          />
-        </Segment>
+        <Route
+          path={routes.ADMIN}
+          exact
+          component={props => <Roles {...props} />}
+        />
+        <Route
+          path={routes.ADMIN_ROLES}
+          exact
+          component={props => <Roles {...props} />}
+        />
+        <Route
+          path={routes.ADMIN_CONTEXTS}
+          exact
+          component={props => <Contexts {...props} />}
+        />
       </Grid.Column>
     </Grid>
   </div>
 );
 
-export default Admin;
+const authCondition = authUser => !!authUser;
+export default withAuthorization(authCondition)(Admin);

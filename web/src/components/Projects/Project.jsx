@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { Route, NavLink } from 'react-router-dom';
-import { Grid, Menu, Segment } from 'semantic-ui-react';
+import { Grid, Menu } from 'semantic-ui-react';
+import withAuthorization from 'components/withAuthorization';
 
 import * as routes from 'constants/routes';
 import Questions from './Questions';
@@ -59,35 +60,32 @@ class Project extends Component {
               />
             </Menu>
           </Grid.Column>
-
           <Grid.Column stretched width={12}>
-            <Segment>
-              <Route
-                path={routes.PROJECT}
-                exact
-                component={props => <Questions {...props} />}
-              />
-              <Route
-                path={routes.PROJECT_FRAGEN}
-                exact
-                component={props => <Questions {...props} />}
-              />
-              <Route
-                path={routes.PROJECTS_ANALYSE}
-                exact
-                component={props => <Analysis {...props} />}
-              />
-              <Route
-                path={routes.PROJECTS_FEEDBACKGEBER}
-                exact
-                component={props => <Feedbackers {...props} />}
-              />
-              <Route
-                path={routes.PROJECTS_FEEDBACKNEHMER}
-                exact
-                component={props => <Clients {...props} />}
-              />
-            </Segment>
+            <Route
+              path={routes.PROJECT}
+              exact
+              component={props => <Questions {...props} />}
+            />
+            <Route
+              path={routes.PROJECT_FRAGEN}
+              exact
+              component={props => <Questions {...props} />}
+            />
+            <Route
+              path={routes.PROJECT_ANALYSE}
+              exact
+              component={props => <Analysis {...props} />}
+            />
+            <Route
+              path={routes.PROJECT_FEEDBACKGEBER}
+              exact
+              component={props => <Feedbackers {...props} />}
+            />
+            <Route
+              path={routes.PROJECT_FEEDBACKNEHMER}
+              exact
+              component={props => <Clients {...props} />}
+            />
           </Grid.Column>
         </Grid>
       </div>
@@ -95,4 +93,6 @@ class Project extends Component {
   }
 }
 
-export default Project;
+const authCondition = authUser => !!authUser;
+// export default Project
+export default withAuthorization(authCondition)(Project);
