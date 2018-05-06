@@ -6,11 +6,13 @@ import withAuthorization from 'components/withAuthorization';
 import * as routes from 'constants/routes';
 import Roles from './Roles';
 import Contexts from './Contexts';
+import Users from './Users';
 
 export const Admin = () => (
   <div className="admin-content">
     <Grid>
       <Grid.Column width={4}>
+        <h1>&nbsp;</h1>
         <Menu fluid vertical pointing>
           <Menu.Item
             name="Rollen"
@@ -22,6 +24,12 @@ export const Admin = () => (
             name="Themen"
             as={NavLink}
             to="/admin/contexts"
+            exact
+          />
+          <Menu.Item
+            name="users"
+            as={NavLink}
+            to="/admin/users"
             exact
           />
         </Menu>
@@ -41,6 +49,11 @@ export const Admin = () => (
           path={routes.ADMIN_CONTEXTS}
           exact
           component={props => <Contexts {...props} />}
+        />
+        <Route
+          path={routes.ADMIN_USERS}
+          exact
+          component={props => <Users {...props} />}
         />
       </Grid.Column>
     </Grid>

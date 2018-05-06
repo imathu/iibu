@@ -14,3 +14,4 @@ export const PROJECT_ANALYSE = '/project/:projectId/analyse';
 
 export const ADMIN_ROLES = '/admin/roles';
 export const ADMIN_CONTEXTS = '/admin/contexts';
+export const ADMIN_USERS = '/admin/users';
