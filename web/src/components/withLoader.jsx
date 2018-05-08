@@ -7,7 +7,10 @@ const withLoader = (func, param = null) => (Component) => {
     static propTypes = {
       match: PropTypes.shape({
         params: PropTypes.shape({}),
-      }).isRequired,
+      }),
+    }
+    static defaultProps = {
+      match: {},
     }
     constructor(props) {
       super(props);

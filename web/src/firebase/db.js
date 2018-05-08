@@ -5,8 +5,17 @@ export const doCreateUser = (id, username, email) => db.ref(`users/${id}`).set({
   username,
   email,
 });
+export const doRemoveUser = id => db.ref(`users/${id}`).set({});
+
+export const doCreateAdmin = id => db.ref(`admins/${id}`).set({
+  admin: true,
+});
+export const doRemoveAdmin = id => db.ref(`admins/${id}`).set({});
+
+export const removeRef = () => db.off('value');
 
 export const onceGetUsers = () => db.ref('users').once('value');
+export const onceGetAdminUsers = () => db.ref('admins').once('value');
 
 export const onceGetProjects = () => (
   db.ref('projects').once('value')
