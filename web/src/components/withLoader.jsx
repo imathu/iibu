@@ -22,7 +22,7 @@ const withLoader = (func, param = null) => (Component) => {
       if (this.props) {
         const p = (param) ? this.props.match.params[param] : null;
         func(p).then((snapshot) => {
-          this.setState(() => ({ data: snapshot.val() }));
+          this.setState(() => ({ data: (snapshot.val()) ? snapshot.val() : {} }));
         });
       }
     }
@@ -30,7 +30,7 @@ const withLoader = (func, param = null) => (Component) => {
       const { data } = this.state;
       return (
         <div>
-          {(data) ? <Component data={data} /> : <Loader active inline="centered" />}
+          {(data) ? <Component {...this.props} data={data} /> : <Loader active inline="centered" />}
         </div>
       );
     }
