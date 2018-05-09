@@ -45,5 +45,5 @@ export const doRemoveQuestions = projectId =>
   db.ref(`projects/${projectId}/questions`).set({});
 
 export const doCreateQuestions = (projectId, questions) => (
-  db.ref(`/projects/${projectId}/`).set({ questions })
+  db.ref(`/projects/${projectId}/`).update({ questions })
 );

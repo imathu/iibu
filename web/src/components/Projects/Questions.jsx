@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import withLoader from 'components/withLoader';
-import { Table, List, Button, Header, Segment } from 'semantic-ui-react';
+import { Table, List, Button, Header, Segment, Divider } from 'semantic-ui-react';
 
 import Parser from 'utils/parser';
 
@@ -131,10 +131,9 @@ class Questions extends React.Component {
         />
         <br /><br />
         <Segment padded>
-          <Button.Group>
-            <Button to="#" onClick={this.focusTextInput}>Import von File</Button>
-            <Button disabled>Import von Template</Button>
-          </Button.Group>
+          <Button to="#" fluid onClick={this.focusTextInput}>Import von File</Button>
+          <Divider horizontal>Or</Divider>
+          <Button fluid disabled>Import von Template</Button>
         </Segment>
       </div>
     );
