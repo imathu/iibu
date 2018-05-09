@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import withLoader from 'components/withLoader';
-import { Table, List, Button } from 'semantic-ui-react';
+import { Table, List, Button, Header, Segment } from 'semantic-ui-react';
 
 import Parser from 'utils/parser';
 
@@ -40,6 +40,10 @@ class Questions extends React.Component {
     db.doCreateQuestions(this.props.match.params.projectId, this.state.data).then(() =>
       this.setState(() => ({ editedData: false })));
   }
+  onQuestionsDelete = () => {
+    db.doRemoveQuestions(this.props.match.params.projectId).then(() =>
+      this.setState(() => ({ data: {} })));
+  }
 
   focusTextInput = (e) => {
     e.preventDefault();
@@ -68,13 +72,17 @@ class Questions extends React.Component {
     if (Object.keys(data).length > 0) {
       return (
         <div>
-          <h1>Fragebogen</h1>
-          {this.state.editedData &&
-            <Button
-              onClick={() => this.onQuestionsSave()}
-            >Fragen speichern
-            </Button>
-          }
+          <Header floated="left" as="h1">Fragebogen</Header>
+          <Button.Group floated="right">
+            {this.state.editedData &&
+              <Button
+                color="green"
+                onClick={() => this.onQuestionsSave()}
+              >Fragen speichern
+              </Button>
+            }
+            <Button onClick={() => this.onQuestionsDelete()}>Löschen</Button>
+          </Button.Group>
           <Table celled padded size="small">
             <Table.Header>
               <Table.Row>
@@ -112,9 +120,7 @@ class Questions extends React.Component {
     }
     return (
       <div>
-        <h1>Fragebogen</h1>
-        <br />
-        <br />
+        <Header floated="left" as="h1">Fragebogen</Header>
         <input
           style={{ display: 'none' }}
           id="import"
@@ -123,8 +129,13 @@ class Questions extends React.Component {
           ref={(ref) => { this.input = ref; }}
           onChange={d => this.handleFileUpload(d, this.props.match.params.projectId)}
         />
-        <Button to="#" onClick={this.focusTextInput}>Import von File</Button>
-        <Button disabled>Import von Template</Button>
+        <br /><br />
+        <Segment padded>
+          <Button.Group>
+            <Button to="#" onClick={this.focusTextInput}>Import von File</Button>
+            <Button disabled>Import von Template</Button>
+          </Button.Group>
+        </Segment>
       </div>
     );
   }

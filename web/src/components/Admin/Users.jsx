@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Table, Button } from 'semantic-ui-react';
+import { Table, Button, Header } from 'semantic-ui-react';
 import withLoader from 'components/withLoader';
 
 import * as routes from 'constants/routes';
@@ -47,8 +47,7 @@ class Users extends React.Component {
     return (
       <div>
         <AdminUsers users={data} />
-        <hr />
-        <h1>Benutzer</h1>
+        <Header floated="left" as="h1">Benutzer</Header>
         <Table celled padded size="small">
           <Table.Header>
             <Table.Row>

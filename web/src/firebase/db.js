@@ -41,6 +41,9 @@ export const onceGetQuestions = projectId => (
   db.ref(`projects/${projectId}/questions`).once('value')
 );
 
+export const doRemoveQuestions = projectId =>
+  db.ref(`projects/${projectId}/questions`).set({});
+
 export const doCreateQuestions = (projectId, questions) => (
   db.ref(`/projects/${projectId}/`).set({ questions })
 );

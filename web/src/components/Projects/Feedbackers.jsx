@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Table } from 'semantic-ui-react';
+import { Table, Header } from 'semantic-ui-react';
 
 import { db } from '../../firebase';
 
@@ -28,7 +28,7 @@ class Feedbackers extends React.Component {
     const { data } = this.state;
     return (
       <div>
-        <h1>Feedbackgeber</h1>
+        <Header floated="left" as="h1">Feedbackgeber</Header>
         <Table celled padded size="small">
           <Table.Header>
             <Table.Row>

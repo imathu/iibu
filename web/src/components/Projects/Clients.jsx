@@ -1,13 +1,13 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import withLoader from 'components/withLoader';
-import { Table } from 'semantic-ui-react';
+import { Table, Header } from 'semantic-ui-react';
 
 import { db } from '../../firebase';
 
 const Clients = ({ data }) => (
   <div>
-    <h1>Clients</h1>
+    <Header floated="left" as="h1">Feedbacknehmer</Header>
     <Table celled padded size="small">
       <Table.Header>
         <Table.Row>
