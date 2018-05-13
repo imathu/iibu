@@ -1,11 +1,15 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import withLoader from 'components/withLoader';
-import { Table, List, Button, Header, Segment, Divider } from 'semantic-ui-react';
+import { Table, List, Button, Header, Segment, Divider, Modal, Form, Input } from 'semantic-ui-react';
 
 import Parser from 'utils/parser';
 
 import { db } from '../../firebase';
+
+const byPropKey = (propertyName, value) => () => ({
+  [propertyName]: value,
+});
 
 const parseQuestionsToState = (questionsArray) => {
   const d = {};
@@ -33,6 +37,11 @@ class Questions extends React.Component {
     this.state = {
       data: this.props.data,
       editedData: false,
+      open: false,
+      title: '',
+      description: '',
+      showTemplates: false,
+      templateQuestions: {},
     };
   }
 
@@ -44,10 +53,31 @@ class Questions extends React.Component {
     db.doRemoveQuestions(this.props.match.params.projectId).then(() =>
       this.setState(() => ({ data: {} })));
   }
+  onTemplateSave = () => {
+    db.doCreateTemplate(
+      this.state.title,
+      this.state.description,
+      this.state.data,
+    ).then(() =>
+      this.close());
+  }
 
   focusTextInput = (e) => {
     e.preventDefault();
     this.input.click();
+  }
+
+  show = () => this.setState({ open: true })
+  close = () => {
+    this.setState({ open: false });
+  }
+
+  importFromTemplate = questions => this.setState({ data: questions, editedData: true });
+
+  showTemplates = () => {
+    db.onceGetTemplates().then(snapshot =>
+      this.setState({ templateQuestions: snapshot.val() }));
+    this.setState({ showTemplates: true });
   }
 
   handleFileUpload = (data) => {
@@ -68,21 +98,68 @@ class Questions extends React.Component {
     reader.readAsText(file);
   }
   render() {
-    const { data } = this.state;
+    const {
+      data,
+      open,
+      title,
+      description,
+    } = this.state;
+    const isInvalid = title === '';
     if (Object.keys(data).length > 0) {
       return (
         <div>
           <Header floated="left" as="h1">Fragebogen</Header>
-          <Button.Group floated="right">
-            {this.state.editedData &&
-              <Button
-                color="green"
-                onClick={() => this.onQuestionsSave()}
-              >Fragen speichern
-              </Button>
+          {this.state.editedData &&
+            <Button
+              color="green"
+              onClick={() => this.onQuestionsSave()}
+            >Fragen speichern
+            </Button>
+          }
+          <Button.Group size="tiny" basic floated="right">
+            <Button basic onClick={() => this.onQuestionsDelete()}>Löschen</Button>
+            {!this.state.editedData &&
+              <Button basic onClick={() => this.show()}>als Template speichern</Button>
             }
-            <Button onClick={() => this.onQuestionsDelete()}>Löschen</Button>
           </Button.Group>
+          <Modal size="tiny" open={open} onClose={() => this.close()}>
+            <Modal.Header>
+              Fragebogen als Template speichern
+            </Modal.Header>
+            <Form style={{ margin: '20px' }}>
+              <Form.Field>
+                <Input
+                  label={{ icon: 'asterisk' }}
+                  labelPosition="left corner"
+                  type="text"
+                  id="title"
+                  placeholder="Titel"
+                  value={title}
+                  onChange={event => this.setState(byPropKey('title', event.target.value))}
+                />
+              </Form.Field>
+              <Form.Field>
+                <input
+                  placeholder="Beschreibung"
+                  value={description}
+                  onChange={event => this.setState(byPropKey('description', event.target.value))}
+                />
+              </Form.Field>
+            </Form>
+            <Modal.Actions>
+              <Button negative onClick={this.close}>
+                Abbrechen
+              </Button>
+              <Button
+                onClick={this.onTemplateSave}
+                positive
+                icon="checkmark"
+                labelPosition="right"
+                content="Speichern"
+                disabled={isInvalid}
+              />
+            </Modal.Actions>
+          </Modal>
           <Table celled padded size="small">
             <Table.Header>
               <Table.Row>
@@ -133,8 +210,31 @@ class Questions extends React.Component {
         <Segment padded>
           <Button to="#" fluid onClick={this.focusTextInput}>Import von File</Button>
           <Divider horizontal>Or</Divider>
-          <Button fluid disabled>Import von Template</Button>
+          <Button fluid onClick={this.showTemplates}>Import von Template</Button>
         </Segment>
+        {this.state.showTemplates &&
+          <Table celled padded size="small">
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Id</Table.HeaderCell>
+                <Table.HeaderCell>Titel</Table.HeaderCell>
+                <Table.HeaderCell>Beschreibung</Table.HeaderCell>
+                <Table.HeaderCell />
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {!!this.state.templateQuestions &&
+                Object.keys(this.state.templateQuestions).map(id => (
+                  <Table.Row key={id}>
+                    <Table.Cell>{id}</Table.Cell>
+                    <Table.Cell>{this.state.templateQuestions[id].title}</Table.Cell>
+                    <Table.Cell>{this.state.templateQuestions[id].description}</Table.Cell>
+                    <Table.Cell><Button onClick={() => this.importFromTemplate(this.state.templateQuestions[id].questions)} size="tiny">import</Button></Table.Cell>
+                  </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        }
       </div>
     );
   }

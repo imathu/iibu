@@ -47,3 +47,15 @@ export const doRemoveQuestions = projectId =>
 export const doCreateQuestions = (projectId, questions) => (
   db.ref(`/projects/${projectId}/`).update({ questions })
 );
+
+export const doCreateTemplate = (title, description, questions) => (
+  db.ref('/templates/').push({
+    title,
+    questions,
+    description,
+  })
+);
+
+export const onceGetTemplates = () => (
+  db.ref('templates').once('value')
+);

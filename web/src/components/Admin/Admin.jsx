@@ -7,6 +7,7 @@ import * as routes from 'constants/routes';
 import Roles from './Roles';
 import Contexts from './Contexts';
 import Users from './Users';
+import Templates from './Templates';
 
 export const Admin = () => (
   <div className="admin-content">
@@ -32,6 +33,12 @@ export const Admin = () => (
             to="/admin/users"
             exact
           />
+          <Menu.Item
+            name="templates"
+            as={NavLink}
+            to="/admin/templates"
+            exact
+          />
         </Menu>
       </Grid.Column>
       <Grid.Column stretched width={12}>
@@ -54,6 +61,11 @@ export const Admin = () => (
           path={routes.ADMIN_USERS}
           exact
           component={props => <Users {...props} />}
+        />
+        <Route
+          path={routes.ADMIN_TEMPLATES}
+          exact
+          component={props => <Templates {...props} />}
         />
       </Grid.Column>
     </Grid>
