@@ -7,6 +7,7 @@ import withAuthorization from 'components/withAuthorization';
 import * as routes from 'constants/routes';
 import Questions from './Questions';
 import Clients from './Clients';
+import ClientDetails from './ClientDetails';
 import Feedbackers from './Feedbackers';
 import { Analysis } from './Analysis';
 
@@ -86,6 +87,11 @@ class Project extends Component {
               path={routes.PROJECT_FEEDBACKNEHMER}
               exact
               component={props => <Clients {...props} />}
+            />
+            <Route
+              path={routes.PROJECT_FEEDBACKNEHMER_DETAILS}
+              exact
+              component={props => <ClientDetails {...props} />}
             />
           </Grid.Column>
         </Grid>

@@ -6,6 +6,7 @@ import { db } from '../../../firebase';
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
+  changedData: true,
 });
 
 class TemplateModal extends React.Component {

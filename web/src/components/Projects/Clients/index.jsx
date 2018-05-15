@@ -61,6 +61,7 @@ class Clients extends React.Component {
         {(Object.keys(clients).length > 0)
           ? <ClientList
             clients={clients}
+            projectId={this.props.match.params.projectId}
             feedbackers={feedbackers}
             editedData={editedData}
             onClientsSave={this.onClientsSave}

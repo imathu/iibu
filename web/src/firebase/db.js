@@ -29,32 +29,44 @@ export const onceGetContexts = () => (
   db.ref('contexts').once('value')
 );
 
+// feedbacker data
 export const onceGetFeedbackers = projectId => (
   db.ref(`projects/${projectId}/feedbackers`).once('value')
 );
-
 export const doCreateFeedbackers = (projectId, feedbackers) => (
   db.ref(`projects/${projectId}/`).update({ feedbackers })
 );
 
+// Client data
+export const onceGetClient = (projectId, clientId) => (
+  db.ref(`projects/${projectId}/clients/${clientId}`).once('value')
+);
 export const onceGetClients = projectId => (
   db.ref(`projects/${projectId}/clients`).once('value')
+);
+export const doSaveClient = (projectId, client) => (
+  db.ref(`projects/${projectId}/clients/${client.id}`).update({
+    name: client.name,
+    firstname: client.firstname,
+    email: client.email,
+    gender: client.gender,
+  })
 );
 export const doCreateClients = (projectId, clients) => (
   db.ref(`projects/${projectId}/`).update({ clients })
 );
 
+// Question data
 export const onceGetQuestions = projectId => (
   db.ref(`projects/${projectId}/questions`).once('value')
 );
-
 export const doRemoveQuestions = projectId =>
   db.ref(`projects/${projectId}/questions`).set({});
-
 export const doCreateQuestions = (projectId, questions) => (
   db.ref(`/projects/${projectId}/`).update({ questions })
 );
 
+// template data
 export const doCreateTemplate = (title, description, questions) => (
   db.ref('/templates/').push({
     title,
@@ -62,7 +74,6 @@ export const doCreateTemplate = (title, description, questions) => (
     description,
   })
 );
-
 export const onceGetTemplates = () => (
   db.ref('templates').once('value')
 );
