@@ -33,8 +33,15 @@ export const onceGetFeedbackers = projectId => (
   db.ref(`projects/${projectId}/feedbackers`).once('value')
 );
 
+export const doCreateFeedbackers = (projectId, feedbackers) => (
+  db.ref(`projects/${projectId}/`).update({ feedbackers })
+);
+
 export const onceGetClients = projectId => (
   db.ref(`projects/${projectId}/clients`).once('value')
+);
+export const doCreateClients = (projectId, clients) => (
+  db.ref(`projects/${projectId}/`).update({ clients })
 );
 
 export const onceGetQuestions = projectId => (

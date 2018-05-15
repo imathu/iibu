@@ -14,7 +14,7 @@ const createClient = line => ({
   firstname: line[CSVMap.firstname],
   name: line[CSVMap.name],
   gender: line[CSVMap.gender],
-  mail: line[CSVMap.mail],
+  email: line[CSVMap.mail],
   role: '',
 });
 
@@ -23,17 +23,17 @@ const createFeedbacker = (line, role) => ({
   firstname: line[CSVMap.firstname],
   name: line[CSVMap.name],
   gender: line[CSVMap.gender],
-  mail: line[CSVMap.mail],
+  email: line[CSVMap.mail],
   role: (!role) ? line[CSVMap.role] : role,
 });
 
-const addFeedbacker = (feedbackerArray, feedbacker, procId, clientId) => {
+const addFeedbacker = (feedbackerArray, feedbacker, clientId) => {
   const feedbackers = feedbackerArray;
-  let fdbk = feedbackerArray.find(f => f.mail === feedbacker.mail);
+  let fdbk = feedbackerArray.find(f => f.email === feedbacker.email);
   if (fdbk !== undefined) {
     // a feedbacker with given mail already exists, Just add a new client Id
     feedbackers.map((f) => {
-      if (f.mail === feedbacker.mail) {
+      if (f.email === feedbacker.email) {
         const newFeedbacker = f;
         newFeedbacker.clients = Object.assign({}, newFeedbacker.clients, {
           ...newFeedbacker.clients,
@@ -50,8 +50,7 @@ const addFeedbacker = (feedbackerArray, feedbacker, procId, clientId) => {
     // a feedbacker with the given mail does not exists, add a new feedbacker
     fdbk = {
       id: uuidv4(),
-      mail: feedbacker.mail,
-      proc: procId,
+      email: feedbacker.email,
       gender: feedbacker.gender,
       clients: {
         [clientId]: {
@@ -65,10 +64,19 @@ const addFeedbacker = (feedbackerArray, feedbacker, procId, clientId) => {
   return feedbackers;
 };
 
+const feedbackersToObject = (feedbackers) => {
+  const f = {};
+  feedbackers.forEach((feedbacker) => {
+    f[feedbacker.id] = {};
+    f[feedbacker.id] = feedbacker;
+  });
+  return f;
+};
+
 // parse the list of clients and feedbackers to JSON
 // return an object containing an array of clients and an array of feedbackers
-function feedbackerCSV2JJSON(feedbackerArray, procId) {
-  const clients = [];
+function feedbackerCSV2JJSON(feedbackerArray) {
+  let clients = {};
   let clientId = -1;
   let feedbackers = [];
   feedbackerArray.forEach((line) => {
@@ -76,16 +84,19 @@ function feedbackerCSV2JJSON(feedbackerArray, procId) {
       if (line[4] === 'Selbsteinschätzung') {
         // add a new client
         const client = createClient(line);
-        clients.push(client);
+        clients = {
+          ...clients,
+          [client.id]: client,
+        };
         clientId = client.id;
-        feedbackers = addFeedbacker(feedbackers, createFeedbacker(line, 'self'), procId, clientId);
+        feedbackers = addFeedbacker(feedbackers, createFeedbacker(line, 'self'), clientId);
       } else {
         // add a new feedbacker to the current client
-        feedbackers = addFeedbacker(feedbackers, createFeedbacker(line), procId, clientId);
+        feedbackers = addFeedbacker(feedbackers, createFeedbacker(line), clientId);
       }
     }
   });
-  return { clients, feedbackers };
+  return { clients, feedbackers: feedbackersToObject(feedbackers) };
 }
 
 // parse a CSV string of questionaires to json
@@ -119,7 +130,7 @@ function questionCSV2json(questionArray) {
 
 class Parser {
   // return an object with a client array and a feedbacker array
-  static parseClients(input, procId) {
+  static parseClients(input) {
     return new Promise(((resolve, reject) => {
       const feedbackers = [];
       csv({ noheader: false })
@@ -131,7 +142,7 @@ class Parser {
           if (error) {
             return reject(new Error('CSV File invalid'));
           }
-          return resolve(feedbackerCSV2JJSON(feedbackers, procId));
+          return resolve(feedbackerCSV2JJSON(feedbackers));
         });
     }));
   }
