@@ -1,0 +1,7 @@
+{
+    "plugins": ["node", "jsx-a11y"],
+    "extends": ["eslint:recommended", "plugin:node/recommended", "airbnb"],
+    "rules": {
+        "node/exports-style": ["error", "module.exports"],
+    }
+}

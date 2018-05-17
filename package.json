@@ -1,0 +1,38 @@
+{
+  "name": "iibu",
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      ".eslintrc-node"
+    ]
+  },
+  "private": true,
+  "scripts": {
+    "start": "NODE_ENV=prod node server.js",
+    "start-dev": "NODE_ENV=dev node server.js",
+    "start-test": "NODE_ENV=test node server.js",
+    "test": "mocha --timeout 10000 --exit",
+    "test-coverage": "nyc --reporter=html mocha --timeout 10000",
+    "heroku-postbuild": "cd web && yarn --production=true && yarn run build",
+    "lint": "eslint --ext .js *.js controllers/ test/",
+    "lint-fix": "eslint --ext .js --fix *.js controllers/ test/"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "config": "^1.30.0",
+    "dateformat": "^3.0.3",
+    "express": "^4.16.3",
+    "firebase-admin": "^5.12.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-react": "^7.8.2"
+  }
+}
