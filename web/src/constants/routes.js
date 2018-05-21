@@ -17,3 +17,5 @@ export const ADMIN_ROLES = '/admin/roles';
 export const ADMIN_CONTEXTS = '/admin/contexts';
 export const ADMIN_USERS = '/admin/users';
 export const ADMIN_TEMPLATES = '/admin/templates';
+
+export const ANSWERS = '/answers/:projectId/:feedbackerId';

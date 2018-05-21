@@ -2,6 +2,12 @@
   "name": "iibu",
   "version": "0.1.0",
   "private": true,
+  "eslintConfig": {
+    "extends": [
+      ".eslintrc.yml"
+    ]
+  },
+  "proxy": "http://localhost:3001",
   "dependencies": {
     "csvtojson": "^1.1.12",
     "firebase": "^4.13.1",

@@ -20,11 +20,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# firebase
-eeboo-skillsgarden*.json
-
 # configs
-config/dev.json
+config/firebase-auth*.json
 
 # nyc
 .nyc_outpu# See https://help.github.com/ignore-files/ for more about ignoring files.

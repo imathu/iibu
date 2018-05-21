@@ -9,6 +9,7 @@ import LandingPage from 'components/Landing';
 import ProjectsPage from 'components/Projects/Projects';
 import ProjectPage from 'components/Projects/Project';
 import AdminPage from 'components/Admin/Admin';
+import Answers from 'components/Answers';
 
 import * as routes from 'constants/routes';
 
@@ -50,6 +51,10 @@ const App = () => (
       <Route
         path={routes.SIGN_UP}
         component={() => <SignUpPage />}
+      />
+      <Route
+        path={routes.ANSWERS}
+        component={props => <Answers {...props} />}
       />
     </div>
   </Router>

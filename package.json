@@ -17,10 +17,11 @@
     "test": "mocha --timeout 10000 --exit",
     "test-coverage": "nyc --reporter=html mocha --timeout 10000",
     "heroku-postbuild": "cd web && yarn --production=true && yarn run build",
-    "lint": "eslint --ext .js *.js controllers/ test/",
-    "lint-fix": "eslint --ext .js --fix *.js controllers/ test/"
+    "lint": "eslint --ext .js *.js controllers/ firebase/",
+    "lint:fix": "eslint --ext .js --fix *.js controllers/ firebase/"
   },
   "dependencies": {
+    "babel-preset-node6": "^11.0.0",
     "body-parser": "^1.18.3",
     "config": "^1.30.0",
     "dateformat": "^3.0.3",

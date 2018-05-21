@@ -3,7 +3,9 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
-const dateFormat = require('dateformat');
+const logger = require('./util');
+
+const feedbacker = require('./controllers/routes/feedbacker');
 
 // parse application/json and look for raw text
 app.use('/api', bodyParser.json());
@@ -11,15 +13,14 @@ app.use('/api/', bodyParser.urlencoded({ extended: true }));
 app.use('/api', bodyParser.text());
 app.use('/api', bodyParser.json({ type: 'application/json' }));
 
-const logger = (req, res, next) => {
-  const { method, url } = req;
-  console.log(dateFormat(new Date(), 'isoDateTime'), method, url); // eslint-disable-line no-console
-  next(); // Passing the request to the next handler in the stack.
-};
-app.use(logger);
+
+app.use(logger.requestLogger);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'web/build')));
+
+app.route('/api/v1/:projectId/answers/:feedbackerId')
+  .get(feedbacker.getFeedbackerAnswers);
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
