@@ -4,9 +4,7 @@ const getContexts = () => (
   new Promise((resolve) => {
     fb.db.ref('contexts/').once('value').then((snapshot) => {
       const contexts = snapshot.val();
-      resolve({
-        contexts,
-      });
+      resolve(contexts);
     });
   })
 );
@@ -15,9 +13,7 @@ const getRoles = () => (
   new Promise((resolve) => {
     fb.db.ref('roles').once('value').then((snapshot) => {
       const roles = snapshot.val();
-      resolve({
-        roles,
-      });
+      resolve(roles);
     });
   })
 );

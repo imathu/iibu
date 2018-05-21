@@ -1,4 +1,6 @@
+import idx from 'idx';
 import Parser from './parser';
+import { getLanguage } from './language';
 
 export function importQuestions(data) {
   const file = data.target.files[0];
@@ -15,4 +17,13 @@ export function importQuestions(data) {
   reader.readAsText(file);
 }
 
-export default importQuestions;
+export const getRoleCode = (roleId, gender) => {
+  if (roleId === 'self') return 'me';
+  if (gender === 'w') return 'she';
+  return 'he';
+};
+
+export function getRoleContent(roles, roleId) {
+  const lang = getLanguage();
+  return idx(roles, _ => _[roleId][lang]) || 'undefined role';
+}

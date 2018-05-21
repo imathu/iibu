@@ -22,9 +22,9 @@ const createFeedbacker = (line, role) => ({
   id: uuidv4(),
   firstname: line[CSVMap.firstname],
   name: line[CSVMap.name],
-  gender: line[CSVMap.gender],
+  gender: (line[CSVMap.gender]).toLowerCase(),
   email: line[CSVMap.mail],
-  role: (!role) ? line[CSVMap.role] : role,
+  role: (!role) ? (line[CSVMap.role]).toLowerCase() : role.toLowerCase(),
 });
 
 const addFeedbacker = (feedbackerArray, feedbacker, clientId) => {
@@ -39,7 +39,7 @@ const addFeedbacker = (feedbackerArray, feedbacker, clientId) => {
           ...newFeedbacker.clients,
           [clientId]: {
             id: clientId,
-            role: feedbacker.role,
+            role: (feedbacker.role).toLowerCase(),
           },
         });
         return newFeedbacker;
@@ -51,11 +51,11 @@ const addFeedbacker = (feedbackerArray, feedbacker, clientId) => {
     fdbk = {
       id: uuidv4(),
       email: feedbacker.email,
-      gender: feedbacker.gender,
+      gender: (feedbacker.gender).toLowerCase(),
       clients: {
         [clientId]: {
           id: clientId,
-          role: feedbacker.role,
+          role: (feedbacker.role).toLowerCase(),
         },
       },
     };

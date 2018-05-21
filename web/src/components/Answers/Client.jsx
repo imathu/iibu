@@ -1,16 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Segment, Header, Divider, Table } from 'semantic-ui-react';
+import { getRoleContent } from 'utils';
 
 import Question from './Question';
 import Answer from './Answer';
 
 const Client = (props) => {
-  const { client, feedbacker, questions } = props;
+  const {
+    client,
+    feedbacker,
+    questions,
+    roles,
+  } = props;
+  const roleId = feedbacker.clients[client.id].role;
+  const roleContent = getRoleContent(roles, roleId);
   return (
     <Segment>
-      <Header textAlign="left" as="h2" >Feedbacknemer: {client.name} {client.firstname}</Header>
-      Sie geben Feedback in der Rolle als: {feedbacker.clients[client.id].role}
+      <Header textAlign="left" as="h2" >Feedbacknehmer: {client.name} {client.firstname}</Header>
+      Sie geben Feedback in der Rolle als: {roleContent}
       <Divider />
       <Table celled padded>
         <Table.Header>
@@ -25,6 +33,8 @@ const Client = (props) => {
               <Table.Cell>
                 <Question
                   question={questions[id]}
+                  roleId={roleId}
+                  gender={feedbacker.gender}
                 />
               </Table.Cell>
               <Table.Cell collapsing>
@@ -44,6 +54,7 @@ Client.propTypes = {
   questions: PropTypes.shape({}).isRequired,
   client: PropTypes.shape({}).isRequired,
   feedbacker: PropTypes.shape({}).isRequired,
+  roles: PropTypes.shape({}).isRequired,
 };
 
 export default Client;

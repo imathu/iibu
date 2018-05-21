@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Segment, Form, Checkbox, List } from 'semantic-ui-react';
+import { Form, Checkbox, List } from 'semantic-ui-react';
 
 const key = (id, index) => `${id}-${index}`;
 
@@ -11,6 +11,7 @@ class Answer extends React.Component {
       value: 0,
     };
   }
+  handleChange = (e, { value }) => this.setState({ value })
   render() {
     const { value } = this.state;
     const { scores, feedbacker } = this.props;
@@ -23,7 +24,9 @@ class Answer extends React.Component {
                 <Checkbox
                   radio
                   name="checkboxRadioGroup"
-                  value={value}
+                  value={i + 1}
+                  checked={value === (i + 1)}
+                  onChange={this.handleChange}
                 />
               </Form.Field>
             </List.Item>

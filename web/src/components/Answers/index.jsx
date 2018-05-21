@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Header, Loader } from 'semantic-ui-react';
+import { Loader, Divider } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import * as routes from 'constants/routes';
 
@@ -13,14 +13,17 @@ const WithData = (props) => {
   return (
     <div>
       {Object.keys(data.feedbacker.clients).map(id => (
-        <Client
-          key={id}
-          contexts={data.contexts}
-          roles={data.roles}
-          questions={data.questions}
-          client={data.clients[id]}
-          feedbacker={data.feedbacker}
-        />
+        <div>
+          <Client
+            key={id}
+            contexts={data.contexts}
+            roles={data.roles}
+            questions={data.questions}
+            client={data.clients[id]}
+            feedbacker={data.feedbacker}
+          />
+          <Divider />
+        </div>
       ))}
     </div>
   );
@@ -66,7 +69,6 @@ class Answers extends React.Component {
     const { data } = this.state;
     return (
       <div id="answers-content">
-        <Header textAlign="center" as="h1">Feedbacker</Header>
         {(data)
           ? <WithData data={data} />
           : <Loader active inline="centered" />
