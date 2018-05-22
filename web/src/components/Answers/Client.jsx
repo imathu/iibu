@@ -12,6 +12,7 @@ const Client = (props) => {
     feedbacker,
     questions,
     roles,
+    projectId,
   } = props;
   const roleId = feedbacker.clients[client.id].role;
   const roleContent = getRoleContent(roles, roleId);
@@ -41,6 +42,9 @@ const Client = (props) => {
                 <Answer
                   feedbacker={feedbacker}
                   scores={questions[id].scores}
+                  projectId={projectId}
+                  clientId={client.id}
+                  questionId={id}
                 />
               </Table.Cell>
             </Table.Row>
@@ -55,6 +59,7 @@ Client.propTypes = {
   client: PropTypes.shape({}).isRequired,
   feedbacker: PropTypes.shape({}).isRequired,
   roles: PropTypes.shape({}).isRequired,
+  projectId: PropTypes.string.isRequired,
 };
 
 export default Client;

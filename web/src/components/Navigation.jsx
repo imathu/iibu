@@ -8,6 +8,7 @@ import * as routes from 'constants/routes';
 
 import AuthUserContext from 'components/AuthUserContext';
 import SignOutButton from 'components/SignOut';
+import Language from 'components/Language';
 
 const NavigationNonAuth = () => (
   <div className="navigation">
@@ -32,6 +33,7 @@ const NavigationNonAuth = () => (
           exact
         />
       </Menu.Menu>
+      <Language />
     </Menu>
   </div>
 );
@@ -64,6 +66,7 @@ const NavigationAuth = ({ authUser }) => (
           to={routes.ADMIN_ROLES}
           exact
         />
+        <Language />
         <Menu.Item>
           <SignOutButton />
         </Menu.Item>

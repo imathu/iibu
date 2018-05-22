@@ -2,6 +2,10 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Form, Checkbox, List } from 'semantic-ui-react';
 
+import idx from 'idx';
+
+import { db } from '../../firebase';
+
 const key = (id, index) => `${id}-${index}`;
 
 class Answer extends React.Component {
@@ -11,7 +15,22 @@ class Answer extends React.Component {
       value: 0,
     };
   }
-  handleChange = (e, { value }) => this.setState({ value })
+  componentDidMount = () => {
+    const { feedbacker, clientId, questionId } = this.props;
+    const value = idx(feedbacker, _ =>
+      _.clients[clientId].answers[questionId].score) || 0;
+    this.setState(() => ({ value }));
+  }
+  handleChange = (e, { value }) => {
+    this.setState(() => ({ value }));
+    db.doUpdateAnswer(
+      this.props.projectId,
+      this.props.feedbacker.id,
+      this.props.clientId,
+      this.props.questionId,
+      value,
+    );
+  }
   render() {
     const { value } = this.state;
     const { scores, feedbacker } = this.props;
@@ -38,7 +57,12 @@ class Answer extends React.Component {
 }
 
 Answer.propTypes = {
-  feedbacker: PropTypes.shape({}).isRequired,
+  feedbacker: PropTypes.shape({
+    id: PropTypes.string,
+  }).isRequired,
+  projectId: PropTypes.string.isRequired,
+  clientId: PropTypes.string.isRequired,
+  questionId: PropTypes.string.isRequired,
   scores: PropTypes.number.isRequired,
 };
 
