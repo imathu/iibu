@@ -40,7 +40,8 @@ class Answers extends React.Component {
           this.props.history.push(routes.LANDING);
         }
       }).catch((e) => {
-        console.log('no data', e);
+        console.log('error', e); // eslint-disable-line no-console
+        this.props.history.push(routes.LANDING);
       });
   }
   render() {

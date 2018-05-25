@@ -2,15 +2,25 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { SignUpLink } from 'components/SignUp';
+import { Segment } from 'semantic-ui-react';
 import * as routes from 'constants/routes';
 
 import { auth } from '../firebase';
 
 const SignInPage = ({ history }) => (
   <div>
-    <h1>SignIn</h1>
-    <SignInForm history={history} />
-    <SignUpLink />
+    <Segment style={{
+       textAlign: 'center',
+       width: '60%',
+       vertical: true,
+       margin: 'auto',
+       marginTop: '20px',
+      }}
+    >
+      <h1>SignIn</h1>
+      <SignInForm history={history} />
+      <SignUpLink />
+    </Segment>
   </div>
 );
 SignInPage.propTypes = {
