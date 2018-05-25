@@ -29,32 +29,32 @@ const App = () => (
       <Route
         exact
         path={routes.LANDING}
-        component={() => <LandingPage />}
+        component={LandingPage}
       />
       <Route
         exact
         path={routes.PROJECTS}
-        component={props => <ProjectsPage {...props} />}
+        component={ProjectsPage}
       />
       <Route
         path={routes.ADMIN}
-        component={props => <AdminPage {...props} />}
+        component={AdminPage}
       />
       <Route
         path={routes.PROJECT}
-        component={props => <ProjectPage {...props} />}
+        component={ProjectPage}
       />
       <Route
         path={routes.SIGN_IN}
-        component={() => <SignInPage />}
+        component={SignInPage}
       />
       <Route
         path={routes.SIGN_UP}
-        component={() => <SignUpPage />}
+        component={SignUpPage}
       />
       <Route
         path={routes.ANSWERS}
-        component={props => <Answers {...props} />}
+        component={Answers}
       />
     </div>
   </Router>
