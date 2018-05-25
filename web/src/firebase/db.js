@@ -20,6 +20,8 @@ export const onceGetProjects = () => (
   db.ref('projects').once('value')
 );
 
+
+// Role Data
 export const onceGetRoles = () => (
   db.ref('roles').once('value')
 );
@@ -71,6 +73,11 @@ export const doRemoveQuestions = projectId =>
   db.ref(`projects/${projectId}/questions`).set({});
 export const doCreateQuestions = (projectId, questions) => (
   db.ref(`/projects/${projectId}/`).update({ questions })
+);
+
+// Project doCreateAdmin
+export const onceGetProject = projectId => (
+  db.ref(`projects/${projectId}`).once('value')
 );
 
 // template data

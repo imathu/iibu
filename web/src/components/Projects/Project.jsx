@@ -3,13 +3,16 @@ import { PropTypes } from 'prop-types';
 import { Route, NavLink } from 'react-router-dom';
 import { Grid, Menu } from 'semantic-ui-react';
 import withAuthorization from 'components/withAuthorization';
+import AdminDataContext from 'components/AdminDataContext';
 
 import * as routes from 'constants/routes';
 import Questions from './Questions';
 import Clients from './Clients';
 import ClientDetails from './ClientDetails';
 import Feedbackers from './Feedbackers';
-import { Analysis } from './Analysis';
+import Analysis from './Analysis';
+
+import { db } from '../../firebase';
 
 class Project extends Component {
   static propTypes = {
@@ -25,77 +28,100 @@ class Project extends Component {
     super(props);
     this.state = {
       params: this.props.match.params,
+      adminData: null,
     };
+  }
+
+  componentDidMount = () => {
+    db.onceGetRoles().then((snapshot) => {
+      this.setState(() => ({
+        adminData: {
+          ...this.state.adminData,
+          roles: (snapshot.val()) ? snapshot.val() : {},
+        },
+      }));
+    });
+    db.onceGetContexts().then((snapshot) => {
+      this.setState(() => ({
+        adminData: {
+          ...this.state.adminData,
+          contexts: (snapshot.val()) ? snapshot.val() : {},
+        },
+      }));
+    });
   }
 
   render() {
     const { projectId } = this.state.params;
+    const { adminData } = this.state;
     return (
-      <div className="admin-content">
-        <Grid>
-          <Grid.Column width={4}>
-            <h1>&nbsp;</h1>
-            <Menu fluid vertical pointing>
-              <Menu.Item
-                name="fragen"
-                as={NavLink}
-                to={`/project/${projectId}/fragen`}
+      <AdminDataContext.Provider value={adminData}>
+        <div className="admin-content">
+          <Grid>
+            <Grid.Column width={3}>
+              <h1>&nbsp;</h1>
+              <Menu fluid vertical pointing>
+                <Menu.Item
+                  name="fragen"
+                  as={NavLink}
+                  to={`/project/${projectId}/fragen`}
+                  exact
+                />
+                <Menu.Item
+                  name="feedbacknehmer"
+                  as={NavLink}
+                  to={`/project/${projectId}/feedbacknehmer`}
+                  exact
+                />
+                <Menu.Item
+                  name="feedbackgeber"
+                  as={NavLink}
+                  to={`/project/${projectId}/feedbackgeber`}
+                  exact
+                />
+                <Menu.Item
+                  name="analyse"
+                  as={NavLink}
+                  to={`/project/${projectId}/analyse`}
+                  exact
+                />
+              </Menu>
+            </Grid.Column>
+            <Grid.Column stretched width={13}>
+              <Route
+                path={routes.PROJECT}
                 exact
+                component={Questions}
               />
-              <Menu.Item
-                name="feedbacknehmer"
-                as={NavLink}
-                to={`/project/${projectId}/feedbacknehmer`}
+              <Route
+                path={routes.PROJECT_FRAGEN}
                 exact
+                component={Questions}
               />
-              <Menu.Item
-                name="feedbackgeber"
-                as={NavLink}
-                to={`/project/${projectId}/feedbackgeber`}
+              <Route
+                path={routes.PROJECT_ANALYSE}
                 exact
+                component={Analysis}
               />
-              <Menu.Item
-                name="analyse"
-                as={NavLink}
-                to={`/project/${projectId}/analyse`}
+              <Route
+                path={routes.PROJECT_FEEDBACKGEBER}
                 exact
+                component={Feedbackers}
               />
-            </Menu>
-          </Grid.Column>
-          <Grid.Column stretched width={12}>
-            <Route
-              path={routes.PROJECT}
-              exact
-              component={props => <Questions {...props} />}
-            />
-            <Route
-              path={routes.PROJECT_FRAGEN}
-              exact
-              component={props => <Questions {...props} />}
-            />
-            <Route
-              path={routes.PROJECT_ANALYSE}
-              exact
-              component={props => <Analysis {...props} />}
-            />
-            <Route
-              path={routes.PROJECT_FEEDBACKGEBER}
-              exact
-              component={props => <Feedbackers {...props} />}
-            />
-            <Route
-              path={routes.PROJECT_FEEDBACKNEHMER}
-              exact
-              component={props => <Clients {...props} />}
-            />
-            <Route
-              path={routes.PROJECT_FEEDBACKNEHMER_DETAILS}
-              exact
-              component={props => <ClientDetails {...props} />}
-            />
-          </Grid.Column>
-        </Grid>
-      </div>
+              <Route
+                path={routes.PROJECT_FEEDBACKNEHMER}
+                exact
+                component={Clients}
+              />
+              <Route
+                path={routes.PROJECT_FEEDBACKNEHMER_DETAILS}
+                exact
+                component={ClientDetails}
+              />
+            </Grid.Column>
+          </Grid>
+        </div>
+      </AdminDataContext.Provider>
     );
   }
 }

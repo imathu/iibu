@@ -2,9 +2,11 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Table, List } from 'semantic-ui-react';
 
+import { getContextById } from 'utils/context';
+import { getQuestionContent } from 'utils/question';
 
 const QuestionList = (props) => {
-  const { data } = props;
+  const { data, adminData } = props;
   return (
     <Table celled padded size="small">
       <Table.Header>
@@ -19,18 +21,22 @@ const QuestionList = (props) => {
         {!!data && Object.keys(data).map(id => (
           <Table.Row key={id}>
             <Table.Cell>{id}</Table.Cell>
-            <Table.Cell>{data[id].context}</Table.Cell>
+            <Table.Cell>{getContextById(adminData.contexts, data[id].context)}</Table.Cell>
             <Table.Cell>{data[id].scores}</Table.Cell>
             <Table.Cell>
               <List>
                 <List.Item
-                  key={data[id].content.de.he}
+                  key={`${id}+1`}
                 >
-                  de: {data[id].content.de.he}
+                  he: {getQuestionContent(data[id], 'he')}
                 </List.Item>
                 <List.Item
-                  key={data[id].content.en.he}
-                >en: {data[id].content.en.he}
+                  key={`${id}+2`}
+                >she: {getQuestionContent(data[id], 'she')}
+                </List.Item>
+                <List.Item
+                  key={`${id}+3`}
+                >me: {getQuestionContent(data[id], 'me')}
                 </List.Item>
               </List>
             </Table.Cell>
@@ -42,6 +48,7 @@ const QuestionList = (props) => {
 };
 QuestionList.propTypes = {
   data: PropTypes.shape({}).isRequired,
+  adminData: PropTypes.shape({}).isRequired,
 };
 
 export default QuestionList;

@@ -2,6 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import withLoader from 'components/withLoader';
 import { Button, Header } from 'semantic-ui-react';
+import AdminDataContext from 'components/AdminDataContext';
 
 import Parser from 'utils/parser';
 
@@ -98,7 +99,12 @@ class Questions extends React.Component {
                 }
               </Button.Group>
               <TemplateModal open={open} closeModal={this.closeModal} data={data} />
-              <QuestionList data={data} />
+              <AdminDataContext.Consumer>
+                {adminData => (adminData && adminData.contexts
+                  ? <QuestionList data={data} adminData={adminData} />
+                  : null)
+                }
+              </AdminDataContext.Consumer>
             </div>
           : <NoQuestions
             importFromTemplate={this.importFromTemplate}
