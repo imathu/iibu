@@ -15,45 +15,50 @@ class AnswersList extends React.Component {
     const { data, projectId } = this.props;
     const { contextRef } = this.state;
     const numQuestions = Object.keys(data.questions).length;
-    return (
-      <Grid>
-        <Grid.Column width={12}>
-          <div ref={this.handleContextRef}>
-            {Object.keys(data.feedbacker.clients).map(id => (
-              <div key={id}>
-                <Client
-                  contexts={data.contexts}
-                  roles={data.roles}
-                  questions={data.questions}
-                  client={data.clients[id]}
-                  feedbacker={data.feedbacker}
-                  updateAnswer={this.updateAnswer}
-                  projectId={projectId}
-                />
-                <Divider />
-              </div>
-            ))}
-          </div>
-        </Grid.Column>
-        <Grid.Column width={4}>
-          <Sticky context={contextRef} offset={10}>
-            <Segment>
-              <Header as="h3">Feedbacknehmer</Header>
-              <Divider />
+    if (data.feedbacker) {
+      return (
+        <Grid>
+          <Grid.Column width={12}>
+            <div ref={this.handleContextRef}>
               {Object.keys(data.feedbacker.clients).map(id => (
                 <div key={id}>
-                  <Menu
-                    feedbacker={data.feedbacker}
-                    numQuestions={numQuestions}
-                    projectId={projectId}
+                  <Client
+                    contexts={data.contexts}
+                    roles={data.roles}
+                    questions={data.questions}
                     client={data.clients[id]}
+                    feedbacker={data.feedbacker}
+                    updateAnswer={this.updateAnswer}
+                    projectId={projectId}
                   />
+                  <Divider />
                 </div>
               ))}
-            </Segment>
-          </Sticky>
-        </Grid.Column>
-      </Grid>
+            </div>
+          </Grid.Column>
+          <Grid.Column width={4}>
+            <Sticky context={contextRef} offset={10}>
+              <Segment>
+                <Header as="h3">Feedbacknehmer</Header>
+                <Divider />
+                {Object.keys(data.feedbacker.clients).map(id => (
+                  <div key={id}>
+                    <Menu
+                      feedbacker={data.feedbacker}
+                      numQuestions={numQuestions}
+                      projectId={projectId}
+                      client={data.clients[id]}
+                    />
+                  </div>
+                ))}
+              </Segment>
+            </Sticky>
+          </Grid.Column>
+        </Grid>
+      );
+    }
+    return (
+      <Segment style={{ textAlign: 'center' }}>no data found, check your URL</Segment>
     );
   }
 }

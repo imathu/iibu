@@ -26,7 +26,7 @@ class Menu extends React.Component {
     const { client, numQuestions } = this.props;
     const { answers } = this.state;
     return (
-      <div>{client.name} {client.firstname}: <b>{answers} / {numQuestions}</b></div>
+      <div>{client.name} {client.firstname}: <b>{answers} / {numQuestions}</b> Antworten</div>
     );
   }
 }

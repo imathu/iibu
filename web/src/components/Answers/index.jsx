@@ -39,6 +39,8 @@ class Answers extends React.Component {
           console.log('error', data.err); // eslint-disable-line no-console
           this.props.history.push(routes.LANDING);
         }
+      }).catch((e) => {
+        console.log('no data', e);
       });
   }
   render() {
