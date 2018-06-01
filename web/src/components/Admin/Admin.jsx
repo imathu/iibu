@@ -72,5 +72,5 @@ export const Admin = () => (
   </div>
 );
 
-const authCondition = authUser => !!authUser;
+const authCondition = (authUser, admin) => (!!authUser && admin);
 export default withAuthorization(authCondition)(Admin);

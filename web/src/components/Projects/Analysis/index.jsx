@@ -1,42 +1,26 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import withLoader from 'components/withLoader';
-import { Header } from 'semantic-ui-react';
 import AdminDataContext from 'components/AdminDataContext';
+
+import PageContent from './PageContent';
 
 import { db } from '../../../firebase';
 
-const PageContent = ({ data, adminData }) => {
-  return (
-    <div>
-      <Header floated="left" as="h1">Analyse</Header>
-    </div>
-  );
-};
-PageContent.propTypes = {
+const Analysis = props => (
+  <AdminDataContext.Consumer>
+    {adminData => (adminData
+      ? <PageContent {...props} adminData={adminData} />
+      : null)}
+  </AdminDataContext.Consumer>
+);
+Analysis.propTypes = {
   data: PropTypes.shape({}).isRequired,
-  adminData: PropTypes.shape({}).isRequired,
-};
-
-class Analysis extends React.Component {
-  static propTypes = {
-    data: PropTypes.shape({}).isRequired,
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        projectId: PropTypes.string.isRequired,
-      }),
-    }).isRequired,
-  }
-  render() {
-    const { data } = this.props;
-    return (
-      <AdminDataContext.Consumer>
-        {adminData => (adminData
-          ? <PageContent {...this.props} adminData={adminData} />
-          : null)}
-      </AdminDataContext.Consumer>
-    )
-  }
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      projectId: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
 };
 
 const dbFunction = db.onceGetProject;

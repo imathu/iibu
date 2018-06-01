@@ -1,5 +1,5 @@
 import React from 'react';
-import { firebase } from '../firebase';
+import { firebase, db } from '../firebase';
 import AuthUserContext from './AuthUserContext';
 
 const withAuthentication = (Component) => {
@@ -7,22 +7,38 @@ const withAuthentication = (Component) => {
     constructor(props) {
       super(props);
       this.state = {
-        authUser: null,
+        auth: null,
       };
     }
     componentDidMount() {
       firebase.auth.onAuthStateChanged((authUser) => {
         if (authUser) {
-          this.setState(() => ({ authUser }));
+          db.isAdmin(authUser.uid)
+            .then((snapshot) => {
+              this.setState(() => ({
+                auth: {
+                  authUser,
+                  admin: snapshot.exists(),
+                },
+              }));
+            })
+            .catch(() => {
+              this.setState(() => ({
+                auth: {
+                  authUser,
+                  admin: false,
+                },
+              }));
+            });
         } else {
-          this.setState(() => ({ authUser: null }));
+          this.setState(() => ({ auth: null }));
         }
       });
     }
     render() {
-      const { authUser } = this.state;
+      const { auth } = this.state;
       return (
-        <AuthUserContext.Provider value={authUser}>
+        <AuthUserContext.Provider value={auth}>
           <Component {...this.props} />
         </AuthUserContext.Provider>
       );

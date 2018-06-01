@@ -7,4 +7,9 @@ export const getQuestionContent = (question, person) => {
   return idx(question, _ => _.content[language][person]) || 'n/a';
 };
 
+export const getAllContextIds = (questions) => {
+  const contexts = Object.keys(questions).map(qId => questions[qId].context);
+  return contexts.filter((v, i, a) => a.indexOf(v) === i);
+};
+
 export default getQuestionContent;

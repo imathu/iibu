@@ -21,9 +21,11 @@ const withLoader = (func, param = null) => (Component) => {
     componentDidMount() {
       if (this.props) {
         const p = (param) ? this.props.match.params[param] : null;
-        func(p).then((snapshot) => {
-          this.setState(() => ({ data: (snapshot.val()) ? snapshot.val() : {} }));
-        });
+        func(p)
+          .then((snapshot) => {
+            this.setState(() => ({ data: (snapshot.val()) ? snapshot.val() : {} }));
+          })
+          .catch(() => null);
       }
     }
     render() {

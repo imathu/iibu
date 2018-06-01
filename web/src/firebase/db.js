@@ -1,31 +1,32 @@
 import { db } from './firebase';
 
+// User data
 export const doCreateUser = (id, username, email) => db.ref(`users/${id}`).set({
   username,
   email,
 });
 export const doRemoveUser = id => db.ref(`users/${id}`).set({});
+export const onceGetUsers = () => db.ref('users').once('value');
 
+// Admin User
 export const doCreateAdmin = id => db.ref(`admins/${id}`).set({
   admin: true,
 });
 export const doRemoveAdmin = id => db.ref(`admins/${id}`).set({});
-
-export const removeRef = () => db.off('value');
-
-export const onceGetUsers = () => db.ref('users').once('value');
+export const isAdmin = id => db.ref(`admins/${id}`).once('value');
 export const onceGetAdminUsers = () => db.ref('admins').once('value');
 
+// Project data
 export const onceGetProjects = () => (
   db.ref('projects').once('value')
 );
 
-
-// Role Data
+// Role data
 export const onceGetRoles = () => (
   db.ref('roles').once('value')
 );
 
+// Context data
 export const onceGetContexts = () => (
   db.ref('contexts').once('value')
 );

@@ -19,10 +19,6 @@ class Project extends Component {
     match: PropTypes.shape({
       params: PropTypes.shape({}),
     }).isRequired,
-    item: PropTypes.string,
-  }
-  static defaultProps = {
-    item: 'fragen',
   }
   constructor(props) {
     super(props);
@@ -126,6 +122,5 @@ class Project extends Component {
   }
 }
 
-const authCondition = authUser => !!authUser;
-// export default Project
+const authCondition = (authUser, admin) => (!!authUser && admin);
 export default withAuthorization(authCondition)(Project);

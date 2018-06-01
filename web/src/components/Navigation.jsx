@@ -38,50 +38,57 @@ const NavigationNonAuth = () => (
   </div>
 );
 
-const NavigationAuth = ({ authUser }) => (
-  <div className="navigation">
-    <Menu
-      pointing
-      secondary
-    >
-      <Menu.Item>
-        iibu.ch -  {authUser.email}
-      </Menu.Item>
-      <Menu.Menu position="right">
-        <Menu.Item
-          name="home"
-          as={NavLink}
-          to={routes.LANDING}
-          exact
-        />
-        <Menu.Item
-          name="projects"
-          as={NavLink}
-          to={routes.PROJECTS}
-          exact
-        />
-        <Menu.Item
-          name="admin"
-          as={NavLink}
-          to={routes.ADMIN_ROLES}
-          exact
-        />
-        <Language />
+const NavigationAuth = ({ auth }) => {
+  const { admin } = auth;
+  return (
+    <div className="navigation">
+      <Menu
+        pointing
+        secondary
+      >
         <Menu.Item>
-          <SignOutButton />
+          iibu.ch -  {auth.authUser.email}
         </Menu.Item>
-      </Menu.Menu>
-    </Menu>
-  </div>
-);
+        <Menu.Menu position="right">
+          <Menu.Item
+            name="home"
+            as={NavLink}
+            to={routes.LANDING}
+            exact
+          />
+          { (admin) &&
+            <React.Fragment>
+              <Menu.Item
+                name="projects"
+                as={NavLink}
+                to={routes.PROJECTS}
+                exact
+              />
+              <Menu.Item
+                name="admin"
+                as={NavLink}
+                to={routes.ADMIN_ROLES}
+                exact
+              />
+            </React.Fragment>
+          }
+          <Language />
+          <Menu.Item>
+            <SignOutButton />
+          </Menu.Item>
+        </Menu.Menu>
+      </Menu>
+    </div>
+  );
+};
 NavigationAuth.propTypes = {
-  authUser: PropTypes.shape({}).isRequired,
+  auth: PropTypes.shape({}).isRequired,
 };
 
 const Navigation = () => (
   <AuthUserContext.Consumer>
-    {authUser => ((authUser)
-      ? <NavigationAuth authUser={authUser} />
+    {auth => ((auth)
+      ? <NavigationAuth auth={auth} />
       : <NavigationNonAuth />
     )}
   </AuthUserContext.Consumer>

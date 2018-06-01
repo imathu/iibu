@@ -34,5 +34,5 @@ Projects.propTypes = {
 
 const dbFunction = db.onceGetProjects;
 
-const authCondition = authUser => !!authUser;
+const authCondition = (authUser, admin) => (!!authUser && admin);
 export default withAuthorization(authCondition)(withLoader(dbFunction)(Projects));
