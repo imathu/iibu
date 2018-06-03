@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Header, Select } from 'semantic-ui-react';
+import { Header, Select, Button } from 'semantic-ui-react';
 
 import ClientData from './ClientData';
 
@@ -19,10 +19,18 @@ class PageContent extends React.Component {
     super(props);
     this.state = {
       selectedClient: null,
+      radar: true,
+      bar: true,
     };
   }
+  toggleRadar = () => {
+    this.setState(() => ({ radar: !this.state.radar }));
+  }
+  toggleBar = () => {
+    this.setState(() => ({ bar: !this.state.bar }));
+  }
   render() {
-    const { selectedClient } = this.state;
+    const { selectedClient, radar, bar } = this.state;
     const { data } = this.props;
     return (
       <div>
@@ -34,7 +42,19 @@ class PageContent extends React.Component {
           onChange={(event, d) => this.setState(() => ({ selectedClient: d.value }))}
         />
         {(selectedClient) &&
-          <ClientData {...this.props} clientId={selectedClient} />
+          <React.Fragment>
+            <Button floated="right" positive>PDF</Button>
+            <Button.Group floated="right" >
+              <Button color={bar ? 'blue' : 'grey'} onClick={this.toggleBar}>BarChart</Button>
+              <Button color={radar ? 'blue' : 'grey'} onClick={this.toggleRadar}>RadarChart</Button>
+            </Button.Group>
+            <ClientData
+              {...this.props}
+              clientId={selectedClient}
+              radar={radar}
+              bar={bar}
+            />
+          </React.Fragment>
         }
       </div>
     );

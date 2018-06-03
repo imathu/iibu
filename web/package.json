@@ -9,11 +9,13 @@
   },
   "proxy": "http://localhost:3001",
   "dependencies": {
+    "chart.js": "^2.7.2",
     "csvtojson": "^1.1.12",
     "firebase": "^4.13.1",
     "idx": "^2.3.0",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
+    "react-chartjs2": "^1.2.1",
     "react-dom": "^16.3.2",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4",
