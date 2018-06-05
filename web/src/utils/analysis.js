@@ -1,4 +1,5 @@
 import idx from 'idx';
+import { getAllContextIds } from 'utils/question';
 
 const unique = array => (
   array.filter((v, i, a) => a.indexOf(v) === i)
@@ -42,34 +43,70 @@ const createRadarData = (labels, foreign, self) => ({
   }],
 });
 
-// return an array of answers
-const getAnswers = (feedbacker, clientId) => {
-  const answers = idx(feedbacker, _ => _.clients[clientId].answers) || {};
-  return Object.keys(answers).map(id => ({ id, score: answers[id].score }));
-};
-
-const getAllFeedbackersContextIds = (clientId, data) => {
-  const contextIds = [];
-  const { feedbackers } = data;
-  Object.keys(feedbackers).forEach((feedbackerId) => {
-    const answers = getAnswers(feedbackers[feedbackerId], clientId);
-    answers.forEach((answer) => {
-      const contextId = idx(data, _ => _.questions[answer.id].context) || '';
-      if (!contextIds[contextId]) contextIds.push(contextId);
-    });
-  });
-  return unique(contextIds);
-};
-
-export const getDataByContext = (clientId, data, adminData) => {
-  console.log(getAllFeedbackersContextIds(clientId, data));
-  return createRadarData(['a', 'b', 'c', 'd'], [2, 3, 4, 2], [3, 2, 5, 3]);
-};
-
 export const getDataByRoleAndContext = (clientId, data, adminData, contextId, lang='de') => {
-  // console.log('data', data);
-  // console.log('adminData', adminData);
   return createBarData(['vorgesetzter', 'ich', 'kollege'], [3, 4, 2]);
 };
 
-export default getDataByRoleAndContext;
+export class Analysis {
+  constructor(project, adminData) {
+    this.project = project;
+    this.adminData = adminData;
+    this.feedbackers = Object.keys(project.feedbackers)
+      .map(f => ({ id: f, ...project.feedbackers[f] }));
+    this.contexts = getAllContextIds(project.questions);
+    this.questionList = idx(project, _ => _.questions) || {};
+  }
+
+  static getAnswersByContext(answers, contextId) {
+    const filteredAnswers = answers.filter(a => a.context === contextId);
+    const sum = filteredAnswers.reduce((acc, val) => (acc + val.score), 0);
+    return (sum > 0) ? sum / filteredAnswers.length : 0;
+  }
+
+  getRadarData(clientId) {
+    const answers = this.getAnswersByClient(clientId);
+    const foreign = [];
+    const self = [];
+    const contexts = answers.map(a => a.context);
+    // self answers
+    unique(contexts).forEach(context =>
+      self.push(Analysis.getAnswersByContext(answers.filter(a => a.role === 'self'), context)));
+
+    // foreign answers
+    unique(contexts).forEach(context =>
+      foreign.push(Analysis.getAnswersByContext(answers.filter(a => (a.role && a.role !== 'self')), context)));
+
+    const labels = contexts.filter((v, i, a) => a.indexOf(v) === i);
+    return createRadarData(labels, foreign, self);
+  }
+
+  getAnswersByClient(clientId) {
+    const answers = [];
+    Object.keys(this.questionList).forEach((qId) => {
+      this.feedbackers.forEach((feedbacker) => {
+        if (feedbacker.clients[clientId]) {
+          const role = idx(feedbacker, _ => _.clients[clientId].role) || 'n/a';
+          const answer = idx(feedbacker, _ => _.clients[clientId].answers[qId]) || null;
+          if (answer) {
+            answers.push({
+              questionId: qId,
+              context: this.questionList[qId].context,
+              feedbackerId: feedbacker.id,
+              role,
+              score: answer.score,
+            });
+          }
+        } else {
+          answers.push({
+            questionId: qId,
+            context: this.questionList[qId].context,
+            feedbackerId: feedbacker.id,
+            role: null,
+            score: 0,
+          });
+        }
+      });
+    });
+    return (answers);
+  }
+}

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import RC2 from 'react-chartjs2';
 
-import { getDataByContext } from 'utils/analysis';
+import { Analysis } from 'utils/analysis';
 
 const options = {
   responsive: true,
@@ -30,7 +30,9 @@ class ClientContextRadar extends React.Component {
   // }
   render() {
     const { clientId, data, adminData } = this.props;
-    const radarData = getDataByContext(clientId, data, adminData);
+    // const radarData = getDataByContext(clientId, data, adminData);
+    const a = new Analysis(data, adminData);
+    const radarData = a.getRadarData(clientId);
     return (
       <tr>
         <td>

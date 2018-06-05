@@ -47,6 +47,7 @@ ClientData.propTypes = {
   }).isRequired,
   radar: PropTypes.bool.isRequired,
   bar: PropTypes.bool.isRequired,
+  clientId: PropTypes.string.isRequired,
 };
 
 export default ClientData;
