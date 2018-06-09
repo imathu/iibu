@@ -30,7 +30,6 @@ class ClientContextRadar extends React.Component {
   // }
   render() {
     const { clientId, data, adminData } = this.props;
-    // const radarData = getDataByContext(clientId, data, adminData);
     const a = new Analysis(data, adminData);
     const radarData = a.getRadarData(clientId);
     return (

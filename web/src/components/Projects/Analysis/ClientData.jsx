@@ -3,7 +3,6 @@ import { PropTypes } from 'prop-types';
 import { Segment, Table } from 'semantic-ui-react';
 
 import { getAllContextIds } from 'utils/question';
-import { getContextById } from 'utils/context';
 
 import ClientContextBar from './ClientContextBar';
 import ClientContextRadar from './ClientContextRadar';
@@ -18,7 +17,7 @@ const ClientData = props => (
               <ClientContextBar
                 {...props}
                 key={contextId}
-                context={getContextById(props.adminData.contexts, contextId)}
+                contextId={contextId}
               />
             ))}
           </Table.Body>

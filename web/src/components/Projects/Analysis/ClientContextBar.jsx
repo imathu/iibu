@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import RC2 from 'react-chartjs2';
-import { getDataByRoleAndContext } from 'utils/analysis';
+import { getContextById } from 'utils/context';
+
+import { Analysis } from 'utils/analysis';
 
 const options = {
   responsive: true,
   maintainAspectRatio: false,
   legend: {
-    display: false,
+    display: true,
   },
   scales: {
     xAxes: [{
@@ -18,6 +20,7 @@ const options = {
     }],
     yAxes: [{
       categoryPercentage: 0.8,
+      min: 0,
     }],
   },
 };
@@ -27,7 +30,10 @@ class ClientContextBar extends React.Component {
     // barData: PropTypes.shape({}).isRequired,
     // onRef: PropTypes.func.isRequired,
     // label: PropTypes.string.isRequired,
-    context: PropTypes.string.isRequired,
+    data: PropTypes.shape({}).isRequired,
+    adminData: PropTypes.shape({}).isRequired,
+    clientId: PropTypes.string.isRequired,
+    contextId: PropTypes.string.isRequired,
   }
 
   // componentDidMount() {
@@ -39,8 +45,15 @@ class ClientContextBar extends React.Component {
   // }
 
   render() {
-    const { context } = this.props;
-    const barData = getDataByRoleAndContext();
+    const {
+      contextId,
+      clientId,
+      data,
+      adminData,
+    } = this.props;
+    const a = new Analysis(data, adminData);
+    const context = getContextById(adminData.contexts, contextId);
+    const barData = a.getBarData(contextId, clientId);
     return (
       <tr>
         <td>
@@ -51,7 +64,7 @@ class ClientContextBar extends React.Component {
             id="rc2"
             ref={(ref) => { this.bar = ref; }}
             data={barData}
-            type="horizontalBar"
+            type="bar"
             options={options}
           />
         </td>

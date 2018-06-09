@@ -1,16 +1,17 @@
 import idx from 'idx';
-import { getAllContextIds } from 'utils/question';
+import { getContextById } from 'utils/context';
+import { getRoleById } from 'utils/roles';
 
 const unique = array => (
   array.filter((v, i, a) => a.indexOf(v) === i)
 );
 
 const chartColor = [
-  'rgba(27,133,184,0.9)',
-  'rgba(90,82,85,0.9)',
-  'rgba(85,158,131,0.9)',
-  'rgba(174,90,65,0.9)',
-  'rgba(195,203,113,0.9)',
+  'rgba(27,133,184,0.7)',
+  'rgba(90,82,85,0.7)',
+  'rgba(85,158,131,0.7)',
+  'rgba(174,90,65,0.7)',
+  'rgba(195,203,113,0.7)',
   'rgba(27,133,184,0.7)',
   'rgba(90,82,85,0.7)',
   'rgba(85,158,131,0.7)',
@@ -18,13 +19,33 @@ const chartColor = [
   'rgba(195,203,113,0.7)',
 ];
 
-const createBarData = (labels, data) => ({
+const createBarData = (labels, data, min, max) => ({
   labels,
   datasets: [{
-    label: '# of Votes',
+    label: 'Votes',
     data,
     borderWidth: 1,
     backgroundColor: chartColor,
+    type: 'bar',
+  }, {
+    label: 'Votes',
+    data,
+    type: 'line',
+    borderColor: chartColor,
+    borderWidth: 1,
+  }, {
+    label: 'max',
+    data: max,
+    type: 'line',
+    borderColor: chartColor[1],
+    borderWidth: 1,
+    lineTension: '0.3',
+  }, {
+    label: 'min',
+    data: min,
+    type: 'line',
+    borderColor: chartColor[3],
+    borderWidth: 1,
   }],
 });
 
@@ -43,24 +64,59 @@ const createRadarData = (labels, foreign, self) => ({
   }],
 });
 
-export const getDataByRoleAndContext = (clientId, data, adminData, contextId, lang='de') => {
-  return createBarData(['vorgesetzter', 'ich', 'kollege'], [3, 4, 2]);
-};
-
 export class Analysis {
   constructor(project, adminData) {
     this.project = project;
     this.adminData = adminData;
     this.feedbackers = Object.keys(project.feedbackers)
       .map(f => ({ id: f, ...project.feedbackers[f] }));
-    this.contexts = getAllContextIds(project.questions);
+    this.roleIds = Object.keys(adminData.roles);
+    this.roles = adminData.roles;
+    this.contextIds = Object.keys(adminData.contexts);
+    this.contexts = adminData.contexts;
     this.questionList = idx(project, _ => _.questions) || {};
   }
 
+  // return the average for each answer by context
   static getAnswersByContext(answers, contextId) {
     const filteredAnswers = answers.filter(a => a.context === contextId);
     const sum = filteredAnswers.reduce((acc, val) => (acc + val.score), 0);
     return (sum > 0) ? sum / filteredAnswers.length : 0;
+  }
+
+  // return the average for an answer by role
+  static getAnswerByRole(answers, roleId) {
+    const filteredAnswers = answers.filter(a => a.role === roleId);
+    const feedbackers = unique(filteredAnswers.map(a => a.feedbackerId)).length;
+    const filteredArray = filteredAnswers.map(a => a.score);
+    const sum = filteredArray.reduce((acc, val) => (acc + val), 0);
+    const avg = (sum > 0) ? sum / filteredArray.length : 0;
+    const max = filteredArray.reduce((a, b) => Math.max(a, b), 0);
+    const min = filteredArray.reduce((a, b) => Math.min(a, b), 1000);
+    return ({
+      avg,
+      max,
+      min: (min >= 1000) ? 0 : min,
+      feedbackers,
+    });
+  }
+
+  getBarData(contextId, clientId) {
+    const answers = this.getAnswersByClient(clientId);
+    const answersByContext = answers.filter(answer => answer.context === contextId);
+    const { roleIds } = this;
+    const values = [];
+    const mins = [];
+    const maxs = [];
+    const feedbackers = [];
+    this.roleIds.forEach((roleId) => {
+      const value = Analysis.getAnswerByRole(answersByContext, roleId);
+      values.push(value.avg);
+      mins.push(value.min);
+      maxs.push(value.max);
+      feedbackers.push(value.feedbackers);
+    });
+    return createBarData(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values, mins, maxs);
   }
 
   getRadarData(clientId) {
@@ -71,13 +127,11 @@ export class Analysis {
     // self answers
     unique(contexts).forEach(context =>
       self.push(Analysis.getAnswersByContext(answers.filter(a => a.role === 'self'), context)));
-
     // foreign answers
     unique(contexts).forEach(context =>
       foreign.push(Analysis.getAnswersByContext(answers.filter(a => (a.role && a.role !== 'self')), context)));
-
     const labels = contexts.filter((v, i, a) => a.indexOf(v) === i);
-    return createRadarData(labels, foreign, self);
+    return createRadarData(labels.map(l => getContextById(this.contexts, l)), foreign, self);
   }
 
   getAnswersByClient(clientId) {
@@ -110,3 +164,5 @@ export class Analysis {
     return (answers);
   }
 }
+
+export default Analysis;
