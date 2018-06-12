@@ -19,14 +19,15 @@ class ClientContextRadar extends React.Component {
     data: PropTypes.shape({}).isRequired,
     adminData: PropTypes.shape({}).isRequired,
     clientId: PropTypes.string.isRequired,
+    onRef: PropTypes.func.isRequired,
   }
-  // componentDidMount() {
-  //   this.props.onRef(this);
-  // }
-  //
-  // componentWillUnmount() {
-  //   this.props.onRef(undefined);
-  // }
+  componentDidMount() {
+    this.props.onRef(this);
+  }
+
+  componentWillUnmount() {
+    this.props.onRef(undefined);
+  }
   render() {
     const { clientId, data, adminData } = this.props;
     const a = new Analysis(data, adminData);

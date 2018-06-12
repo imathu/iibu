@@ -7,13 +7,8 @@ import datalabels from 'chartjs-plugin-datalabels'; // eslint-disable-line
 
 import { Analysis } from 'utils/analysis';
 
-// const f = context => (
-//   context.dataset.borderColor
-// );
-
 const position = (d) => {
   if (d.dataset.label === 'Votes') {
-    // console.log(c);
     return true;
   }
   return false;
@@ -27,23 +22,35 @@ const color = (d) => {
 
 class ClientContextBar extends React.Component {
   static propTypes = {
-    // barData: PropTypes.shape({}).isRequired,
-    // onRef: PropTypes.func.isRequired,
-    // label: PropTypes.string.isRequired,
+    onRef: PropTypes.func.isRequired,
     data: PropTypes.shape({}).isRequired,
     line: PropTypes.bool.isRequired,
-    adminData: PropTypes.shape({}).isRequired,
+    adminData: PropTypes.shape({
+      contexts: PropTypes.shape({}),
+    }).isRequired,
     clientId: PropTypes.string.isRequired,
     contextId: PropTypes.string.isRequired,
   }
-
-  componentDidMount() {
-    // this.props.onRef(this);
+  constructor(props) {
+    super(props);
+    this.state = {
+      context: '',
+    };
   }
 
-  // componentWillUnmount() {
-  //   this.props.onRef(undefined);
-  // }
+  componentDidMount() {
+    this.setContext();
+    this.props.onRef(this);
+  }
+
+  componentWillUnmount() {
+    this.props.onRef(undefined);
+  }
+
+  setContext = () => (
+    this.setState(() =>
+      ({ context: getContextById(this.props.adminData.contexts, this.props.contextId) }))
+  )
 
   render() {
     const {
@@ -53,8 +60,8 @@ class ClientContextBar extends React.Component {
       adminData,
       line,
     } = this.props;
+    const { context } = this.state;
     const a = new Analysis(data, adminData);
-    const context = getContextById(adminData.contexts, contextId);
     const barData = a.getBarData(contextId, clientId, line);
     const options = {
       responsive: true,
@@ -66,7 +73,8 @@ class ClientContextBar extends React.Component {
         datalabels: {
           display: position,
           anchor: 'end',
-          align: 'left',
+          align: 150,
+          offset: 25,
           backgroundColor: color,
           borderRadius: 4,
           color: 'white',

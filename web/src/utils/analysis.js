@@ -85,7 +85,7 @@ const createRadarData = (labels, foreign, self) => ({
     label: 'foreign',
     data: foreign,
     borderWidth: 3,
-    borderColor: chartColor[6],
+    borderColor: chartColor[5],
   }, {
     label: 'self',
     data: self,

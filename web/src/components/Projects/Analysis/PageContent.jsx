@@ -2,6 +2,8 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Header, Select, Button } from 'semantic-ui-react';
 
+import { PDF } from 'utils/pdf';
+
 import ClientData from './ClientData';
 
 const getOptions = (clients) => {
@@ -23,15 +25,34 @@ class PageContent extends React.Component {
       bar: true,
       line: true,
     };
+    this.ref = null;
   }
-  toggleRadar = () => {
-    this.setState(() => ({ radar: !this.state.radar }));
+  toggleDiagramm = (dia) => {
+    this.setState(() => ({ [dia]: !this.state[dia] }));
   }
-  toggleLine = () => {
-    this.setState(() => ({ line: !this.state.line }));
-  }
-  toggleBar = () => {
-    this.setState(() => ({ bar: !this.state.bar }));
+  // generate a pdf, including all selected Chart types
+  generatePDF = () => {
+    const { bars, radar, lines } = this.ref;
+    const clientId = this.state.selectedClient;
+    const { clients } = this.props.data;
+    const client = `${clients[clientId].firstname} ${clients[clientId].name}`;
+    const pdf = new PDF(client, true, '', true);
+    if (this.state.bar) {
+      const barsArray = Object.keys(bars).map(key => (bars[key]));
+      barsArray.forEach(chart => (
+        pdf.addBarChart(chart.bar.getChart(), chart.state.context)
+      ));
+    }
+    if (this.state.line) {
+      const barsArray = Object.keys(lines).map(key => (lines[key]));
+      barsArray.forEach(chart => (
+        pdf.addBarChart(chart.bar.getChart(), chart.state.context)
+      ));
+    }
+    if (this.state.radar) {
+      pdf.addRadarChart(radar.radar.getChart());
+    }
+    pdf.save(`${client}.pdf`);
   }
   render() {
     const {
@@ -52,11 +73,16 @@ class PageContent extends React.Component {
         />
         {(selectedClient) &&
           <React.Fragment>
-            <Button floated="right" positive>PDF</Button>
+            <Button
+              floated="right"
+              positive
+              onClick={this.generatePDF}
+            >PDF
+            </Button>
             <Button.Group floated="right" >
-              <Button color={bar ? 'blue' : 'grey'} onClick={this.toggleBar}>Bar</Button>
-              <Button color={line ? 'blue' : 'grey'} onClick={this.toggleLine}>Line</Button>
-              <Button color={radar ? 'blue' : 'grey'} onClick={this.toggleRadar}>Radar</Button>
+              <Button color={bar ? 'blue' : 'grey'} onClick={() => this.toggleDiagramm('bar')}>Bar</Button>
+              <Button color={line ? 'blue' : 'grey'} onClick={() => this.toggleDiagramm('line')}>Line</Button>
+              <Button color={radar ? 'blue' : 'grey'} onClick={() => this.toggleDiagramm('radar')}>Radar</Button>
             </Button.Group>
             <ClientData
               {...this.props}
@@ -64,6 +90,7 @@ class PageContent extends React.Component {
               radar={radar}
               bar={bar}
               line={line}
+              onRef={(ref) => { this.ref = ref; }}
             />
           </React.Fragment>
         }
@@ -72,7 +99,9 @@ class PageContent extends React.Component {
   }
 }
 PageContent.propTypes = {
-  data: PropTypes.shape({}).isRequired,
+  data: PropTypes.shape({
+    clients: PropTypes.shape({}),
+  }).isRequired,
   adminData: PropTypes.shape({}).isRequired,
 };
 
