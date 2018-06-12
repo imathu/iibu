@@ -42,37 +42,29 @@ class ClientData extends React.Component {
     return (
       <React.Fragment>
         {bar && (
-
-            <Table>
-              <Table.Body>
-                {getAllContextIds(data.questions).map(contextId => (
-                  <ClientContextBar
-                    {...this.props}
-                    key={contextId}
-                    contextId={contextId}
-                    line={false}
-                    onRef={(ref) => { this.bars[contextId] = ref; }}
-                  />
-                ))}
-              </Table.Body>
-            </Table>
-          
+          <Segment>
+            {getAllContextIds(data.questions).map(contextId => (
+              <ClientContextBar
+                {...this.props}
+                key={contextId}
+                contextId={contextId}
+                line={false}
+                onRef={(ref) => { this.bars[contextId] = ref; }}
+              />
+            ))}
+          </Segment>
         )}
         {line && (
           <Segment>
-            <Table>
-              <Table.Body>
-                {getAllContextIds(data.questions).map(contextId => (
-                  <ClientContextBar
-                    {...this.props}
-                    key={contextId}
-                    contextId={contextId}
-                    line
-                    onRef={(ref) => { this.lines[contextId] = ref; }}
-                  />
-                ))}
-              </Table.Body>
-            </Table>
+            {getAllContextIds(data.questions).map(contextId => (
+              <ClientContextBar
+                {...this.props}
+                key={contextId}
+                contextId={contextId}
+                line
+                onRef={(ref) => { this.lines[contextId] = ref; }}
+              />
+            ))}
           </Segment>
         )}
         {radar && (
