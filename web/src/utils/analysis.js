@@ -2,36 +2,65 @@ import idx from 'idx';
 import { getContextById } from 'utils/context';
 import { getRoleById } from 'utils/roles';
 
+function fix(x) {
+  return Number.parseFloat(x).toFixed(2);
+}
+
+
 const unique = array => (
   array.filter((v, i, a) => a.indexOf(v) === i)
 );
 
 const chartColor = [
-  'rgba(27,133,184,0.7)',
-  'rgba(90,82,85,0.7)',
-  'rgba(85,158,131,0.7)',
-  'rgba(174,90,65,0.7)',
-  'rgba(195,203,113,0.7)',
-  'rgba(27,133,184,0.7)',
-  'rgba(90,82,85,0.7)',
-  'rgba(85,158,131,0.7)',
-  'rgba(174,90,65,0.7)',
-  'rgba(195,203,113,0.7)',
+  'rgba(27,133,184,0.8)',
+  'rgba(90,82,85,0.8)',
+  'rgba(85,158,131,0.8)',
+  'rgba(174,90,65,0.8)',
+  'rgba(195,203,113,0.8)',
+  'rgba(27,133,184,0.9)',
+  'rgba(90,82,85,1)',
+  'rgba(85,158,131,1)',
+  'rgba(174,90,65,1)',
+  'rgba(195,203,113,1)',
 ];
 
 const createBarData = (labels, data, min, max) => ({
   labels,
   datasets: [{
+    label: 'max',
+    data: max,
+    type: 'line',
+    borderColor: chartColor[1],
+    borderWidth: 1,
+    lineTension: '0.3',
+    showLine: false, // no line shown
+    pointRadius: 5,
+    pointHoverRadius: 8,
+  }, {
+    label: 'min',
+    data: min,
+    type: 'line',
+    borderColor: chartColor[1],
+    borderWidth: 1,
+    showLine: false, // no line shown
+    pointRadius: 5,
+    pointHoverRadius: 8,
+  }, {
     label: 'Votes',
     data,
     borderWidth: 1,
     backgroundColor: chartColor,
     type: 'bar',
-  }, {
+  }],
+});
+
+const createLineData = (labels, data, min, max) => ({
+  labels,
+  datasets: [{
     label: 'Votes',
     data,
     type: 'line',
-    borderColor: chartColor,
+    borderColor: chartColor[0],
     borderWidth: 1,
   }, {
     label: 'max',
@@ -49,18 +78,19 @@ const createBarData = (labels, data, min, max) => ({
   }],
 });
 
+
 const createRadarData = (labels, foreign, self) => ({
   labels,
   datasets: [{
     label: 'foreign',
     data: foreign,
     borderWidth: 3,
-    borderColor: chartColor[1],
+    borderColor: chartColor[6],
   }, {
     label: 'self',
     data: self,
     borderWidth: 3,
-    borderColor: chartColor[4],
+    borderColor: chartColor[9],
   }],
 });
 
@@ -101,7 +131,7 @@ export class Analysis {
     });
   }
 
-  getBarData(contextId, clientId) {
+  getBarData(contextId, clientId, line = false) {
     const answers = this.getAnswersByClient(clientId);
     const answersByContext = answers.filter(answer => answer.context === contextId);
     const { roleIds } = this;
@@ -111,11 +141,12 @@ export class Analysis {
     const feedbackers = [];
     this.roleIds.forEach((roleId) => {
       const value = Analysis.getAnswerByRole(answersByContext, roleId);
-      values.push(value.avg);
+      values.push(fix(value.avg));
       mins.push(value.min);
       maxs.push(value.max);
       feedbackers.push(value.feedbackers);
     });
+    if (line) return createLineData(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values, mins, maxs);
     return createBarData(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values, mins, maxs);
   }
 
@@ -126,10 +157,10 @@ export class Analysis {
     const contexts = answers.map(a => a.context);
     // self answers
     unique(contexts).forEach(context =>
-      self.push(Analysis.getAnswersByContext(answers.filter(a => a.role === 'self'), context)));
+      self.push(fix(Analysis.getAnswersByContext(answers.filter(a => a.role === 'self'), context))));
     // foreign answers
     unique(contexts).forEach(context =>
-      foreign.push(Analysis.getAnswersByContext(answers.filter(a => (a.role && a.role !== 'self')), context)));
+      foreign.push(fix(Analysis.getAnswersByContext(answers.filter(a => (a.role && a.role !== 'self')), context))));
     const labels = contexts.filter((v, i, a) => a.indexOf(v) === i);
     return createRadarData(labels.map(l => getContextById(this.contexts, l)), foreign, self);
   }

@@ -3,27 +3,27 @@ import PropTypes from 'prop-types';
 import RC2 from 'react-chartjs2';
 import { getContextById } from 'utils/context';
 
+import datalabels from 'chartjs-plugin-datalabels'; // eslint-disable-line
+
 import { Analysis } from 'utils/analysis';
 
-const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-  legend: {
-    display: true,
-  },
-  scales: {
-    xAxes: [{
-      ticks: {
-        beginAtZero: true,
-        max: 5,
-      },
-    }],
-    yAxes: [{
-      categoryPercentage: 0.8,
-      min: 0,
-    }],
-  },
+// const f = context => (
+//   context.dataset.borderColor
+// );
+
+const position = (d) => {
+  if (d.dataset.label === 'Votes') {
+    // console.log(c);
+    return true;
+  }
+  return false;
 };
+
+const color = (d) => {
+  if (d.dataset.backgroundColor) return d.dataset.backgroundColor[d.dataIndex];
+  return d.dataset.borderColor;
+};
+
 
 class ClientContextBar extends React.Component {
   static propTypes = {
@@ -31,15 +31,16 @@ class ClientContextBar extends React.Component {
     // onRef: PropTypes.func.isRequired,
     // label: PropTypes.string.isRequired,
     data: PropTypes.shape({}).isRequired,
+    line: PropTypes.bool.isRequired,
     adminData: PropTypes.shape({}).isRequired,
     clientId: PropTypes.string.isRequired,
     contextId: PropTypes.string.isRequired,
   }
 
-  // componentDidMount() {
-  //   this.props.onRef(this);
-  // }
-  //
+  componentDidMount() {
+    // this.props.onRef(this);
+  }
+
   // componentWillUnmount() {
   //   this.props.onRef(undefined);
   // }
@@ -50,10 +51,43 @@ class ClientContextBar extends React.Component {
       clientId,
       data,
       adminData,
+      line,
     } = this.props;
     const a = new Analysis(data, adminData);
     const context = getContextById(adminData.contexts, contextId);
-    const barData = a.getBarData(contextId, clientId);
+    const barData = a.getBarData(contextId, clientId, line);
+    const options = {
+      responsive: true,
+      maintainAspectRatio: false,
+      legend: {
+        display: false,
+      },
+      plugins: {
+        datalabels: {
+          display: position,
+          anchor: 'end',
+          align: 'left',
+          backgroundColor: color,
+          borderRadius: 4,
+          color: 'white',
+          font: {
+            weight: 'bold',
+          },
+        },
+      },
+      elements: {
+        point: {
+          pointStyle: 'rectRot',
+        },
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+          },
+        }],
+      },
+    };
     return (
       <tr>
         <td>

@@ -4,16 +4,15 @@ import RC2 from 'react-chartjs2';
 
 import { Analysis } from 'utils/analysis';
 
-const options = {
-  responsive: true,
-  maintainAspectRatio: true,
-  scale: {
-    ticks: {
-      beginAtZero: true,
-      max: 5,
-    },
-  },
-};
+import datalabels from 'chartjs-plugin-datalabels'; // eslint-disable-line
+
+const f = context => (
+  context.dataset.borderColor
+);
+
+const position = d => (
+  (d.dataset.label === 'foreign') ? 'end' : 'start'
+);
 
 class ClientContextRadar extends React.Component {
   static propTypes = {
@@ -32,6 +31,34 @@ class ClientContextRadar extends React.Component {
     const { clientId, data, adminData } = this.props;
     const a = new Analysis(data, adminData);
     const radarData = a.getRadarData(clientId);
+    const options = {
+      responsive: true,
+      maintainAspectRatio: true,
+      scale: {
+        ticks: {
+          beginAtZero: true,
+          max: 5,
+        },
+      },
+      plugins: {
+        datalabels: {
+          backgroundColor: f,
+          borderRadius: 4,
+          color: 'white',
+          scale: 'radial',
+          anchor: 'end',
+          align: position,
+          font: {
+            weight: 'bold',
+          },
+        },
+      },
+      elements: {
+        point: {
+          pointStyle: 'rectRot',
+        },
+      },
+    };
     return (
       <tr>
         <td>

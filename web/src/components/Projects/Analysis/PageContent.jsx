@@ -21,16 +21,25 @@ class PageContent extends React.Component {
       selectedClient: null,
       radar: true,
       bar: true,
+      line: true,
     };
   }
   toggleRadar = () => {
     this.setState(() => ({ radar: !this.state.radar }));
   }
+  toggleLine = () => {
+    this.setState(() => ({ line: !this.state.line }));
+  }
   toggleBar = () => {
     this.setState(() => ({ bar: !this.state.bar }));
   }
   render() {
-    const { selectedClient, radar, bar } = this.state;
+    const {
+      selectedClient,
+      radar,
+      bar,
+      line,
+    } = this.state;
     const { data } = this.props;
     return (
       <div>
@@ -45,14 +54,16 @@ class PageContent extends React.Component {
           <React.Fragment>
             <Button floated="right" positive>PDF</Button>
             <Button.Group floated="right" >
-              <Button color={bar ? 'blue' : 'grey'} onClick={this.toggleBar}>BarChart</Button>
-              <Button color={radar ? 'blue' : 'grey'} onClick={this.toggleRadar}>RadarChart</Button>
+              <Button color={bar ? 'blue' : 'grey'} onClick={this.toggleBar}>Bar</Button>
+              <Button color={line ? 'blue' : 'grey'} onClick={this.toggleLine}>Line</Button>
+              <Button color={radar ? 'blue' : 'grey'} onClick={this.toggleRadar}>Radar</Button>
             </Button.Group>
             <ClientData
               {...this.props}
               clientId={selectedClient}
               radar={radar}
               bar={bar}
+              line={line}
             />
           </React.Fragment>
         }

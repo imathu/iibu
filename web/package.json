@@ -10,6 +10,7 @@
   "proxy": "http://localhost:3001",
   "dependencies": {
     "chart.js": "^2.7.2",
+    "chartjs-plugin-datalabels": "^0.3.0",
     "csvtojson": "^1.1.12",
     "firebase": "^4.13.1",
     "idx": "^2.3.0",

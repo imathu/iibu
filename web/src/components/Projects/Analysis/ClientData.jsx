@@ -18,6 +18,23 @@ const ClientData = props => (
                 {...props}
                 key={contextId}
                 contextId={contextId}
+                line={false}
+              />
+            ))}
+          </Table.Body>
+        </Table>
+      </Segment>
+    )}
+    {props.line && (
+      <Segment>
+        <Table>
+          <Table.Body>
+            {getAllContextIds(props.data.questions).map(contextId => (
+              <ClientContextBar
+                {...props}
+                key={contextId}
+                contextId={contextId}
+                line
               />
             ))}
           </Table.Body>
@@ -46,6 +63,7 @@ ClientData.propTypes = {
   }).isRequired,
   radar: PropTypes.bool.isRequired,
   bar: PropTypes.bool.isRequired,
+  line: PropTypes.bool.isRequired,
   clientId: PropTypes.string.isRequired,
 };
 
