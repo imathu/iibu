@@ -11,7 +11,7 @@ stages:
 jobs:
   include:
   - stage: lint
-    script: build.sh
+    script: cd web && yarn install && yarn lint
   - stage: build
     script: cd web && yarn install && yarn build
   - stage: deploy
