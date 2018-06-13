@@ -10,8 +10,6 @@ stages:
 jobs:
   include:
   - stage: lint
-    script: yarn install && yarn lint
-  - stage: lint
     script: cd web && yarn install && yarn lint
   - stage: build
     script: cd web && yarn install && yarn build
