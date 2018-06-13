@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const serviceAccount = require('./../../config/firebase-auth-0d67b9a393cc.json');
+const serviceAccount = require('./../../config/firebase-auth-0d67b9a393cc.json'); // eslint-disable-line
 const logger = require('./../../util');
 
 admin.initializeApp({

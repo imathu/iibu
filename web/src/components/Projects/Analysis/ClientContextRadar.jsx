@@ -35,10 +35,16 @@ class ClientContextRadar extends React.Component {
     const options = {
       responsive: true,
       maintainAspectRatio: true,
+      animation: {
+        duration: 0,
+      },
       scale: {
+        pointLabels: {
+          fontSize: 14,
+        },
         ticks: {
           beginAtZero: true,
-          max: 5,
+          suggestedMax: 5,
         },
       },
       plugins: {

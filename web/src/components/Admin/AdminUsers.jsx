@@ -38,7 +38,7 @@ class AdminUsers extends React.Component {
         history.push(routes.ADMIN_USERS);
       })
       .catch((error) => {
-        console.log('error', error);
+        console.log('error', error); // eslint-disable-line no-console
       });
     event.preventDefault();
   }

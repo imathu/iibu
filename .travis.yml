@@ -1,0 +1,32 @@
+language: node_js
+node_js: '8'
+cache:
+  directories:
+  - node_modules
+stages:
+  - lint
+  - build
+  - deploy
+jobs:
+  include:
+  - stage: lint
+    script: yarn install && yarn lint
+  - stage: lint
+    script: cd web && yarn install && yarn lint
+  - stage: build
+    script: cd web && yarn install && yarn build
+  - stage: deploy
+    script: skip
+    deploy: &heroku
+      - provider: heroku
+        app: iibu-dev
+        api_key:
+          secure: BFBII2V/KBf7TPbFKLnxgt/EmXKbkB1HPqrKAE1bHiGTaiyEHZG4zesz8O4nx8W1k060kMYqS1KfCTv0asIOMLdNaAfZx6iZKx3MALZS8LM9s218fGHY6e5/xefNP1UiIxR3YYzGdzYno9N/r0fk2w48OjesSX5To2g42LG9yuMVr+KSlt4YToUHXBIcyUN7W7VwNLhAkhmqe3y0gQihxfBhWjD2j5+8FnOUM/DVroQKriPQDL+VF9ZJRgpSOfYi4+sB/VSA1KAvDG1p8am7Ljny9sXlHSjUT8r/eDcV4qmU25SKP6gQ2BNiArcxKyygi9Wxe9JV4W+y3EBjlGz2NAqZXEybe4gEOJUSd+pvipa4c6XJPYCjeotR4DEIMoMNYE1GjNnQsdfv1/tdLuj3iAsdrUA+DmI5SMo8nBIvYrtSaIEJ7LK8CZlWJkEjt3lEugSO6v/4Y2Oqot6Ed6ty5RdFPtE+hQ7vQnoapLZU73BdnJs4snufsojk2fCctAKXuAdythSTq+MY0xOaZZh7C6p8+3QK2dBWF9d+Q4XZeB1NUq5UNy1dvHKossy+qaGlzOocV3jpkjUhpYBZYjwh/U5etP11qUNWDQYmSUuS6Vg5YQfJC0x2xYACU8T/D6ueKWWjZMcU3pVHB2zQaumHVzy1fOo93483dL0Wr0uifnc=
+        on:
+          tags: false
+      - provider: heroku
+        app: iibu
+        api_key:
+          secure: BFBII2V/KBf7TPbFKLnxgt/EmXKbkB1HPqrKAE1bHiGTaiyEHZG4zesz8O4nx8W1k060kMYqS1KfCTv0asIOMLdNaAfZx6iZKx3MALZS8LM9s218fGHY6e5/xefNP1UiIxR3YYzGdzYno9N/r0fk2w48OjesSX5To2g42LG9yuMVr+KSlt4YToUHXBIcyUN7W7VwNLhAkhmqe3y0gQihxfBhWjD2j5+8FnOUM/DVroQKriPQDL+VF9ZJRgpSOfYi4+sB/VSA1KAvDG1p8am7Ljny9sXlHSjUT8r/eDcV4qmU25SKP6gQ2BNiArcxKyygi9Wxe9JV4W+y3EBjlGz2NAqZXEybe4gEOJUSd+pvipa4c6XJPYCjeotR4DEIMoMNYE1GjNnQsdfv1/tdLuj3iAsdrUA+DmI5SMo8nBIvYrtSaIEJ7LK8CZlWJkEjt3lEugSO6v/4Y2Oqot6Ed6ty5RdFPtE+hQ7vQnoapLZU73BdnJs4snufsojk2fCctAKXuAdythSTq+MY0xOaZZh7C6p8+3QK2dBWF9d+Q4XZeB1NUq5UNy1dvHKossy+qaGlzOocV3jpkjUhpYBZYjwh/U5etP11qUNWDQYmSUuS6Vg5YQfJC0x2xYACU8T/D6ueKWWjZMcU3pVHB2zQaumHVzy1fOo93483dL0Wr0uifnc=
+        on:
+          tags: true
