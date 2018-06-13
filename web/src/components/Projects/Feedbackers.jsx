@@ -43,7 +43,7 @@ class Feedbackers extends React.Component {
           <Table.Body>
             {!!data && Object.keys(data).map(id => (
               <Table.Row key={id}>
-                <Table.Cell><a target="_blank" href={getUrl(projectId, id)}>{id}</a></Table.Cell>
+                <Table.Cell><a target="_blank" rel="noopener noreferrer" href={getUrl(projectId, id)}>{id}</a></Table.Cell>
                 <Table.Cell>{data[id].email}</Table.Cell>
                 <Table.Cell>{data[id].gender}</Table.Cell>
               </Table.Row>
