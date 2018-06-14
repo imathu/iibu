@@ -2,7 +2,7 @@
   "name": "iibu",
   "version": "0.1.0",
   "engines": {
-    "node": ">=8.0.0"
+    "node": "9.2.1"
   },
   "eslintConfig": {
     "extends": [
