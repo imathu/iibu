@@ -27,11 +27,11 @@
     "uuid": "^3.2.1"
   },
   "scripts": {
-    "start": "cross-env NODE_PATH=src/ react-scripts start",
-    "build": "cross-env NODE_PATH=src/ react-scripts build",
+    "start": "NODE_PATH=src/ react-scripts start",
+    "build": "NODE_PATH=src/ react-scripts build",
     "lint": "eslint --ext=js --ext=jsx src/",
     "lint-fix": "eslint --fix --ext=js --ext=jsx src/",
-    "test": "cross-env NODE_PATH=src/ react-scripts test --env=jsdom"
+    "test": "NODE_PATH=src/ react-scripts test --env=jsdom"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",
