@@ -20,6 +20,25 @@ export const onceGetAdminUsers = () => db.ref('admins').once('value');
 export const onceGetProjects = () => (
   db.ref('projects').once('value')
 );
+export const onceGetProject = projectId => (
+  db.ref(`projects/${projectId}`).once('value')
+);
+export const doRemoveProject = projectId => db.ref(`projects/${projectId}`).set({});
+export const doUpdateProjectData = (projectId, name, clientBanner) => (
+  db.ref(`projects/${projectId}`).update(({
+    name,
+    clientBanner,
+  }))
+);
+export const doCreateProject = (projectId, name, clientBanner) => (
+  db.ref('projects').push({
+    name,
+    clientBanner,
+    clients: {},
+    questions: {},
+    feedbackers: {},
+  })
+);
 
 // Role data
 export const onceGetRoles = () => (
@@ -76,10 +95,6 @@ export const doCreateQuestions = (projectId, questions) => (
   db.ref(`/projects/${projectId}/`).update({ questions })
 );
 
-// Project doCreateAdmin
-export const onceGetProject = projectId => (
-  db.ref(`projects/${projectId}`).once('value')
-);
 
 // template data
 export const doCreateTemplate = (title, description, questions) => (

@@ -59,7 +59,7 @@ const NavigationAuth = ({ auth }) => {
           { (admin) &&
             <React.Fragment>
               <Menu.Item
-                name="projects"
+                name="projekte"
                 as={NavLink}
                 to={routes.PROJECTS}
                 exact

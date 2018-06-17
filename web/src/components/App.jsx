@@ -6,6 +6,7 @@ import {
 
 import Navigation from 'components/Navigation';
 import LandingPage from 'components/Landing';
+import ProjectEdit from 'components/Projects/ProjectEdit';
 import ProjectsPage from 'components/Projects/Projects';
 import ProjectPage from 'components/Projects/Project';
 import AdminPage from 'components/Admin/Admin';
@@ -35,6 +36,11 @@ const App = () => (
         exact
         path={routes.PROJECTS}
         component={ProjectsPage}
+      />
+      <Route
+        exact
+        path={routes.PROJECT_EDIT}
+        component={ProjectEdit}
       />
       <Route
         path={routes.ADMIN}

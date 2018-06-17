@@ -7,6 +7,7 @@ export const SIGN_UP = '/signup';
 export const SIGN_OUT = '/signout';
 export const PASSWORD_FORGET = '/pw-forget';
 
+export const PROJECT_EDIT = '/projects/edit';
 export const PROJECT_FRAGEN = '/project/:projectId/fragen';
 export const PROJECT_FEEDBACKGEBER = '/project/:projectId/feedbackgeber';
 export const PROJECT_FEEDBACKNEHMER = '/project/:projectId/feedbacknehmer';
