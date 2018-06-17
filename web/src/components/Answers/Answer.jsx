@@ -40,7 +40,9 @@ class Answer extends React.Component {
           {[...Array(scores)].map((x, i) => (
             <List.Item key={key(feedbacker.id, i)}>
               <Form.Field>
+                <label className="custom" htmlFor={i + 1}><center>{i + 1}</center></label>
                 <Checkbox
+                  fitted
                   radio
                   name="checkboxRadioGroup"
                   value={i + 1}

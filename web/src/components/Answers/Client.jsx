@@ -25,7 +25,7 @@ const Client = (props) => {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Frage</Table.HeaderCell>
-            <Table.HeaderCell>Antwort</Table.HeaderCell>
+            <Table.HeaderCell>1 = trifft nicht zu<br />5 = trifft zu</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>

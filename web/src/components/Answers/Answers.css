@@ -3,3 +3,7 @@
   margin: auto;
   margin-top: 10px;
 }
+
+.custom label {
+    margin: 0 5px 0;
+}
