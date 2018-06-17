@@ -16,21 +16,21 @@ const Projects = props => (
           <Table.HeaderCell>Projekt</Table.HeaderCell>
           <Table.HeaderCell />
           <Table.HeaderCell />
-          <Table.HeaderCell />
+          <Table.HeaderCell collapsing />
         </Table.Row>
       </Table.Header>
       <Table.Body>
         {!!props.data && Object.keys(props.data).map(id => (
           <Table.Row key={id}>
             <Table.Cell>{props.data[id].name}</Table.Cell>
-            <Table.Cell>
+            <Table.Cell collapsing textAlign="center">
               <a href={`/project/${id}/fragen`}>Analyse</a>
             </Table.Cell>
-            <Table.Cell>
+            <Table.Cell collapsing textAlign="center">
               <a href={`/projects/edit?projectId=${id}`}>Details</a>
             </Table.Cell>
-            <Table.Cell>
-              <Button size="tiny">Löschen</Button>
+            <Table.Cell collapsing textAlign="center">
+              <Button disabled size="tiny">Löschen</Button>
             </Table.Cell>
           </Table.Row>
         ))}

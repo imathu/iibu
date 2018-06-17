@@ -1,9 +1,10 @@
 import React from 'react';
 
 const LandingPage = () => (
-  <div>
+  <div style={{ textAlign: 'center' }}>
     <br /> <br />
-    <h1 style={{ textAlign: 'center' }}> iibu.ch landing page </h1>
+    <h1>Willkommen bei iibu.ch </h1>
+    270 Grad Feedbackanalyse für Führungskräfte
   </div>
 );
 
