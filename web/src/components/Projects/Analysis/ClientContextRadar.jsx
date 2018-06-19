@@ -49,6 +49,7 @@ class ClientContextRadar extends React.Component {
       },
       plugins: {
         datalabels: {
+          display: false,
           backgroundColor: f,
           borderRadius: 4,
           color: 'white',

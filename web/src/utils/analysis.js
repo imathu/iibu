@@ -24,7 +24,26 @@ const chartColor = [
   'rgba(195,203,113,1)',
 ];
 
-const createBarData = (labels, data, min, max) => ({
+export const color10 = [
+  'rgba(27,133,184,1)',
+  'rgba(90,82,85,1)',
+  'rgba(85,158,131,1)',
+  'rgba(174,90,65,1)',
+  'rgba(195,203,113,1)',
+];
+
+export const barChartByQuestion = (labels, data) => ({
+  labels,
+  datasets: [{
+    label: 'Votes',
+    data,
+    borderWidth: 1,
+    backgroundColor: chartColor,
+    type: 'horizontalBar',
+  }],
+});
+
+const createBarPerContext = (labels, data, min, max) => ({
   labels,
   datasets: [{
     label: 'max',
@@ -131,6 +150,21 @@ export class Analysis {
     });
   }
 
+  getBarByQuestion(contextId, questionId, clientId) {
+    const answers = this.getAnswersByClient(clientId);
+    const answersByContext = answers.filter(a =>
+      ((a.questionId === questionId) && (a.context === contextId)));
+    const { roleIds } = this;
+    const values = [];
+    const feedbackers = [];
+    this.roleIds.forEach((roleId) => {
+      const value = Analysis.getAnswerByRole(answersByContext, roleId);
+      values.push(fix(value.avg));
+      feedbackers.push(value.feedbackers);
+    });
+    return barChartByQuestion(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values);
+  }
+
   getBarData(contextId, clientId, line = false) {
     const answers = this.getAnswersByClient(clientId);
     const answersByContext = answers.filter(answer => answer.context === contextId);
@@ -147,7 +181,7 @@ export class Analysis {
       feedbackers.push(value.feedbackers);
     });
     if (line) return createLineData(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values, mins, maxs);
-    return createBarData(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values, mins, maxs);
+    return createBarPerContext(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values, mins, maxs);
   }
 
   getRadarData(clientId) {

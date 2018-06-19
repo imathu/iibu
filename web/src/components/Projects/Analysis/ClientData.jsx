@@ -6,6 +6,7 @@ import { getAllContextIds } from 'utils/question';
 
 import ClientContextBar from './ClientContextBar';
 import ClientContextRadar from './ClientContextRadar';
+import ClientContextBarPerQuestion from './ClientContextBarPerQuestion';
 
 class ClientData extends React.Component {
   static propTypes = {
@@ -16,16 +17,18 @@ class ClientData extends React.Component {
       contexts: PropTypes.shape({}),
     }).isRequired,
     radar: PropTypes.bool.isRequired,
-    bar: PropTypes.bool.isRequired,
+    barPerContext: PropTypes.bool.isRequired,
+    barPerQuestion: PropTypes.bool.isRequired,
     line: PropTypes.bool.isRequired,
     clientId: PropTypes.string.isRequired,
     onRef: PropTypes.func.isRequired,
   }
   constructor(props) {
     super(props);
-    this.bars = {}; // use this for references to child refs
-    this.radar = {}; // use this for references to child refs
-    this.lines = {}; // use this for references to child refs
+    this.barsPerContext = {};
+    this.barsPerQuestion = {};
+    this.radar = {};
+    this.lines = {};
   }
 
   componentDidMount() {
@@ -34,14 +37,15 @@ class ClientData extends React.Component {
 
   render() {
     const {
-      bar,
+      barPerContext,
+      barPerQuestion,
       line,
       data,
       radar,
     } = this.props;
     return (
       <React.Fragment>
-        {bar && (
+        {barPerContext && (
           <Segment>
             {getAllContextIds(data.questions).map(contextId => (
               <ClientContextBar
@@ -49,7 +53,19 @@ class ClientData extends React.Component {
                 key={contextId}
                 contextId={contextId}
                 line={false}
-                onRef={(ref) => { this.bars[contextId] = ref; }}
+                onRef={(ref) => { this.barsPerContext[contextId] = ref; }}
+              />
+            ))}
+          </Segment>
+        )}
+        {barPerQuestion && (
+          <Segment>
+            {getAllContextIds(data.questions).map(contextId => (
+              <ClientContextBarPerQuestion
+                {...this.props}
+                key={contextId}
+                contextId={contextId}
+                onRef={(ref) => { this.barsPerQuestion[contextId] = ref; }}
               />
             ))}
           </Segment>

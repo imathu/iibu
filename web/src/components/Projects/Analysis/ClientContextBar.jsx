@@ -122,7 +122,7 @@ class ClientContextBar extends React.Component {
           <Grid.Column width={13}>
             <RC2
               id="rc2"
-              ref={(ref) => { this.bar = ref; }}
+              ref={(ref) => { this.barPerContext = ref; }}
               data={barData}
               type="bar"
               options={options}
