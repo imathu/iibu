@@ -1,6 +1,7 @@
 import idx from 'idx';
 import { getContextById } from 'utils/context';
 import { getRoleById } from 'utils/roles';
+import { getSD } from 'utils/Analysis/index';
 
 function fix(x) {
   return Number.parseFloat(x).toFixed(2);
@@ -140,12 +141,13 @@ export class Analysis {
     const filteredArray = filteredAnswers.map(a => a.score);
     const sum = filteredArray.reduce((acc, val) => (acc + val), 0);
     const avg = (sum > 0) ? sum / filteredArray.length : 0;
-    const max = filteredArray.reduce((a, b) => Math.max(a, b), 0);
-    const min = filteredArray.reduce((a, b) => Math.min(a, b), 1000);
+    // const max = filteredArray.reduce((a, b) => Math.max(a, b), 0);
+    // const min = filteredArray.reduce((a, b) => Math.min(a, b), 1000);
+    const sd = getSD(filteredArray);
     return ({
       avg,
-      max,
-      min: (min >= 1000) ? 0 : min,
+      max: avg + sd,
+      min: avg - sd,
       feedbackers,
     });
   }
