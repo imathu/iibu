@@ -1,3 +1,4 @@
+import { getURL } from 'utils';
 import { auth } from './firebase';
 
 // Sign Up
@@ -11,7 +12,7 @@ export const doSignInWithEmailAndPassword = (email, password) =>
 // email Sign In
 export const doSignInWithEmail = (email, projectId, feedbackerId) =>
   auth.sendSignInLinkToEmail(email, {
-    url: `http://localhost:3000/answers/${projectId}/${feedbackerId}`,
+    url: `${getURL()}/answers/${projectId}/${feedbackerId}`,
     handleCodeInApp: true,
   });
 export const isSignInWithEmailLink = email =>

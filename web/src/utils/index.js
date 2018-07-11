@@ -27,3 +27,7 @@ export function getRoleContent(roles, roleId) {
   const lang = getLanguage();
   return idx(roles, _ => _[roleId][lang]) || 'undefined role';
 }
+
+export function getURL() {
+  return process.env.REACT_APP_URL || 'http://localhost:3000';
+}
