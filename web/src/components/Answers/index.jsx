@@ -4,7 +4,9 @@ import { Loader } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import * as routes from 'constants/routes';
 
+import { firebase, auth } from '../../firebase';
 import AnswersList from './AnswersList';
+import SignInEmail from './SignInEmail';
 
 import './Answers.css';
 
@@ -25,35 +27,74 @@ class Answers extends React.Component {
     super(props);
     this.state = {
       data: null,
+      authUser: null,
+      loading: false,
     };
   }
   componentDidMount = () => {
     const { projectId, feedbackerId } = this.props.match.params;
     const API = `/api/v1/${projectId}/answers/${feedbackerId}`;
-    fetch(API)
-      .then(response => response.json())
-      .then((data) => {
-        if (!data.err) {
-          this.setState({ data });
-        } else {
-          console.log('error', data.err); // eslint-disable-line no-console
-          this.props.history.push(routes.LANDING);
-        }
-      }).catch((e) => {
-        console.log('error', e); // eslint-disable-line no-console
-        this.props.history.push(routes.LANDING);
-      });
+    firebase.auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        firebase.auth.currentUser.getIdToken(true).then((idToken) => {
+          fetch(API, { headers: { Authorization: idToken } })
+            .then((response) => {
+              if (response.ok) {
+                return response.json();
+              }
+              throw new Error('not authorized');
+            })
+            .then((data) => {
+              if (!data.err) {
+                this.setState({ data });
+              } else {
+                console.log('error', data.err); // eslint-disable-line
+              }
+            }).catch((e) => {
+              alert(e); // eslint-disable-line
+              this.props.history.push(routes.LANDING);
+            });
+        }).catch((error) => {
+          console.log(error); // eslint-disable-line
+        });
+        this.setState(() => ({ authUser }));
+      } else {
+        this.setState(() => ({ authUser: null }));
+      }
+    });
+    if (auth.isSignInWithEmailLink(window.location.href)) {
+      this.setState(() => ({ loading: true }));
+      let email = window.localStorage.getItem('emailForSignIn');
+      if (!email) {
+        email = window.prompt('Please provide your email for confirmation');
+      }
+      auth.signInWithEmailLink(email, window.location.href)
+        .then(() => {
+          window.localStorage.removeItem('emailForSignIn');
+          this.setState(() => ({ loading: false }));
+        })
+        .catch(() => {
+          this.setState(() => ({ loading: false }));
+        });
+    }
   }
   render() {
-    const { data } = this.state;
+    const { data, authUser, loading } = this.state;
     const { projectId, feedbackerId } = this.props.match.params;
+    if (loading) {
+      return <Loader />;
+    }
     return (
-      <div id="answers-content">
-        {(data)
-          ? <AnswersList data={data} projectId={projectId} feedbackerId={feedbackerId} />
-          : <Loader active inline="centered" />
-        }
-      </div>
+      (authUser)
+        ?
+          <div id="answers-content">
+            {(data)
+              ? <AnswersList data={data} projectId={projectId} feedbackerId={feedbackerId} />
+              : <Loader active inline="centered" />
+            }
+          </div>
+        :
+          <SignInEmail projectId={projectId} feedbackerId={feedbackerId} />
     );
   }
 }

@@ -34,8 +34,10 @@ admin.initializeApp({
 });
 
 const db = admin.database();
+const auth = admin.auth();
 logger.consoleLogger('Connected to database');
 
 module.exports = {
   db,
+  auth,
 };

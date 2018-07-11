@@ -13,7 +13,6 @@ app.use('/api/', bodyParser.urlencoded({ extended: true }));
 app.use('/api', bodyParser.text());
 app.use('/api', bodyParser.json({ type: 'application/json' }));
 
-
 app.use(logger.requestLogger);
 
 // Serve static files from the React app

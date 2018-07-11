@@ -37,19 +37,47 @@ const getProject = projectId => (
   })
 );
 
-async function getFeedbackerAnswers(projectId, feedbackerId) {
+const verifyIdToken = idToken => (
+  new Promise((resolve) => {
+    fb.auth.verifyIdToken(idToken)
+      .then(token => resolve(token.email))
+      .catch(() => resolve(undefined));
+  })
+);
+
+async function getFeedbackerAnswers(projectId, feedbackerId, idToken) {
+  const email = await verifyIdToken(idToken);
+  if (!email) {
+    return {
+      status: '500',
+      payload: 'Could not verify your email',
+    };
+  }
+  const res = {
+    status: '403',
+    payload: 'Forbidden',
+  };
   const contexts = await getContexts();
   const roles = await getRoles();
   const project = await getProject((projectId));
-  return (project.feedbackers)
-    ? {
-      contexts,
-      roles,
-      clients: project.clients,
-      questions: project.questions,
-      feedbacker: project.feedbackers[feedbackerId],
+  if (project.feedbackers) {
+    const feedbacker = project.feedbackers[feedbackerId];
+    if (feedbacker) {
+      if (feedbacker.email === email) {
+        return {
+          status: '200',
+          payload: {
+            contexts,
+            roles,
+            clients: project.clients,
+            questions: project.questions,
+            feedbacker,
+          },
+        };
+      }
     }
-    : { err: 'feedbacker not found' };
+  }
+  return res;
 }
 
 module.exports = {
