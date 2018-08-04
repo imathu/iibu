@@ -65,6 +65,9 @@ export const doUpdateAnswer = (projectId, feedbackerId, clientId, questionId, sc
 export const numAnswers = (projectId, feedbackerId, clientId) => (
   db.ref(`projects/${projectId}/feedbackers/${feedbackerId}/clients/${clientId}/answers`)
 );
+export const doDisableBanner = (projectId, feedbackerId) => (
+  db.ref(`projects/${projectId}/feedbackers/${feedbackerId}`).update({ noBanner: true })
+);
 
 // Client data
 export const onceGetClient = (projectId, clientId) => (

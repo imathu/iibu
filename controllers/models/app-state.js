@@ -69,6 +69,7 @@ async function getFeedbackerAnswers(projectId, feedbackerId, idToken) {
           payload: {
             contexts,
             roles,
+            clientBanner: project.clientBanner,
             clients: project.clients,
             questions: project.questions,
             feedbacker,

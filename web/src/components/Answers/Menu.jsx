@@ -29,8 +29,8 @@ class Menu extends React.Component {
     return (
       <div>{client.name} {client.firstname}: <b>{answers} / {numQuestions}</b>
         {(answers === numQuestions)
-            ? <Icon color="teal" name="checkmark" style={{ paddingLeft: '8px' }} />
-            : <Icon color="orange" name="exclamation circle" style={{ paddingLeft: '8px' }} />
+            ? <Icon color="green" name="checkmark" style={{ paddingLeft: '8px' }} />
+            : <Icon color="red" name="exclamation circle" style={{ paddingLeft: '8px' }} />
         }
       </div>
     );
