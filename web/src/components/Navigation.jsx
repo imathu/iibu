@@ -15,6 +15,7 @@ const NavigationNonAuth = () => (
     <Menu
       pointing
       secondary
+      stackable
     >
       <Menu.Item>
         iibu.ch
