@@ -26,6 +26,7 @@
     "config": "^1.30.0",
     "dateformat": "^3.0.3",
     "express": "^4.16.3",
+    "express-sslify": "^1.2.0",
     "firebase-admin": "^5.12.1"
   },
   "devDependencies": {

@@ -1,6 +1,10 @@
 const express = require('express');
+const enforce = require('express-sslify');
 
 const app = express();
+if (process.env.NODE_ENV !== 'dev') {
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
 const path = require('path');
 const bodyParser = require('body-parser');
 const logger = require('./util');
