@@ -17,7 +17,7 @@ class AnswersList extends React.Component {
     const numQuestions = Object.keys(data.questions).length;
     if (data.feedbacker) {
       return (
-        <Grid>
+        <Grid stackable columns={2} reversed="mobile vertically">
           <Grid.Column width={12}>
             <div ref={this.handleContextRef}>
               {Object.keys(data.feedbacker.clients).map(id => (
@@ -38,9 +38,7 @@ class AnswersList extends React.Component {
           </Grid.Column>
           <Grid.Column width={4}>
             <Sticky context={contextRef} offset={10}>
-              <Segment>
-                <Header as="h3">Feedbacknehmer</Header>
-                <Divider />
+              <Segment style={{ backgroundColor: 'lightgray' }}>
                 {Object.keys(data.feedbacker.clients).map(id => (
                   <div key={id}>
                     <Menu

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from 'semantic-ui-react';
 
 import { db } from '../../firebase';
 
@@ -26,7 +27,12 @@ class Menu extends React.Component {
     const { client, numQuestions } = this.props;
     const { answers } = this.state;
     return (
-      <div>{client.name} {client.firstname}: <b>{answers} / {numQuestions}</b> Antworten</div>
+      <div>{client.name} {client.firstname}: <b>{answers} / {numQuestions}</b>
+        {(answers === numQuestions)
+            ? <Icon color="teal" name="checkmark" style={{ paddingLeft: '8px' }} />
+            : <Icon color="orange" name="exclamation circle" style={{ paddingLeft: '8px' }} />
+        }
+      </div>
     );
   }
 }
