@@ -28,4 +28,4 @@ jobs:
         api_key:
           secure: "SJ9zYOGwvADaUaseausKqYEzfjoX7EGArbgEWucPiWxTmDt+k0nFlWLed8LBgtme2cQlbl5rVGDMQ+hdhV3IO7XQUGowY+QC/j/j80jE0lJQiBivlDmx3FYQr5x3LCFGalu3ijwLcLMVK7Ok7Cmd0cBd3Z1u85oC7es9MwifZYPj/x3j0yYZod7Xlb5UbbvH9qMj3LEcyasxZSOXRbtRLwW2oujEqSxnLmhTzqNVk0c69AUVjg+Jle0WQIiW/whZrNWaT2jB4aRe0dz4FBhnnr8cNr+mFlVCgzU5JZ4NKdyZnTtQtQRzwxmGm7v2NCE5T5zQRdeOQ2xJookmr198oIzWf1XbysGF4bNnh5RKdfpjhZqbzhaptOlePasIloskcujM0nCqo8cm2fPetVpNrosx0dpf6F/j4ooreCB8uNQMmQWS5FDXDQlQSQbIGG2RTXWOob7gSqgBg7VhnZPAkonLr3zYpv98K6PbOJ9cqy5K/wQXU0ITUlLpdghzY2fUmDRw1vm8sQj9XgMtR2ToZfC4laorRyw8WyqS7ygL9rwPQG149JGwhCCM0NekfhEdX6MMXvaEB6EthMxEE12aOOh6y/FMmTB90jd7izBNA56l1c9eEC/PHbh+2rKEetNQD3JvhFVGJSzM/QvE0tyUPz+bEg8bv/Q+lJfomfcBnt4="
         on:
-          tags: true
+          tags: false
