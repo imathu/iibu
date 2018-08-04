@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Divider, Grid, Sticky, Segment, Header } from 'semantic-ui-react';
+import { Divider, Grid, Sticky, Segment } from 'semantic-ui-react';
 import Client from './Client';
 import Menu from './Menu';
 
