@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import { Link, withRouter } from 'react-router-dom';
 import * as routes from 'constants/routes';
 import { Segment } from 'semantic-ui-react';
@@ -15,7 +16,13 @@ const PasswordResetPage = ({ history }) => (
        marginTop: '20px',
       }}
     >
-      <h1>Reset your Password</h1>
+      <h1>
+        <FormattedMessage
+          id="app.pwdResetTitle"
+          defaultMessage="Passwort zurücksetzen"
+          values={{ what: 'react-intl' }}
+        />
+      </h1>
       <PasswordResetForm history={history} />
     </Segment>
   </div>
@@ -78,12 +85,16 @@ class PasswordResetForm extends Component {
   }
 }
 const PasswordResetLink = () => (
-  <p>
-    Reset your password?
+  <div>
+    <FormattedMessage
+      id="app.pwdResetQuestion"
+      defaultMessage="Passwort zurücksetzen?"
+      values={{ what: 'react-intl' }}
+    />
     {' '}
     {// eslint-disable-next-line
     }<Link to={routes.PASSWORD_RESET}>Reset</Link>
-  </p>);
+  </div>);
 
 export default withRouter(PasswordResetPage);
 

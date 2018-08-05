@@ -1,0 +1,12 @@
+{
+  "app.title": "Willkommen bei iibu",
+  "app.intro": "270 Grad Feedbackanalyse für Führungskräfte",
+  "app.pwdResetTitle": "Passwort Reset",
+  "app.pwdResetQuestion": "Passwort zurücksetzen?",
+  "app.signUpQuestion": "Sie haben noch keinen Account?",
+  "feedback.feedbacker": "Feedbacknehmer",
+  "feedback.role": "Sie geben Feedback in der Rolle als",
+  "feedback.question": "Frage",
+  "feedback.nomatch": "nicht zutreffend",
+  "feedback.match": "trifft zu"
+}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import { Link, withRouter } from 'react-router-dom';
 import * as routes from 'constants/routes';
 import { Segment } from 'semantic-ui-react';
@@ -121,12 +122,16 @@ class SignUpForm extends Component {
   }
 }
 const SignUpLink = () => (
-  <p>
-    Do not have an account?
+  <div>
+    <FormattedMessage
+      id="app.signUpQuestion"
+      defaultMessage="Sie haben noch keinen Account?"
+      values={{ what: 'react-intl' }}
+    />
     {' '}
     {// eslint-disable-next-line
     }<Link to={routes.SIGN_UP}>Sign Up</Link>
-  </p>);
+  </div>);
 
 export default withRouter(SignUpPage);
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import { Segment, Header, Divider, Table } from 'semantic-ui-react';
 import { getRoleContent } from 'utils';
 
@@ -20,14 +21,44 @@ const Client = (props) => {
   const roleContent = getRoleContent(roles, roleId);
   return (
     <Segment>
-      <Header textAlign="left" as="h2" >Feedbacknehmer: {client.name} {client.firstname}</Header>
-      Sie geben Feedback in der Rolle als: {roleContent}
+      <Header textAlign="left" as="h2" >
+        <FormattedMessage
+          id="feedback.feedbacker"
+          defaultMessage="Feedbacknehmer"
+          values={{ what: 'react-intl' }}
+        />
+        : {client.name} {client.firstname}
+      </Header>
+      <FormattedMessage
+        id="feedback.role"
+        defaultMessage="Sie geben Feedback in der Rolle als"
+        values={{ what: 'react-intl' }}
+      />
+      : {roleContent}
       <Divider />
       <Table celled padded>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Frage</Table.HeaderCell>
-            <Table.HeaderCell>1 = trifft nicht zu<br />5 = trifft zu</Table.HeaderCell>
+            <Table.HeaderCell>
+              <FormattedMessage
+                id="feedback.question"
+                defaultMessage="Frage"
+                values={{ what: 'react-intl' }}
+              />
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              1 = <FormattedMessage
+                id="feedback.nomatch"
+                defaultMessage="trifft nicht zu"
+                values={{ what: 'react-intl' }}
+              />
+              <br />
+              5 = <FormattedMessage
+                id="feedback.match"
+                defaultMessage="trifft zu"
+                values={{ what: 'react-intl' }}
+              />
+            </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>

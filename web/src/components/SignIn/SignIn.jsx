@@ -18,8 +18,9 @@ const SignInPage = ({ history }) => (
        marginTop: '20px',
       }}
     >
-      <h1>SignIn</h1>
+      <h1>Login</h1>
       <SignInForm history={history} />
+      <hr />
       <SignUpLink />
       <PasswordResetLink />
     </Segment>
