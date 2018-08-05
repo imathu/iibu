@@ -1,42 +1,24 @@
 import React from 'react';
-import { Dropdown } from 'semantic-ui-react';
-import { getLanguage, setLanguage } from 'utils/language';
-
-const options = [
-  { key: 1, text: 'de', value: 'de' },
-  { key: 2, text: 'en', value: 'en' },
-];
+import { PropTypes } from 'prop-types';
+import { Flag, Container } from 'semantic-ui-react';
+import { LANGUAGE } from 'utils/language';
 
 class Language extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      language: 'fr',
-    };
+  static propTypes = {
+    language: PropTypes.shape({
+      setLanguage: PropTypes.func,
+    }).isRequired,
   }
-
-  componentDidMount = () => {
-    this.setState(() => ({ language: getLanguage() }));
-  }
-
-  handleChange = (e, { value }) => {
-    this.setState(() => ({ language: value }));
-    setLanguage(value);
+  setLanguage = (language) => {
+    this.props.language.setLanguage(language);
   }
 
   render() {
-    const { language } = this.state;
     return (
-      <Dropdown
-        compact
-        icon=""
-        className="link item"
-        onChange={this.handleChange}
-        options={options}
-        selection
-        placeholder="de "
-        value={language}
-      />
+      <Container textAlign="right">
+        <Flag name="de" onClick={() => this.setLanguage(LANGUAGE.DE)} />
+        <Flag name="gb" onClick={() => this.setLanguage(LANGUAGE.EN)} />
+      </Container>
     );
   }
 }

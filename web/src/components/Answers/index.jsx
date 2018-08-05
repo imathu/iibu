@@ -89,7 +89,11 @@ class Answers extends React.Component {
         ?
           <div id="answers-content">
             {(data)
-              ? <AnswersList data={data} projectId={projectId} feedbackerId={feedbackerId} />
+              ? <AnswersList
+                data={data}
+                projectId={projectId}
+                feedbackerId={feedbackerId}
+              />
               : <Loader active inline="centered" />
             }
           </div>

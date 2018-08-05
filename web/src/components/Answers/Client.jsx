@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Segment, Header, Divider, Table } from 'semantic-ui-react';
 import { getRoleContent } from 'utils';
 
+import LanguageContext from 'components/LanguageContext';
+
 import Question from './Question';
 import Answer from './Answer';
 
@@ -32,11 +34,16 @@ const Client = (props) => {
           {Object.keys(questions).map(id => (
             <Table.Row key={id}>
               <Table.Cell>
-                <Question
-                  question={questions[id]}
-                  roleId={roleId}
-                  gender={feedbacker.gender}
-                />
+                <LanguageContext.Consumer>
+                  {language => (
+                    <Question
+                      question={questions[id]}
+                      roleId={roleId}
+                      gender={feedbacker.gender}
+                      language={language}
+                    />
+                  )}
+                </LanguageContext.Consumer>
               </Table.Cell>
               <Table.Cell collapsing>
                 <Answer

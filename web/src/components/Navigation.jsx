@@ -8,7 +8,6 @@ import * as routes from 'constants/routes';
 
 import AuthUserContext from 'components/AuthUserContext';
 import SignOutButton from 'components/SignIn/SignOutButton';
-import Language from 'components/Language';
 
 const style = { color: 'black' };
 
@@ -24,13 +23,12 @@ const NavigationNonAuth = () => (
       </Menu.Item>
       <Menu.Menu position="right">
         <Menu.Item
-          name="sign_in"
+          name="login"
           as={NavLink}
           to={routes.SIGN_IN}
           exact
         />
       </Menu.Menu>
-      <Language />
     </Menu>
   </div>
 );
@@ -64,7 +62,6 @@ const NavigationAuth = ({ auth }) => {
               />
             </React.Fragment>
           }
-          <Language />
           <Menu.Item>
             <SignOutButton />
           </Menu.Item>

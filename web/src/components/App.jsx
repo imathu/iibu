@@ -1,75 +1,34 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-} from 'react-router-dom';
-
-import Navigation from 'components/Navigation';
-import LandingPage from 'components/Landing';
-import ProjectEdit from 'components/Projects/ProjectEdit';
-import ProjectsPage from 'components/Projects/Projects';
-import ProjectPage from 'components/Projects/Project';
-import AdminPage from 'components/Admin/Admin';
-import Answers from 'components/Answers';
-
-import * as routes from 'constants/routes';
-
 import withAuthentication from 'components/withAuthentication';
 
-import SignUpPage from 'components/SignIn/SignUp';
-import SignInPage from 'components/SignIn/SignIn';
-import PasswordResetPage from 'components/SignIn/PasswordReset';
+import Content from 'components/Content';
+
+import LanguageContext from 'components/LanguageContext';
+import { getLanguage, setLanguage } from 'utils/language';
 
 import 'semantic-ui-css/semantic.min.css';
 import './App.css';
 
-const App = () => (
-  <Router>
-    <div className="App">
-      <Navigation />
-      <Route
-        exact
-        path={routes.LANDING}
-        component={LandingPage}
-      />
-      <Route
-        exact
-        path={routes.PROJECTS}
-        component={ProjectsPage}
-      />
-      <Route
-        exact
-        path={routes.PROJECT_EDIT}
-        component={ProjectEdit}
-      />
-      <Route
-        path={routes.ADMIN}
-        component={AdminPage}
-      />
-      <Route
-        path={routes.PROJECT}
-        component={ProjectPage}
-      />
-      <Route
-        path={routes.SIGN_IN}
-        component={SignInPage}
-      />
-      <Route
-        path={routes.SIGN_UP}
-        component={SignUpPage}
-      />
-      <Route
-        path={routes.PASSWORD_RESET}
-        component={PasswordResetPage}
-      />
-      <Route
-        path={routes.ANSWERS}
-        component={Answers}
-      />
-    </div>
-  </Router>
-);
-
-// export default(App);
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      language: getLanguage(),
+    };
+  }
+  setLanguage = (language) => {
+    this.setState(() => ({ language }));
+    setLanguage(language);
+  }
+  render() {
+    return (
+      <LanguageContext.Provider
+        value={{ language: this.state.language, setLanguage: this.setLanguage }}
+      >
+        <Content />
+      </LanguageContext.Provider>
+    );
+  }
+}
 
 export default withAuthentication(App);
