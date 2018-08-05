@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import * as routes from 'constants/routes';
 import { Segment } from 'semantic-ui-react';
-import { auth, db } from '../firebase';
+import { auth, db } from '../../firebase';
 
 const SignUpPage = ({ history }) => (
   <div>

@@ -5,7 +5,7 @@ export const PROJECT = '/project/:projectId';
 export const SIGN_IN = '/signin';
 export const SIGN_UP = '/signup';
 export const SIGN_OUT = '/signout';
-export const PASSWORD_FORGET = '/pw-forget';
+export const PASSWORD_RESET = '/passwordreset';
 
 export const PROJECT_EDIT = '/projects/edit';
 export const PROJECT_FRAGEN = '/project/:projectId/fragen';

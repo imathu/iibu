@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { SignUpLink } from 'components/SignUp';
+import { PasswordResetLink } from 'components/SignIn/PasswordReset';
 import { Segment } from 'semantic-ui-react';
 import * as routes from 'constants/routes';
 
-import { auth } from '../firebase';
+import { SignUpLink } from './SignUp';
+import { auth } from '../../firebase';
 
 const SignInPage = ({ history }) => (
   <div>
@@ -20,6 +21,7 @@ const SignInPage = ({ history }) => (
       <h1>SignIn</h1>
       <SignInForm history={history} />
       <SignUpLink />
+      <PasswordResetLink />
     </Segment>
   </div>
 );

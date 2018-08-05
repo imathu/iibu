@@ -48,7 +48,7 @@ class Answers extends React.Component {
               if (!data.err) {
                 this.setState({ data });
               } else {
-                console.log('error', data.err); // eslint-disable-line
+                throw new Error('an unexpected error occured', data.err);
               }
             }).catch((e) => {
               alert(e); // eslint-disable-line

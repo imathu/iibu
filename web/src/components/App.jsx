@@ -16,9 +16,9 @@ import * as routes from 'constants/routes';
 
 import withAuthentication from 'components/withAuthentication';
 
-import SignUpPage from 'components/SignUp';
-import SignInPage from 'components/SignIn';
-// import PasswordForgetPage from 'components/PasswordForget';
+import SignUpPage from 'components/SignIn/SignUp';
+import SignInPage from 'components/SignIn/SignIn';
+import PasswordResetPage from 'components/SignIn/PasswordReset';
 
 import 'semantic-ui-css/semantic.min.css';
 import './App.css';
@@ -57,6 +57,10 @@ const App = () => (
       <Route
         path={routes.SIGN_UP}
         component={SignUpPage}
+      />
+      <Route
+        path={routes.PASSWORD_RESET}
+        component={PasswordResetPage}
       />
       <Route
         path={routes.ANSWERS}
