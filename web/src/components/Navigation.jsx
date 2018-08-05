@@ -7,8 +7,10 @@ import { NavLink } from 'react-router-dom';
 import * as routes from 'constants/routes';
 
 import AuthUserContext from 'components/AuthUserContext';
-import SignOutButton from 'components/SignIn/SignOut';
+import SignOutButton from 'components/SignIn/SignOutButton';
 import Language from 'components/Language';
+
+const style = { color: 'black' };
 
 const NavigationNonAuth = () => (
   <div className="navigation">
@@ -18,15 +20,9 @@ const NavigationNonAuth = () => (
       stackable
     >
       <Menu.Item>
-        iibu.ch
+        <a style={style} href={routes.LANDING}>iibu Feedbackanalyse</a>
       </Menu.Item>
       <Menu.Menu position="right">
-        <Menu.Item
-          name="home"
-          as={NavLink}
-          to={routes.LANDING}
-          exact
-        />
         <Menu.Item
           name="sign_in"
           as={NavLink}
@@ -49,15 +45,9 @@ const NavigationAuth = ({ auth }) => {
         stackable
       >
         <Menu.Item>
-          iibu.ch -  {auth.authUser.email}
+          <a style={style} href={routes.LANDING}>iibu Feedbackanalyse</a>
         </Menu.Item>
         <Menu.Menu position="right">
-          <Menu.Item
-            name="home"
-            as={NavLink}
-            to={routes.LANDING}
-            exact
-          />
           { (admin) &&
             <React.Fragment>
               <Menu.Item
