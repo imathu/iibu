@@ -64,13 +64,13 @@ class Answers extends React.Component {
     });
     if (auth.isSignInWithEmailLink(window.location.href)) {
       this.setState(() => ({ loading: true }));
-      let email = window.localStorage.getItem('emailForSignIn');
+      let email = localStorage.getItem('emailForSignIn');
       if (!email) {
-        email = window.prompt('Please provide your email for confirmation');
+        email = window.prompt('Please provide your email for confirmation'); // eslint-disable-line no-alert
       }
       auth.signInWithEmailLink(email, window.location.href)
         .then(() => {
-          window.localStorage.removeItem('emailForSignIn');
+          localStorage.removeItem('emailForSignIn');
           this.setState(() => ({ loading: false }));
         })
         .catch(() => {

@@ -47,7 +47,7 @@ class SignInForm extends Component {
     auth.doSignInWithEmail(email, this.props.projectId, this.props.feedbackerId)
       .then(() => {
         this.setState(() => ({ message: 'you received an email to continue login' }));
-        window.localStorage.setItem('emailForSignIn', email);
+        localStorage.setItem('emailForSignIn', email);
       })
       .catch((error) => {
         this.setState(byPropKey('error', error));

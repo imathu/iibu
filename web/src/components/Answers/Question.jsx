@@ -9,7 +9,6 @@ const Question = ({
   language,
 }) => {
   const roleCode = getRoleCode(roleId, gender) || 'he';
-  console.log(language);
   return (
     <div>
       {question.content[language.language][roleCode]}

@@ -1,5 +1,6 @@
 import React from 'react';
 import withAuthentication from 'components/withAuthentication';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import { addLocaleData, IntlProvider } from 'react-intl';
 import locale_en from 'react-intl/locale-data/en'; // eslint-disable-line camelcase
@@ -7,7 +8,8 @@ import locale_de from 'react-intl/locale-data/de'; // eslint-disable-line camelc
 import messages_de from 'translations/de.json'; // eslint-disable-line camelcase
 import messages_en from 'translations/en.json'; // eslint-disable-line camelcase
 
-import Content from 'components/Content';
+import NavigationDesktop from 'components/Menu/NavigationDesktop';
+import NavigationMobile from 'components/Menu/NavigationMobile';
 
 import LanguageContext from 'components/LanguageContext';
 import { getLanguage, setLanguage } from 'utils/language';
@@ -21,6 +23,13 @@ const messages = {
   de: messages_de,
   en: messages_en,
 };
+
+const PageContent = () => (
+  <React.Fragment>
+    <NavigationDesktop />
+    <NavigationMobile />
+  </React.Fragment>
+);
 
 class App extends React.Component {
   constructor(props) {
@@ -39,7 +48,9 @@ class App extends React.Component {
         <LanguageContext.Provider
           value={{ language: this.state.language, setLanguage: this.setLanguage }}
         >
-          <Content />
+          <Router>
+            <PageContent />
+          </Router>
         </LanguageContext.Provider>
       </IntlProvider>
     );
