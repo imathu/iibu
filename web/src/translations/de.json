@@ -4,9 +4,13 @@
   "app.pwdResetTitle": "Passwort Reset",
   "app.pwdResetQuestion": "Passwort zurücksetzen?",
   "app.signUpQuestion": "Sie haben noch keinen Account?",
+  "feedback.bannerHeader": "Willkommen als Feedbackgeber",
+  "feedback.SignInEmail": "One-time Login mit ihrer Email Adresse",
+  "feedback.SignInEmailAlternative": "Alternativ können sie sich mit user/passwort anmelden",
   "feedback.feedbacker": "Feedbacknehmer",
   "feedback.role": "Sie geben Feedback in der Rolle als",
   "feedback.question": "Frage",
   "feedback.nomatch": "nicht zutreffend",
-  "feedback.match": "trifft zu"
+  "feedback.match": "trifft zu",
+  "feedback.waitForData": "Wenn sie sich korrekt angemeldet haben werden die Daten in ein paar Sekunden dargestellt"
 }

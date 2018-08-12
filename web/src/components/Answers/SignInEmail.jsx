@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import * as routes from 'constants/routes';
 import { Segment } from 'semantic-ui-react';
+import { FormattedMessage } from 'react-intl';
 
 import { auth } from '../../firebase';
 
@@ -15,8 +17,23 @@ const SignInEmailPage = props => (
        marginTop: '20px',
       }}
     >
-      <h1>SignIn with your email address</h1>
+      <h1>
+        <FormattedMessage
+          id="feedback.SignInEmail"
+          defaultMessage="One-time Login mit ihrer Email Adresse"
+          values={{ what: 'react-intl' }}
+        />
+      </h1>
       <SignInForm {...props} />
+      <div style={{ marginTop: '10px' }}>
+        <FormattedMessage
+          id="feedback.SignInEmailAlternative"
+          defaultMessage="alternative signup with email/password"
+          values={{ what: 'react-intl' }}
+        />
+        {// eslint-disable-next-line
+        }&nbsp;<Link to={routes.SIGN_IN}>Sign In</Link>
+      </div>
     </Segment>
   </div>
 );

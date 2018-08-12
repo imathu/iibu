@@ -39,6 +39,8 @@ const INITIAL_STATE = {
   error: null,
 };
 
+// <Loader active inline="centered" />
+
 class SignInForm extends Component {
   static propTypes = {
     history: PropTypes.shape({}).isRequired,

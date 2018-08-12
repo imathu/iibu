@@ -1,39 +1,64 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Divider, Grid, Sticky, Segment, Modal, Header, Button, Icon, Checkbox } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+import { Loader, Divider, Grid, Sticky, Segment, Modal, Header, Button, Icon, Checkbox } from 'semantic-ui-react';
+import * as routes from 'constants/routes';
 import Client from './Client';
 import Menu from './Menu';
 
-import { db } from '../../firebase';
+import { firebase, db } from '../../firebase';
 
 class AnswersList extends React.Component {
   static propTypes = {
-    data: PropTypes.shape({
-      feedbacker: PropTypes.shape({
-        id: PropTypes.string,
-      }).isRequired,
-    }).isRequired,
     projectId: PropTypes.string.isRequired,
+    feedbackerId: PropTypes.string.isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func,
+    }).isRequired,
   };
   constructor(props) {
     super(props);
     this.state = {
+      data: null,
       modalShow: true,
       checkBoxToggle: false,
     };
   }
   componentDidMount = () => {
-    const { feedbacker } = this.props.data;
-    if (feedbacker && feedbacker.noBanner) {
-      this.setState(() => ({ modalShow: false }));
-    }
+    const { projectId, feedbackerId } = this.props;
+    const API = `/api/v1/${projectId}/answers/${feedbackerId}`;
+    firebase.auth.currentUser.getIdToken(true).then((idToken) => {
+      fetch(API, { headers: { Authorization: idToken } })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('not authorized');
+        })
+        .then((data) => {
+          if (!data.err) {
+            this.setState({ data });
+            if (data.feedbacker && data.feedbacker.noBanner) {
+              this.setState(() => ({ modalShow: false }));
+            }
+          } else {
+            throw new Error('an unexpected error occured', data.err);
+          }
+        }).catch((e) => {
+          alert(e); // eslint-disable-line
+          this.props.history.push(routes.LANDING);
+        });
+    }).catch((error) => {
+      console.log(error); // eslint-disable-line
+    });
   }
   closeModal = () => {
     this.setState(() => ({ modalShow: false }));
     if (this.state.checkBoxToggle) {
       db.doDisableBanner(
         this.props.projectId,
-        this.props.data.feedbacker.id,
+        this.state.data.feedbacker.id,
       );
     }
   }
@@ -42,14 +67,21 @@ class AnswersList extends React.Component {
   }
   handleContextRef = contextRef => this.setState({ contextRef });
   render() {
-    const { data, projectId } = this.props;
+    const { projectId } = this.props;
+    const { data } = this.state;
     const { contextRef, modalShow, checkBoxToggle } = this.state;
-    const numQuestions = Object.keys(data.questions).length;
-    if (data.feedbacker) {
+    if (data && data.feedbacker) {
+      const numQuestions = Object.keys(data.questions).length;
       return (
         <React.Fragment>
           <Modal open={modalShow}>
-            <Header content="Willkommen als Feedbackgeber" />
+            <Header>
+              <FormattedMessage
+                id="feedback.bannerHeader"
+                defaultMessage="Willkommen als Feedbackgeber"
+                values={{ what: 'react-intl' }}
+              />
+            </Header>
             <Modal.Content>
               {data.clientBanner}
             </Modal.Content>
@@ -104,9 +136,18 @@ class AnswersList extends React.Component {
       );
     }
     return (
-      <Segment style={{ textAlign: 'center' }}>no data found, check your URL</Segment>
+      <React.Fragment>
+        <Loader active inline="centered" />
+        <Segment style={{ textAlign: 'center' }}>
+          <FormattedMessage
+            id="feedback.waitForData"
+            defaultMessage="Daten werden geladen"
+            values={{ what: 'react-intl' }}
+          />
+        </Segment>
+      </React.Fragment>
     );
   }
 }
 
-export default AnswersList;
+export default withRouter(AnswersList);

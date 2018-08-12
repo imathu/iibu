@@ -4,9 +4,13 @@
   "app.pwdResetTitle": "password reset",
   "app.pwdResetQuestion": "reset your password?",
   "app.signUpQuestion": "don't have an account?",
+  "feedback.bannerHeader": "Welcome in your role as feedbacker",
+  "feedback.SignInEmail": "One-time login with your email",
+  "feedback.SignInEmailAlternative": "as alternative you can login with user/password",
   "feedback.feedbacker": "feedback receiver",
   "feedback.role": "your role as a feedbacker is",
   "feedback.question": "question",
   "feedback.nomatch": "inappropriate",
-  "feedback.match": "applicable"
+  "feedback.match": "applicable",
+  "feedback.waitForData": "If you are authorized, the data will be loaded in a few seconds"
 }
