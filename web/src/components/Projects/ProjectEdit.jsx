@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Segment, Form, Input, TextArea, Button, Grid, Header } from 'semantic-ui-react';
+import { Segment, Form, Input, TextArea, Button, Grid, Header, Checkbox } from 'semantic-ui-react';
 
 import { db } from '../../firebase';
 
@@ -9,6 +9,17 @@ const byPropKey = (project, propertyName, value) => () => ({
   project: {
     ...project,
     [propertyName]: value,
+  },
+  changedData: true,
+});
+
+const setBanner = (project, language, value) => () => ({
+  project: {
+    ...project,
+    clientBanner: {
+      ...project.clientBanner,
+      [language]: value,
+    },
   },
   changedData: true,
 });
@@ -28,7 +39,16 @@ class ProjectEdit extends React.Component {
       project: {
         projectId: null,
         name: '',
-        clientBanner: '',
+        clientBanner: {
+          de: '',
+          en: '',
+          fr: '',
+        },
+        languages: {
+          de: true,
+          en: false,
+          fr: false,
+        },
       },
     };
   }
@@ -42,7 +62,8 @@ class ProjectEdit extends React.Component {
             project: {
               id: params.get('projectId'),
               name: snapshot.val().name || '',
-              clientBanner: snapshot.val().clientBanner || '',
+              clientBanner: snapshot.val().clientBanner || {},
+              languages: snapshot.val().languages || {},
             },
           }));
         }
@@ -52,18 +73,34 @@ class ProjectEdit extends React.Component {
   onSave = () => {
     const { project } = this.state;
     if (project.id) {
-      db.doUpdateProjectData(project.id, project.name, project.clientBanner).then(() =>
+      db.doUpdateProjectData(project.id, project).then(() =>
         this.setState(() => ({ changedData: false })));
     } else {
-      db.doCreateProject(project.id, project.name, project.clientBanner).then(() =>
+      db.doCreateProject(project.id, project).then(() =>
         this.setState(() => ({ changedData: false })));
     }
   }
   onCancel = () => {
     this.props.history.push('/projects');
   }
+  onToggleLanguage = (event, data) => {
+    const { project } = this.state;
+    const key = data.label;
+    const val = !project.languages[key];
+    this.setState(() => ({
+      project: {
+        ...project,
+        languages: {
+          ...project.languages,
+          [key]: val,
+        },
+      },
+      changedData: true,
+    }));
+  }
   render() {
     const { project, changedData } = this.state;
+    const { languages } = project || {};
     const save = changedData && project.name !== '';
     return (
       <div className="admin-content" style={{ width: '50%' }}>
@@ -78,28 +115,70 @@ class ProjectEdit extends React.Component {
             <Grid.Column width={16}>
               <Segment>
                 <Form>
-                  <Form.Group>
-                    <Form.Field
-                      id="name"
-                      control={Input}
-                      label="Name"
-                      placeholder="Name"
-                      width={8}
-                      value={project.name}
-                      onChange={event => this.setState(byPropKey(project, 'name', event.target.value))}
+                  <Form.Field
+                    id="name"
+                    control={Input}
+                    label="Name"
+                    placeholder="Name"
+                    width={8}
+                    value={project.name}
+                    onChange={event => this.setState(byPropKey(project, 'name', event.target.value))}
+                  />
+                  <Form.Field>
+                    <Checkbox
+                      toggle
+                      label="de"
+                      checked={languages.de}
+                      disabled
                     />
-                  </Form.Group>
-                  <Form.Group>
+                  </Form.Field>
+                  <Form.Field>
+                    <Checkbox
+                      toggle
+                      label="en"
+                      checked={languages.en}
+                      onChange={this.onToggleLanguage}
+                    />
+                  </Form.Field>
+                  <Form.Field>
+                    <Checkbox
+                      toggle
+                      label="fr"
+                      checked={languages.fr}
+                      onChange={this.onToggleLanguage}
+                    />
+                  </Form.Field>
+                  <Form.Field
+                    id="deClientBanner"
+                    control={TextArea}
+                    label="Feedbackgeber intro Banner (deutsch)"
+                    placeholder="Text, der dem Feedbackgeber in Deutsch angezeigt wird"
+                    width={16}
+                    value={project.clientBanner.de}
+                    onChange={event => this.setState(setBanner(project, 'de', event.target.value))}
+                  />
+                  {languages.en && (
                     <Form.Field
-                      id="clientBanner"
+                      id="enclientBanner"
                       control={TextArea}
-                      label="Feedbackgeber intro Banner"
-                      placeholder="Text, der dem Feedbackgeber angezeigt wird"
+                      label="Feedbackgeber intro Banner (englisch)"
+                      placeholder="Text, der dem Feedbackgeber in Eglisch angezeigt wird"
                       width={16}
-                      value={project.clientBanner}
-                      onChange={event => this.setState(byPropKey(project, 'clientBanner', event.target.value))}
+                      value={project.clientBanner.en}
+                      onChange={event => this.setState(setBanner(project, 'en', event.target.value))}
                     />
-                  </Form.Group>
+                  )}
+                  {languages.fr && (
+                    <Form.Field
+                      id="frclientBanner"
+                      control={TextArea}
+                      label="Feedbackgeber intro Banner (französisch)"
+                      placeholder="Text, der dem Feedbackgeber in Französisch angezeigt wird"
+                      width={16}
+                      value={project.clientBanner.fr}
+                      onChange={event => this.setState(setBanner(project, 'fr', event.target.value))}
+                    />
+                  )}
                 </Form>
               </Segment>
             </Grid.Column>

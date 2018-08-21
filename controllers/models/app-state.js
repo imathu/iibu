@@ -70,6 +70,7 @@ async function getFeedbackerAnswers(projectId, feedbackerId, idToken) {
             contexts,
             roles,
             clientBanner: project.clientBanner,
+            languages: project.languages,
             clients: project.clients,
             questions: project.questions,
             feedbacker,

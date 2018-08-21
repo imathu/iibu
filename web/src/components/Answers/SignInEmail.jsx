@@ -7,36 +7,51 @@ import { FormattedMessage } from 'react-intl';
 
 import { auth } from '../../firebase';
 
-const SignInEmailPage = props => (
-  <div>
-    <Segment style={{
-       textAlign: 'center',
-       width: '60%',
-       vertical: true,
-       margin: 'auto',
-       marginTop: '20px',
-      }}
-    >
-      <h1>
-        <FormattedMessage
-          id="feedback.SignInEmail"
-          defaultMessage="One-time Login mit ihrer Email Adresse"
-          values={{ what: 'react-intl' }}
-        />
-      </h1>
-      <SignInForm {...props} />
-      <div style={{ marginTop: '10px' }}>
-        <FormattedMessage
-          id="feedback.SignInEmailAlternative"
-          defaultMessage="alternative signup with email/password"
-          values={{ what: 'react-intl' }}
-        />
-        {// eslint-disable-next-line
-        }&nbsp;<Link to={routes.SIGN_IN}>Sign In</Link>
-      </div>
-    </Segment>
-  </div>
-);
+const SignInEmailPage = (props) => {
+  const { projectId, feedbackerId } = props.match.params;
+  return (
+    <div>
+      <Segment style={{
+         textAlign: 'center',
+         width: '60%',
+         vertical: true,
+         margin: 'auto',
+         marginTop: '20px',
+        }}
+      >
+        <h1>
+          <FormattedMessage
+            id="feedback.SignInEmail"
+            defaultMessage="One-time Login mit ihrer Email Adresse"
+            values={{ what: 'react-intl' }}
+          />
+        </h1>
+        <SignInForm {...props} />
+        <div style={{ marginTop: '10px' }}>
+          <FormattedMessage
+            id="feedback.SignInEmailAlternative"
+            defaultMessage="alternative signup with email/password"
+            values={{ what: 'react-intl' }}
+          />&nbsp;
+          {// eslint-disable-next-line
+            <Link
+              to={{
+                  pathname: routes.SIGN_IN,
+                  search: `?projectId=${projectId}&feedbackerId=${feedbackerId}`,
+              }}
+            >Sign In
+            </Link>
+          }
+        </div>
+      </Segment>
+    </div>
+  );
+};
+SignInEmailPage.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({}),
+  }).isRequired,
+};
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Loader, Divider, Grid, Sticky, Segment, Modal, Header, Button, Icon, Checkbox } from 'semantic-ui-react';
+import LanguageContext from 'components/LanguageContext';
+import Language from 'components/Language';
 import * as routes from 'constants/routes';
 import Client from './Client';
 import Menu from './Menu';
@@ -73,66 +75,72 @@ class AnswersList extends React.Component {
     if (data && data.feedbacker) {
       const numQuestions = Object.keys(data.questions).length;
       return (
-        <React.Fragment>
-          <Modal open={modalShow}>
-            <Header>
-              <FormattedMessage
-                id="feedback.bannerHeader"
-                defaultMessage="Willkommen als Feedbackgeber"
-                values={{ what: 'react-intl' }}
-              />
-            </Header>
-            <Modal.Content>
-              {data.clientBanner}
-            </Modal.Content>
-            <Modal.Actions>
-              <Checkbox
-                label="diese Nachricht nicht mehr anzeigen"
-                checked={checkBoxToggle}
-                onClick={this.checkBoxToggle}
-              />
-              <Button color="green" onClick={this.closeModal}>
-                <Icon name="checkmark" /> Gelesen
-              </Button>
-            </Modal.Actions>
-          </Modal>
-          <Grid stackable columns={2} reversed="mobile vertically">
-            <Grid.Column width={12}>
-              <div ref={this.handleContextRef}>
-                {Object.keys(data.feedbacker.clients).map(id => (
-                  <div key={id}>
-                    <Client
-                      contexts={data.contexts}
-                      roles={data.roles}
-                      questions={data.questions}
-                      client={data.clients[id]}
-                      feedbacker={data.feedbacker}
-                      updateAnswer={this.updateAnswer}
-                      projectId={projectId}
-                    />
-                    <Divider />
+        <LanguageContext.Consumer>
+          {language => (
+            <React.Fragment>
+              <Modal open={modalShow}>
+                <Header>
+                  <FormattedMessage
+                    id="feedback.bannerHeader"
+                    defaultMessage="Willkommen als Feedbackgeber"
+                    values={{ what: 'react-intl' }}
+                  />
+                </Header>
+                <Modal.Content>
+                  <Language language={language} languages={data.languages} />
+                  {data.clientBanner[language.language]}
+                </Modal.Content>
+                <Modal.Actions>
+                  <Checkbox
+                    label="diese Nachricht nicht mehr anzeigen"
+                    checked={checkBoxToggle}
+                    onClick={this.checkBoxToggle}
+                  />
+                  <Button color="green" onClick={this.closeModal}>
+                    <Icon name="checkmark" /> Gelesen
+                  </Button>
+                </Modal.Actions>
+              </Modal>
+              <Language languages={data.languages} />
+              <Grid style={{ marginTop: '5px' }} stackable columns={2} reversed="mobile vertically">
+                <Grid.Column width={12}>
+                  <div ref={this.handleContextRef}>
+                    {Object.keys(data.feedbacker.clients).map(id => (
+                      <div key={id}>
+                        <Client
+                          contexts={data.contexts}
+                          roles={data.roles}
+                          questions={data.questions}
+                          client={data.clients[id]}
+                          feedbacker={data.feedbacker}
+                          updateAnswer={this.updateAnswer}
+                          projectId={projectId}
+                        />
+                        <Divider />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </Grid.Column>
-            <Grid.Column width={4}>
-              <Sticky context={contextRef} offset={10}>
-                <Segment style={{ backgroundColor: 'lightgray' }}>
-                  {Object.keys(data.feedbacker.clients).map(id => (
-                    <div key={id}>
-                      <Menu
-                        feedbacker={data.feedbacker}
-                        numQuestions={numQuestions}
-                        projectId={projectId}
-                        client={data.clients[id]}
-                      />
-                    </div>
-                  ))}
-                </Segment>
-              </Sticky>
-            </Grid.Column>
-          </Grid>
-        </React.Fragment>
+                </Grid.Column>
+                <Grid.Column width={4}>
+                  <Sticky context={contextRef} offset={10}>
+                    <Segment style={{ backgroundColor: 'lightgray' }}>
+                      {Object.keys(data.feedbacker.clients).map(id => (
+                        <div key={id}>
+                          <Menu
+                            feedbacker={data.feedbacker}
+                            numQuestions={numQuestions}
+                            projectId={projectId}
+                            client={data.clients[id]}
+                          />
+                        </div>
+                      ))}
+                    </Segment>
+                  </Sticky>
+                </Grid.Column>
+              </Grid>
+            </React.Fragment>
+          )}
+        </LanguageContext.Consumer>
       );
     }
     return (

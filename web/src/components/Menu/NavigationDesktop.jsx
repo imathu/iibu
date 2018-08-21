@@ -7,7 +7,6 @@ import { NavLink, Link } from 'react-router-dom';
 import * as routes from 'constants/routes';
 
 import Content from 'components/Content';
-import Language from 'components/Language';
 
 import AuthUserContext from 'components/AuthUserContext';
 
@@ -33,22 +32,19 @@ const AdminMenu = () => (
   </Menu.Menu>
 );
 
-const NonAdminMenu = ({ auth }) => {
-  console.log(auth);
-  return (
-    <Menu.Menu position="right">
-      {auth
-        ? <Menu.Item onClick={() => fbAuth.doSignOut()}>Logout</Menu.Item>
-        : <Menu.Item
-          position="right"
-          name="login"
-          as={Link}
-          to={routes.SIGN_IN}
-        />
-      }
-    </Menu.Menu>
-  );
-};
+const NonAdminMenu = ({ auth }) => (
+  <Menu.Menu position="right">
+    {auth
+      ? <Menu.Item onClick={() => fbAuth.doSignOut()}>Logout</Menu.Item>
+      : <Menu.Item
+        position="right"
+        name="login"
+        as={Link}
+        to={routes.SIGN_IN}
+      />
+    }
+  </Menu.Menu>
+);
 NonAdminMenu.propTypes = {
   auth: PropTypes.shape({}),
 };
@@ -84,7 +80,6 @@ const NavigationDesktop = () => (
               </Container>
             </Menu>
           </Segment>
-          <Language />
           <Content />
         </React.Fragment>
       )}

@@ -7,3 +7,7 @@
 .custom label {
     margin: 0 5px 0;
 }
+
+.flag {
+  cursor: pointer;
+}

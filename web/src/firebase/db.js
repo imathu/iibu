@@ -24,10 +24,11 @@ export const onceGetProject = projectId => (
   db.ref(`projects/${projectId}`).once('value')
 );
 export const doRemoveProject = projectId => db.ref(`projects/${projectId}`).set({});
-export const doUpdateProjectData = (projectId, name, clientBanner) => (
+export const doUpdateProjectData = (projectId, project) => (
   db.ref(`projects/${projectId}`).update(({
-    name,
-    clientBanner,
+    name: project.name,
+    clientBanner: project.clientBanner,
+    languages: project.languages,
   }))
 );
 export const doCreateProject = (projectId, name, clientBanner) => (

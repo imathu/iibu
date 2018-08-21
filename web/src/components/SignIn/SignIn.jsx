@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import queryString from 'query-string';
 import { PasswordResetLink } from 'components/SignIn/PasswordReset';
 import { Segment } from 'semantic-ui-react';
 import * as routes from 'constants/routes';
@@ -8,7 +9,8 @@ import * as routes from 'constants/routes';
 import { SignUpLink } from './SignUp';
 import { auth } from '../../firebase';
 
-const SignInPage = ({ history }) => (
+const SignInPage = props => (
+  // const parsed = queryString.parse(location.search);
   <div>
     <Segment style={{
        textAlign: 'center',
@@ -19,16 +21,13 @@ const SignInPage = ({ history }) => (
       }}
     >
       <h1>Login</h1>
-      <SignInForm history={history} />
+      <SignInForm {...props} />
       <hr />
       <SignUpLink />
       <PasswordResetLink />
     </Segment>
   </div>
 );
-SignInPage.propTypes = {
-  history: PropTypes.shape({}).isRequired,
-};
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -44,7 +43,10 @@ const INITIAL_STATE = {
 class SignInForm extends Component {
   static propTypes = {
     history: PropTypes.shape({}).isRequired,
-  }
+    location: PropTypes.shape({
+      search: PropTypes.string,
+    }).isRequired,
+  };
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
@@ -61,7 +63,12 @@ class SignInForm extends Component {
     auth.doSignInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState(() => ({ ...INITIAL_STATE }));
-        history.push(routes.LANDING);
+        const parsed = queryString.parse(this.props.location.search);
+        if (parsed.feedbackerId && parsed.projectId) {
+          history.push(`/answers/${parsed.projectId}/${parsed.feedbackerId}`);
+        } else {
+          history.push(routes.LANDING);
+        }
       })
       .catch((error) => {
         this.setState(byPropKey('error', error));
