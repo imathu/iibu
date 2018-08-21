@@ -146,6 +146,7 @@ class ProjectEdit extends React.Component {
                       label="fr"
                       checked={languages.fr}
                       onChange={this.onToggleLanguage}
+                      disabled
                     />
                   </Form.Field>
                   <Form.Field

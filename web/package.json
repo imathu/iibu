@@ -17,7 +17,7 @@
     "jspdf": "^1.4.1",
     "moment": "^2.22.2",
     "prop-types": "^15.6.1",
-    "query-string": "^6.1.0",
+    "qs": "^6.5.2",
     "react": "^16.3.2",
     "react-chartjs2": "^1.2.1",
     "react-dom": "^16.3.2",

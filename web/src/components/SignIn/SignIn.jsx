@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import queryString from 'query-string';
+import qs from 'qs';
 import { PasswordResetLink } from 'components/SignIn/PasswordReset';
 import { Segment } from 'semantic-ui-react';
+import Language from 'components/Language';
 import * as routes from 'constants/routes';
 
 import { SignUpLink } from './SignUp';
 import { auth } from '../../firebase';
 
 const SignInPage = props => (
-  // const parsed = queryString.parse(location.search);
   <div>
+    <Language languages={{ en: 'true' }} />
     <Segment style={{
        textAlign: 'center',
        width: '60%',
@@ -63,7 +64,7 @@ class SignInForm extends Component {
     auth.doSignInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState(() => ({ ...INITIAL_STATE }));
-        const parsed = queryString.parse(this.props.location.search);
+        const parsed = qs.parse(this.props.location.search.slice(1));
         if (parsed.feedbackerId && parsed.projectId) {
           history.push(`/answers/${parsed.projectId}/${parsed.feedbackerId}`);
         } else {

@@ -6,7 +6,6 @@ import { NavLink, Link } from 'react-router-dom';
 import * as routes from 'constants/routes';
 
 import Content from 'components/Content';
-import Language from 'components/Language';
 
 import AuthUserContext from 'components/AuthUserContext';
 
@@ -101,7 +100,6 @@ class NavigationMobile extends React.Component {
                     </Menu>
                   </Container>
                 </Segment>
-                <Language />
                 <Content />
               </Sidebar.Pusher>
             </Sidebar.Pushable>
