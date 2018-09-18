@@ -2,7 +2,7 @@
   "name": "iibu",
   "version": "0.1.0",
   "engines": {
-    "node": "9.2.1"
+    "node": "10.9.0"
   },
   "eslintConfig": {
     "extends": [
@@ -27,7 +27,8 @@
     "dateformat": "^3.0.3",
     "express": "^4.16.3",
     "express-sslify": "^1.2.0",
-    "firebase-admin": "^5.12.1"
+    "firebase-admin": "^5.12.1",
+    "nodemailer": "^4.6.8"
   },
   "devDependencies": {
     "eslint": "^4.19.1",

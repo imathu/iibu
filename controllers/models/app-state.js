@@ -1,4 +1,31 @@
 const fb = require('./db');
+const nodemailer = require('nodemailer');
+
+
+const RES_200 = {
+  status: '200',
+  payload: 'ok',
+};
+
+const RES_403 = {
+  status: '403',
+  payload: 'Forbidden',
+};
+
+const RES_500 = {
+  status: '403',
+  payload: 'Internal Server Error',
+};
+
+const transporter = nodemailer.createTransport({
+  host: process.env.MAIL_SMTP,
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PWD,
+  },
+});
 
 const getContexts = () => (
   new Promise((resolve) => {
@@ -45,6 +72,38 @@ const verifyIdToken = idToken => (
   })
 );
 
+const isAdmin = idToken => (
+  new Promise((resolve) => {
+    fb.auth.verifyIdToken(idToken)
+      .then(token => resolve(token.admin))
+      .catch(() => resolve(false));
+  })
+);
+
+async function sendMail(projectId, payload, idToken) {
+  const admin = await isAdmin(idToken);
+  if (!admin) return RES_403;
+  const { feedbackers } = payload;
+  if (!(feedbackers && projectId)) return RES_500;
+
+  payload.feedbackers.forEach((feedbacker) => {
+    const mailOptions = {
+      from: 'mathu@gmx.ch',
+      to: feedbacker.emailAddress,
+      subject: feedbacker.emailSubject,
+      text: feedbacker.emailText,
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error); // eslint-disable-line no-console
+      } else {
+        console.log('Message sent: %s', info.messageId); // eslint-disable-line no-console
+      }
+    });
+  });
+  return RES_200;
+}
+
 async function getFeedbackerAnswers(projectId, feedbackerId, idToken) {
   const email = await verifyIdToken(idToken);
   if (!email) {
@@ -84,4 +143,5 @@ async function getFeedbackerAnswers(projectId, feedbackerId, idToken) {
 
 module.exports = {
   getFeedbackerAnswers,
+  sendMail,
 };
