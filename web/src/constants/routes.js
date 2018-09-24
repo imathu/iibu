@@ -10,6 +10,7 @@ export const PASSWORD_RESET = '/passwordreset';
 export const PROJECT_EDIT = '/projects/edit';
 export const PROJECT_FRAGEN = '/project/:projectId/fragen';
 export const PROJECT_FEEDBACKGEBER = '/project/:projectId/feedbackgeber';
+export const PROJECT_FEEDBACKGEBER_DETAILS = '/project/:projectId/feedbackgeber/:feedbackerId';
 export const PROJECT_FEEDBACKNEHMER = '/project/:projectId/feedbacknehmer';
 export const PROJECT_FEEDBACKNEHMER_DETAILS = '/project/:projectId/feedbacknehmer/:clientId';
 export const PROJECT_ANALYSE = '/project/:projectId/analyse';

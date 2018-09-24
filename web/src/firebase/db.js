@@ -31,10 +31,10 @@ export const doUpdateProjectData = (projectId, project) => (
     languages: project.languages,
   }))
 );
-export const doCreateProject = (projectId, name, clientBanner) => (
+export const doCreateProject = (projectId, project) => (
   db.ref('projects').push({
-    name,
-    clientBanner,
+    name: project.name,
+    clientBanner: project.clientBanner,
     clients: {},
     questions: {},
     feedbackers: {},
@@ -54,6 +54,9 @@ export const onceGetContexts = () => (
 // feedbacker data
 export const onceGetFeedbackers = projectId => (
   db.ref(`projects/${projectId}/feedbackers`).once('value')
+);
+export const onceGetFeedbacker = (projectId, feedbackerId) => (
+  db.ref(`projects/${projectId}/feedbackers/${feedbackerId}`).once('value')
 );
 export const doCreateFeedbackers = (projectId, feedbackers) => (
   db.ref(`projects/${projectId}/`).update({ feedbackers })

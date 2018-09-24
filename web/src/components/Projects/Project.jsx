@@ -9,7 +9,8 @@ import * as routes from 'constants/routes';
 import Questions from './Questions';
 import Clients from './Clients';
 import ClientDetails from './ClientDetails';
-import Feedbackers from './Feedbackers';
+import Feedbackers from './Feedbackers/Feedbackers';
+import FeedbackerDetail from './Feedbackers/FeedbackerDetail';
 import Analysis from './Analysis';
 
 import { db } from '../../firebase';
@@ -103,6 +104,11 @@ class Project extends Component {
                 path={routes.PROJECT_FEEDBACKGEBER}
                 exact
                 component={Feedbackers}
+              />
+              <Route
+                path={routes.PROJECT_FEEDBACKGEBER_DETAILS}
+                exact
+                component={FeedbackerDetail}
               />
               <Route
                 path={routes.PROJECT_FEEDBACKNEHMER}
