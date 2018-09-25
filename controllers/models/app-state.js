@@ -88,7 +88,7 @@ async function sendMail(projectId, payload, idToken) {
 
   payload.feedbackers.forEach((feedbacker) => {
     const mailOptions = {
-      from: 'mathu@gmx.ch',
+      from: process.env.MAIL_FROM,
       to: feedbacker.emailAddress,
       subject: feedbacker.emailSubject,
       text: feedbacker.emailText,
