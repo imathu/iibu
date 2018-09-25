@@ -34,7 +34,7 @@ class FeedbackerDetail extends React.Component {
   }
   state = {
     data: {},
-    selectedClients: [],
+    selectedClients: {},
     changedData: false,
   }
   componentDidMount = () => {
@@ -44,37 +44,61 @@ class FeedbackerDetail extends React.Component {
       db.onceGetFeedbacker(projectId, feedbackerId).then((snapshot) => {
         this.setState(() => ({
           data: snapshot.val(),
-          selectedClients: (data.clients) || [],
+          selectedClients: (data.clients) || {},
         }));
       });
     } else {
       this.setState(() => ({
         data,
-        selectedClients: data.clients || [],
+        selectedClients: data.clients || {},
       }));
     }
   }
   onFeedbackerSave = () => {
-    console.log('saving feedbacker', this.state.data.id);
+    alert('not implemented yet'); // eslint-disable-line
     this.setState(() => ({ changedData: false }));
   }
-  clientSelectionAdd = (selectedClientIds) => {
-    this.setState(() => ({ selectedClientIds, changedData: true }));
+  setRole = (clientId, roleId) => {
+    const { data } = this.state;
+    if (data.clients[clientId]) {
+      data.clients[clientId].role = roleId;
+      this.setState(() => ({
+        data,
+        selectedClients: data.clients,
+        changedData: true,
+      }));
+    }
   }
-  clientRemoveId = () => {
+  toggleClient = (clientId, roleId) => {
+    const { data } = this.state;
+    let clients = {};
+    if (!data.clients[clientId]) {
+      clients = Object.assign({}, data.clients, {
+        ...data.clients,
+        [clientId]: {
+          id: clientId,
+          role: roleId,
+          answers: {},
+        },
+      });
+    } else {
+      delete data.clients[clientId];
+      clients = data.clients; // eslint-disable-line
+    }
+    data.clients = clients;
     this.setState(() => ({
-      // TODO:
+      data,
+      selectedClients: data.clients,
       changedData: true,
     }));
   }
   render() {
-    const { data } = this.state;
+    const { data, changedData, selectedClients } = this.state;
     const {
       id,
       email,
       gender,
     } = data;
-    const { changedData, selectedClients } = this.state;
     const { projectId } = this.props.match.params;
     return (
       <div>
@@ -115,6 +139,8 @@ class FeedbackerDetail extends React.Component {
                               projectId={projectId}
                               adminData={adminData}
                               selectedClients={selectedClients}
+                              toggleClient={this.toggleClient}
+                              setRole={this.setRole}
                             />
                             : null
                           )}

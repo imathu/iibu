@@ -8,9 +8,9 @@ class FeedbackerClientList extends React.Component {
   state = {
     clients: [],
     options: Object.keys(this.props.adminData.roles).map(id => ({
-      key: this.props.adminData.roles[id],
-      value: this.props.adminData.roles[id],
-      text: 'Rolle',
+      key: id,
+      value: id,
+      text: this.props.adminData.roles[id].de || 'n/a',
     })),
   }
   componentDidMount = () => {
@@ -26,9 +26,14 @@ class FeedbackerClientList extends React.Component {
       }));
     });
   }
+  setRole = (clientId, roleId) => {
+    this.props.setRole(clientId, roleId);
+  }
+  toggleClient = (clientId) => {
+    this.props.toggleClient(clientId, 'kollege');
+  }
   render() {
     const { selectedClients } = this.props;
-    const selectedClientIds = Object.keys(selectedClients);
     const { clients, options } = this.state;
     return (
       <div>
@@ -53,15 +58,21 @@ class FeedbackerClientList extends React.Component {
                   {client.firstname}
                 </Table.Cell>
                 <Table.Cell>
-                  <Dropdown
-                    placeholder="Rolle"
-                    options={options}
-                  />
+                  {selectedClients[client.id] && (
+                    <Dropdown
+                      placeholder="Rolle"
+                      options={options}
+                      value={selectedClients[client.id].role}
+                      onChange={(event, data) => this.setRole(client.id, data.value)}
+                    />
+                  )
+                  }
                 </Table.Cell>
                 <Table.Cell>
                   <Radio
                     toggle
-                    checked={client.id.indexOf(selectedClientIds) !== -1}
+                    checked={!!selectedClients[client.id]}
+                    onChange={() => this.toggleClient(client.id)}
                   />
                 </Table.Cell>
               </Table.Row>
@@ -78,6 +89,8 @@ FeedbackerClientList.propTypes = {
   adminData: PropTypes.shape({
     roles: PropTypes.shape({}),
   }).isRequired,
+  toggleClient: PropTypes.func.isRequired,
+  setRole: PropTypes.func.isRequired,
 };
 
 export default FeedbackerClientList;
