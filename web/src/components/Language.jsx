@@ -7,7 +7,7 @@ import { LANGUAGE } from 'utils/language';
 const Content = ({ language, languages }) => (
   <Container textAlign="right">
     <Flag name="de" onClick={() => language.setLanguage(LANGUAGE.DE)} />
-    {languages.en && (
+    {languages && languages.en && (
       <Flag name="gb" onClick={() => language.setLanguage(LANGUAGE.EN)} />
     )}
   </Container>
