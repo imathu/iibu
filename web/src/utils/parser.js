@@ -11,20 +11,20 @@ const CSVMap = {
 
 const createClient = line => ({
   id: uuidv4(),
-  firstname: line[CSVMap.firstname],
-  name: line[CSVMap.name],
-  gender: line[CSVMap.gender],
-  email: line[CSVMap.mail],
+  firstname: (line[CSVMap.firstname]),
+  name: (line[CSVMap.name]),
+  gender: (line[CSVMap.gender]),
+  email: (line[CSVMap.mail]),
   role: '',
 });
 
 const createFeedbacker = (line, role) => ({
   id: uuidv4(),
-  firstname: line[CSVMap.firstname],
-  name: line[CSVMap.name],
-  gender: (line[CSVMap.gender]).toLowerCase(),
-  email: line[CSVMap.mail],
-  role: (!role) ? (line[CSVMap.role]).toLowerCase() : role.toLowerCase(),
+  firstname: (line[CSVMap.firstname]),
+  name: (line[CSVMap.name]),
+  gender: ((line[CSVMap.gender])).toLowerCase(),
+  email: (line[CSVMap.mail]),
+  role: (!role) ? ((line[CSVMap.role])).toLowerCase() : role.toLowerCase(),
 });
 
 const addFeedbacker = (feedbackerArray, feedbacker, clientId) => {
@@ -81,7 +81,7 @@ function feedbackerCSV2JJSON(feedbackerArray) {
   let feedbackers = [];
   feedbackerArray.forEach((line) => {
     if (line[10] !== '') {
-      if (line[4] === 'Selbsteinschätzung') {
+      if ((line[4]).toLowerCase() === 'selbsteinschätzung') {
         // add a new client
         const client = createClient(line);
         clients = {

@@ -72,7 +72,7 @@ class Questions extends React.Component {
         });
       }
     ))(file);
-    reader.readAsText(file);
+    reader.readAsText(file, 'ISO-8859-1');
   }
   render() {
     const {
