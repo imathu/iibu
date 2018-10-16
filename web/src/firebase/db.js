@@ -61,6 +61,9 @@ export const onceGetFeedbacker = (projectId, feedbackerId) => (
 export const doCreateFeedbackers = (projectId, feedbackers) => (
   db.ref(`projects/${projectId}/`).update({ feedbackers })
 );
+export const doUpdateFeedbacker = (projectId, data) => (
+  db.ref(`projects/${projectId}/feedbackers/${data.id}`).update(data)
+);
 export const doUpdateAnswer = (projectId, feedbackerId, clientId, questionId, score) => (
   db.ref(`projects/${projectId}/feedbackers/${feedbackerId}/clients/${clientId}/answers/${questionId}`).update({
     score,

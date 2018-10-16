@@ -55,8 +55,9 @@ class FeedbackerDetail extends React.Component {
     }
   }
   onFeedbackerSave = () => {
-    alert('not implemented yet'); // eslint-disable-line
-    this.setState(() => ({ changedData: false }));
+    const { projectId } = this.props.match.params;
+    db.doUpdateFeedbacker(projectId, this.state.data).then(() =>
+      this.setState(() => ({ changedData: false })));
   }
   setRole = (clientId, roleId) => {
     const { data } = this.state;
@@ -155,7 +156,7 @@ class FeedbackerDetail extends React.Component {
                       icon="checkmark"
                       labelPosition="right"
                       content="Speichern"
-                      disabled={!changedData}
+                      disabled={(!changedData || Object.keys(selectedClients).length <= 0)}
                     />
                   </Grid.Column>
                 </Grid.Row>
