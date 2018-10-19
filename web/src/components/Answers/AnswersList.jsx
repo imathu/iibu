@@ -25,6 +25,8 @@ class AnswersList extends React.Component {
       data: null,
       modalShow: true,
       checkBoxToggle: false,
+      clients: [],
+      closeManually: false,
     };
   }
   componentDidMount = () => {
@@ -41,6 +43,19 @@ class AnswersList extends React.Component {
         .then((data) => {
           if (!data.err) {
             this.setState({ data });
+            if (data.feedbacker) {
+              // add a watcher for the number of answers for each client
+              Object.keys(data.feedbacker.clients).forEach((clientId) => {
+                db.numAnswers(projectId, data.feedbacker.id, clientId).on('value', (snapshot) => {
+                  this.setState(() => ({
+                    clients: {
+                      ...this.state.clients,
+                      [clientId]: snapshot.numChildren(),
+                    },
+                  }));
+                });
+              });
+            }
             if (data.feedbacker && data.feedbacker.noBanner) {
               this.setState(() => ({ modalShow: false }));
             }
@@ -67,13 +82,28 @@ class AnswersList extends React.Component {
   checkBoxToggle = () => {
     this.setState(() => ({ checkBoxToggle: !this.state.checkBoxToggle }));
   }
+  close = () => {
+    this.setState(() => ({ closeManually: true }));
+  }
   handleContextRef = contextRef => this.setState({ contextRef });
   render() {
     const { projectId } = this.props;
-    const { data } = this.state;
-    const { contextRef, modalShow, checkBoxToggle } = this.state;
+    const { data, clients } = this.state;
+    const {
+      contextRef,
+      modalShow,
+      checkBoxToggle,
+      closeManually,
+    } = this.state;
+    let totalAnswers = 0;
+    Object.keys(clients).forEach((id) => {
+      totalAnswers += clients[id];
+    });
     if (data && data.feedbacker) {
       const numQuestions = Object.keys(data.questions).length;
+      const end = (totalAnswers > 0
+        && totalAnswers >= numQuestions * Object.keys(clients).length)
+        && !closeManually;
       return (
         <LanguageContext.Consumer>
           {language => (
@@ -99,6 +129,24 @@ class AnswersList extends React.Component {
                   <Button color="green" onClick={this.closeModal}>
                     <Icon name="checkmark" /> Gelesen
                   </Button>
+                </Modal.Actions>
+              </Modal>
+              <Modal size="tiny" open={end} onClose={this.close}>
+                <Modal.Content>
+                  <FormattedMessage
+                    id="feedback.end"
+                    defaultMessage="Sie haben alle Fragen beantwortet, herzlichen Dank"
+                    values={{ what: 'react-intl' }}
+                  />
+                </Modal.Content>
+                <Modal.Actions>
+                  <Button
+                    positive
+                    icon="checkmark"
+                    labelPosition="right"
+                    content="Ok"
+                    onClick={this.close}
+                  />
                 </Modal.Actions>
               </Modal>
               <Language languages={data.languages} />
@@ -129,6 +177,7 @@ class AnswersList extends React.Component {
                           <Menu
                             feedbacker={data.feedbacker}
                             numQuestions={numQuestions}
+                            numAnswers={clients[id] || 0}
                             projectId={projectId}
                             client={data.clients[id]}
                           />
