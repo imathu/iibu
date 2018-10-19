@@ -23,7 +23,7 @@ const Client = (props) => {
     <Segment>
       <Header textAlign="left" as="h2" >
         <FormattedMessage
-          id="feedback.feedbacker"
+          id={(client.gender === 'w') ? 'feedback.feedbackerin' : 'feedback.feedbacker'}
           defaultMessage="Feedbacknehmer"
           values={{ what: 'react-intl' }}
         />

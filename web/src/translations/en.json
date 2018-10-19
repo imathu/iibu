@@ -8,6 +8,7 @@
   "feedback.SignInEmail": "One-time login with your email",
   "feedback.SignInEmailAlternative": "as alternative you can login with user/password",
   "feedback.feedbacker": "feedback receiver",
+  "feedback.feedbackerin": "feedback receiver",
   "feedback.role": "your role as a feedbacker is",
   "feedback.question": "question",
   "feedback.nomatch": "inappropriate",
