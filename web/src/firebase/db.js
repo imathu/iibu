@@ -23,6 +23,9 @@ export const onceGetProjects = () => (
 export const onceGetProject = projectId => (
   db.ref(`projects/${projectId}`).once('value')
 );
+export const getProject = projectId => (
+  db.ref(`projects/${projectId}`)
+);
 export const doRemoveProject = projectId => db.ref(`projects/${projectId}`).set({});
 export const doUpdateProjectData = (projectId, project) => (
   db.ref(`projects/${projectId}`).update(({

@@ -1,9 +1,12 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import * as routes from 'constants/routes';
 import { getURL } from 'utils';
+import AdminDataContext from 'components/AdminDataContext';
 import { Table, Header, Checkbox, Button, Modal, Form, Input, TextArea, List } from 'semantic-ui-react';
+
+import FeedbackerRow from './FeedbackerRow';
 
 import { firebase, db } from '../../../firebase';
 
@@ -180,6 +183,7 @@ class Feedbackers extends React.Component {
               <Table.HeaderCell>Id</Table.HeaderCell>
               <Table.HeaderCell>Mail</Table.HeaderCell>
               <Table.HeaderCell>Geschlecht</Table.HeaderCell>
+              <Table.HeaderCell>Status</Table.HeaderCell>
               <Table.HeaderCell>Details</Table.HeaderCell>
               <Table.HeaderCell>
                 <Checkbox
@@ -191,28 +195,17 @@ class Feedbackers extends React.Component {
           </Table.Header>
           <Table.Body>
             {!!data && Object.keys(data).map(id => (
-              <Table.Row key={id}>
-                <Table.Cell><a target="_blank" rel="noopener noreferrer" href={getURI(projectId, id)}>{id}</a></Table.Cell>
-                <Table.Cell>{data[id].email}</Table.Cell>
-                <Table.Cell>{data[id].gender}</Table.Cell>
-                <Table.Cell>
-                  {// eslint-disable-next-line
-                  <Link
-                    to={{
-                     pathname: `/project/${projectId}/feedbackgeber/${id}`,
-                     state: data[id],
-                    }}
-                  > Details
-                  </Link>
-                  }
-                </Table.Cell>
-                <Table.Cell>
-                  <Checkbox
-                    checked={selected.indexOf(id) !== -1}
-                    onChange={() => this.toggleSelect(id)}
+              <AdminDataContext.Consumer key={id}>
+                {adminData => (adminData && adminData.project
+                  ? <FeedbackerRow
+                    feedbackerId={id}
+                    selected={selected}
+                    adminData={adminData}
+                    projectId={projectId}
+                    toggleSelect={this.toggleSelect}
                   />
-                </Table.Cell>
-              </Table.Row>
+                  : null)}
+              </AdminDataContext.Consumer>
             ))}
           </Table.Body>
         </Table>

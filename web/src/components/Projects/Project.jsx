@@ -30,6 +30,7 @@ class Project extends Component {
   }
 
   componentDidMount = () => {
+    const { projectId } = this.state.params;
     db.onceGetRoles().then((snapshot) => {
       this.setState(() => ({
         adminData: {
@@ -43,6 +44,14 @@ class Project extends Component {
         adminData: {
           ...this.state.adminData,
           contexts: (snapshot.val()) ? snapshot.val() : {},
+        },
+      }));
+    });
+    db.getProject(projectId).on('value', (snapshot) => {
+      this.setState(() => ({
+        adminData: {
+          ...this.state.adminData,
+          project: (snapshot.val()) ? snapshot.val() : {},
         },
       }));
     });
