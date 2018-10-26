@@ -71,7 +71,7 @@ const NavigationDesktop = () => (
                 <Menu.Item
                   as={Link}
                   to={routes.LANDING}
-                ><h1>iibu Feedbackanalyse</h1>
+                ><h1>realfeedback.ch</h1>
                 </Menu.Item>
                 {auth && auth.admin
                 ? <AdminMenu />

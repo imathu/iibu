@@ -1,9 +1,10 @@
 {
-  "app.title": "Willkommen bei iibu",
-  "app.intro": "270 Grad Feedbackanalyse für Führungskräfte",
+  "app.title": "Willkommen bei realfeedback.ch",
+  "app.intro": "360 Grad Feedbackanalyse für Führungskräfte",
   "app.pwdResetTitle": "Passwort Reset",
   "app.pwdResetQuestion": "Passwort zurücksetzen?",
   "app.signUpQuestion": "Sie haben noch keinen Account?",
+  "app.signUpMessage": "Eröffnen Sie mit Ihrer Mail Adresse einen Account",
   "feedback.bannerHeader": "Willkommen als Feedbackgeber",
   "feedback.SignInEmail": "One-time Login mit ihrer Email Adresse",
   "feedback.SignInEmailAlternative": "Alternativ können sie sich mit user/passwort anmelden",

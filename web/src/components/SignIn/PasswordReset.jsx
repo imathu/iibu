@@ -3,14 +3,16 @@ import { PropTypes } from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Link, withRouter } from 'react-router-dom';
 import * as routes from 'constants/routes';
-import { Segment } from 'semantic-ui-react';
-import { auth } from '../../firebase';
+import LanguageContext from 'components/LanguageContext';
+import { Segment, Input, Form, Button, Message } from 'semantic-ui-react';
+import { auth, codes } from '../../firebase';
 
 const PasswordResetPage = ({ history }) => (
   <div>
-    <Segment style={{
+    <Segment
+      compact
+      style={{
        textAlign: 'center',
-       width: '60%',
        vertical: true,
        margin: 'auto',
        marginTop: '20px',
@@ -39,6 +41,7 @@ const INITIAL_STATE = {
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
+  error: null,
 });
 
 class PasswordResetForm extends Component {
@@ -56,8 +59,8 @@ class PasswordResetForm extends Component {
         this.setState(byPropKey('message', 'password reset link sent to your email'));
       })
       .catch((error) => {
-        this.setState(byPropKey('error', error));
-        this.setState(byPropKey('message', ''));
+        this.setState({ error });
+        this.setState({ message: '' });
       });
     event.preventDefault();
   }
@@ -70,17 +73,32 @@ class PasswordResetForm extends Component {
     } = this.state;
     const isInvalid = email === '';
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={email}
-          onChange={event => this.setState(byPropKey('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-        />
-        <button disabled={isInvalid} type="submit">Reset</button>
-        { error && <p>{error.message}</p> }
-        { message && <p>{message}</p> }
-      </form>
+      <LanguageContext.Consumer>
+        {lang => (
+          <React.Fragment>
+            <Form error onSubmit={this.onSubmit}>
+              <Form.Field
+                id="email"
+                fluid
+                control={Input}
+                placeholder="Mail"
+                value={email}
+                onChange={event => this.setState(byPropKey('email', event.target.value))}
+              />
+              <Button disabled={isInvalid} type="submit">Reset</Button>
+              { error &&
+                <Message error content={codes.errCode(error, lang.language)} />
+              }
+            </Form>
+            <br />
+            <Form success>
+              { message &&
+                <Message success content={message} />
+              }
+            </Form>
+          </React.Fragment>
+        )}
+      </LanguageContext.Consumer>
     );
   }
 }

@@ -82,7 +82,7 @@ class NavigationMobile extends React.Component {
                       <Menu.Item
                         as={Link}
                         to={routes.LANDING}
-                      ><h3>iibu Feedbackanalyse</h3>
+                      ><h3>realfeedback.ch</h3>
                       </Menu.Item>
                       {auth
                         ?

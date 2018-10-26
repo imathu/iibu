@@ -2,21 +2,31 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Link, withRouter } from 'react-router-dom';
+import LanguageContext from 'components/LanguageContext';
+import Language from 'components/Language';
 import * as routes from 'constants/routes';
-import { Segment } from 'semantic-ui-react';
-import { auth, db } from '../../firebase';
+import { Segment, Input, Form, Button, Message } from 'semantic-ui-react';
+import { auth, codes } from '../../firebase';
 
 const SignUpPage = ({ history }) => (
   <div>
-    <Segment style={{
+    <Language languages={{ en: 'true' }} />
+    <Segment
+      compact
+      style={{
        textAlign: 'center',
-       width: '60%',
        vertical: true,
        margin: 'auto',
        marginTop: '20px',
       }}
     >
       <h1>Sign Up</h1>
+      <FormattedMessage
+        id="app.signUpMessage"
+        defaultMessage="Eröffnen Sie mit Ihrere Mail Adresse einen Accountn"
+        values={{ what: 'react-intl' }}
+      />
+      <hr />
       <SignUpForm history={history} />
     </Segment>
   </div>
@@ -35,6 +45,7 @@ const INITIAL_STATE = {
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
+  error: null,
 });
 
 class SignUpForm extends Component {
@@ -48,37 +59,21 @@ class SignUpForm extends Component {
   }
 
   onSubmit = (event) => {
-    const {
-      username,
-      email,
-      passwordOne,
-    } = this.state;
-
-    const {
-      history,
-    } = this.props;
+    const { email, passwordOne } = this.state;
+    const { history } = this.props;
 
     auth.doCreateUserWithEmailAndPassword(email, passwordOne)
-      .then((authUser) => {
-        // Create a user in your own accessible Firebase Database too
-        db.doCreateUser(authUser.uid, username, email)
-          .then(() => {
-            this.setState(() => ({ ...INITIAL_STATE }));
-            history.push(routes.LANDING);
-          })
-          .catch((error) => {
-            this.setState(byPropKey('error', error));
-          });
+      .then(() => {
+        history.push(routes.LANDING);
       })
       .catch((error) => {
-        this.setState(byPropKey('error', error));
+        this.setState({ error });
       });
     event.preventDefault();
   }
 
   render() {
     const {
-      username,
       email,
       passwordOne,
       passwordTwo,
@@ -87,37 +82,44 @@ class SignUpForm extends Component {
     const isInvalid =
       passwordOne !== passwordTwo ||
       passwordOne === '' ||
-      email === '' ||
-      username === '';
+      email === '';
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={username}
-          onChange={event => this.setState(byPropKey('username', event.target.value))}
-          type="text"
-          placeholder="Full Name"
-        />
-        <input
-          value={email}
-          onChange={event => this.setState(byPropKey('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          value={passwordOne}
-          onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
-          type="password"
-          placeholder="Password"
-        />
-        <input
-          value={passwordTwo}
-          onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}
-          type="password"
-          placeholder="Confirm Password"
-        />
-        <button disabled={isInvalid} type="submit">Sign Up</button>
-        { error && <p>{error.message}</p> }
-      </form>
+      <LanguageContext.Consumer>
+        {lang => (
+          <Form error onSubmit={this.onSubmit}>
+            <Form.Field
+              id="email"
+              fluid
+              control={Input}
+              placeholder="Mail"
+              value={email}
+              onChange={event => this.setState(byPropKey('email', event.target.value))}
+            />
+            <Form.Field
+              id="passwordOne"
+              fluid
+              control={Input}
+              placeholder="Passwort"
+              value={passwordOne}
+              type="password"
+              onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
+            />
+            <Form.Field
+              id="passwordTwo"
+              fluid
+              control={Input}
+              placeholder="Passwort Wiederholen"
+              value={passwordTwo}
+              type="password"
+              onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}
+            />
+            { error &&
+              <Message error content={codes.errCode(error, lang.language)} />
+            }
+            <Button disabled={isInvalid} type="submit">Sign Up</Button>
+          </Form>
+        )}
+      </LanguageContext.Consumer>
     );
   }
 }

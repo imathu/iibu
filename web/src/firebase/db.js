@@ -2,7 +2,7 @@ import { db } from './firebase';
 
 // User data
 export const doCreateUser = (id, username, email) => db.ref(`users/${id}`).set({
-  username,
+  displayName: username,
   email,
 });
 export const doRemoveUser = id => db.ref(`users/${id}`).set({});

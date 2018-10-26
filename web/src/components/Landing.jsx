@@ -18,7 +18,7 @@ const LandingPage = ({ mobile }) => (
       >
         <FormattedMessage
           id="app.title"
-          defaultMessage="Willkommen bei iibu"
+          defaultMessage="Willkommen bei realfeedback.ch"
           values={{ what: 'react-intl' }}
         />
       </Header>
@@ -33,7 +33,7 @@ const LandingPage = ({ mobile }) => (
       >
         <FormattedMessage
           id="app.intro"
-          defaultMessage="270 Grad Feedbackanalyse für Führungskräfte"
+          defaultMessage="360 Grad Feedbackanalyse für Führungskräfte"
           values={{ what: 'react-intl' }}
         />
       </Header>

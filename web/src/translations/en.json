@@ -1,9 +1,10 @@
 {
-  "app.title": "Welcome to iibu",
-  "app.intro": "270 feedback analysis for executives",
+  "app.title": "Welcome to realfeedback.ch",
+  "app.intro": "360 feedback analysis for executives",
   "app.pwdResetTitle": "password reset",
   "app.pwdResetQuestion": "reset your password?",
   "app.signUpQuestion": "don't have an account?",
+  "app.signUpMessage": "create a new account with your email",
   "feedback.bannerHeader": "Welcome in your role as feedbacker",
   "feedback.SignInEmail": "One-time login with your email",
   "feedback.SignInEmailAlternative": "as alternative you can login with user/password",
