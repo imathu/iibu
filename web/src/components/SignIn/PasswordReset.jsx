@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Link, withRouter } from 'react-router-dom';
 import * as routes from 'constants/routes';
 import LanguageContext from 'components/LanguageContext';
+import PopUp from 'components/PopUp';
 import { Segment, Input, Form, Button, Message } from 'semantic-ui-react';
 import { auth, codes } from '../../firebase';
 
@@ -37,6 +38,7 @@ const INITIAL_STATE = {
   email: '',
   error: null,
   message: null,
+  showMessage: false,
 };
 
 const byPropKey = (propertyName, value) => () => ({
@@ -45,10 +47,12 @@ const byPropKey = (propertyName, value) => () => ({
 });
 
 class PasswordResetForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { ...INITIAL_STATE };
+  static propTypes = {
+    history: PropTypes.shape({
+      push: PropTypes.func,
+    }).isRequired,
   }
+  state = { ...INITIAL_STATE };
 
   onSubmit = (event) => {
     const { email } = this.state;
@@ -56,20 +60,25 @@ class PasswordResetForm extends Component {
     auth.doPasswordReset(email)
       .then(() => {
         this.setState(() => ({ ...INITIAL_STATE }));
-        this.setState(byPropKey('message', 'password reset link sent to your email'));
+        this.setState({ showMessage: true });
       })
       .catch((error) => {
         this.setState({ error });
-        this.setState({ message: '' });
+        this.setState({ showMessage: false });
       });
     event.preventDefault();
+  }
+
+  closeMessage = () => {
+    this.setState({ showMessage: false });
+    this.props.history.push(routes.SIGN_IN);
   }
 
   render() {
     const {
       email,
       error,
-      message,
+      showMessage,
     } = this.state;
     const isInvalid = email === '';
     return (
@@ -90,12 +99,11 @@ class PasswordResetForm extends Component {
                 <Message error content={codes.errCode(error, lang.language)} />
               }
             </Form>
-            <br />
-            <Form success>
-              { message &&
-                <Message success content={message} />
-              }
-            </Form>
+            <PopUp
+              open={showMessage}
+              messageId="app.PasswordResetOk"
+              close={this.closeMessage}
+            />
           </React.Fragment>
         )}
       </LanguageContext.Consumer>

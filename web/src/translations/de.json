@@ -5,6 +5,7 @@
   "app.pwdResetQuestion": "Passwort zurücksetzen?",
   "app.signUpQuestion": "Sie haben noch keinen Account?",
   "app.signUpMessage": "Eröffnen Sie mit Ihrer Mail Adresse einen Account",
+  "app.PasswordResetOk": "Sie haben ein Mail für das Zurücksetzen des Passworts erhalten",
   "feedback.bannerHeader": "Willkommen als Feedbackgeber",
   "feedback.SignInEmail": "One-time Login mit ihrer Email Adresse",
   "feedback.SignInEmailAlternative": "Alternativ können sie sich mit user/passwort anmelden",

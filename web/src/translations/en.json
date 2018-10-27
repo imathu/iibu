@@ -5,6 +5,7 @@
   "app.pwdResetQuestion": "reset your password?",
   "app.signUpQuestion": "don't have an account?",
   "app.signUpMessage": "create a new account with your email",
+  "app.PasswordResetOk": "an email was sent to reset your password",
   "feedback.bannerHeader": "Welcome in your role as feedbacker",
   "feedback.SignInEmail": "One-time login with your email",
   "feedback.SignInEmailAlternative": "as alternative you can login with user/password",
