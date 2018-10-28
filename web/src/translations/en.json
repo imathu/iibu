@@ -1,6 +1,10 @@
 {
-  "app.title": "Welcome to realfeedback.ch",
+  "app.title": "realfeedback.ch",
   "app.intro": "360 feedback analysis for executives",
+  "app.contact": "contact <info at realfeedback.ch> for questions and consulting",
+  "app.loginMessage": "welcome",
+  "app.feedbackerThanks": "thank you for participating at realfeedback.ch",
+  "app.feedbackerMessage": "to participate as feedbacker you'll receive an email from your organizer. In case of questions, please ask the organizer for help",
   "app.pwdResetTitle": "password reset",
   "app.pwdResetQuestion": "reset your password?",
   "app.signUpQuestion": "don't have an account?",

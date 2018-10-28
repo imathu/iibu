@@ -1,13 +1,17 @@
 {
-  "app.title": "Willkommen bei realfeedback.ch",
+  "app.title": "realfeedback.ch",
   "app.intro": "360 Grad Feedbackanalyse für Führungskräfte",
+  "app.contact": "Für Fragen und Beratung wende dich an <info at realfeedback.ch>",
+  "app.loginMessage": "Willkommen",
+  "app.feedbackerThanks": "Danke, dass du dich bei realfeedback.ch angemeldet hast",
+  "app.feedbackerMessage": "Für die Teilnahme an einer Feedbackrunde hast du von deinem Organisator einen Link per E-Mail erhalten. Wende dich bei Fragen an den Organisator deiner Feedbackrunde",
   "app.pwdResetTitle": "Passwort Reset",
   "app.pwdResetQuestion": "Passwort zurücksetzen?",
   "app.signUpQuestion": "Sie haben noch keinen Account?",
   "app.signUpMessage": "Eröffnen Sie mit Ihrer Mail Adresse einen Account",
   "app.PasswordResetOk": "Sie haben ein Mail für das Zurücksetzen des Passworts erhalten",
   "feedback.bannerHeader": "Willkommen als Feedbackgeber",
-  "feedback.SignInEmail": "One-time Login mit ihrer Email Adresse",
+  "feedback.SignInEmail": "One-time Login mit ihrer E-Mail Adresse",
   "feedback.SignInEmailAlternative": "Alternativ können sie sich mit user/passwort anmelden",
   "feedback.feedbacker": "Feedbacknehmer",
   "feedback.feedbackerin": "Feedbacknehmerin",
@@ -17,5 +21,5 @@
   "feedback.match": "trifft zu",
   "feedback.waitForData": "Wenn sie sich korrekt angemeldet haben werden die Daten in ein paar Sekunden dargestellt",
   "feedback.end": "Sie haben alle Fragen beantwortet, herzlichen Dank",
-  "feedback.passwordSent": "Ein Login-Link wurde Ihnen per Mail zugestellt"
+  "feedback.passwordSent": "Ein Link für das einmalige Login wurde Ihnen per Mail zugestellt"
 }
