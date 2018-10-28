@@ -94,10 +94,10 @@ class PasswordResetForm extends Component {
                 value={email}
                 onChange={event => this.setState(byPropKey('email', event.target.value))}
               />
-              <Button disabled={isInvalid} type="submit">Reset</Button>
               { error &&
                 <Message error content={codes.errCode(error, lang.language)} />
               }
+              <Button disabled={isInvalid} type="submit">Reset</Button>
             </Form>
             <PopUp
               open={showMessage}

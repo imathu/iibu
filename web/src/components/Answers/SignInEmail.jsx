@@ -2,18 +2,21 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import * as routes from 'constants/routes';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Input, Form, Button, Message } from 'semantic-ui-react';
+import LanguageContext from 'components/LanguageContext';
+import PopUp from 'components/PopUp';
 import { FormattedMessage } from 'react-intl';
 
-import { auth } from '../../firebase';
+import { auth, codes } from '../../firebase';
 
 const SignInEmailPage = (props) => {
   const { projectId, feedbackerId } = props.match.params;
   return (
     <div>
-      <Segment style={{
+      <Segment
+        compact
+        style={{
          textAlign: 'center',
-         width: '60%',
          vertical: true,
          margin: 'auto',
          marginTop: '20px',
@@ -22,7 +25,7 @@ const SignInEmailPage = (props) => {
         <h1>
           <FormattedMessage
             id="feedback.SignInEmail"
-            defaultMessage="One-time Login mit ihrer Email Adresse"
+            defaultMessage="One-time Login Email Adresse"
             values={{ what: 'react-intl' }}
           />
         </h1>
@@ -55,11 +58,13 @@ SignInEmailPage.propTypes = {
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
+  error: null,
 });
 const INITIAL_STATE = {
   email: '',
   error: null,
   message: null,
+  showMessage: false,
 };
 
 class SignInForm extends Component {
@@ -78,33 +83,51 @@ class SignInForm extends Component {
     event.preventDefault();
     auth.doSignInWithEmail(email, this.props.projectId, this.props.feedbackerId)
       .then(() => {
-        this.setState(() => ({ message: 'you received an email to continue login' }));
+        this.setState({ showMessage: true });
         localStorage.setItem('emailForSignIn', email);
       })
       .catch((error) => {
-        this.setState(byPropKey('error', error));
+        this.setState({ error });
       });
+  }
+  closeMessage = () => {
+    this.setState({ showMessage: false });
+    this.setState(() => ({ ...INITIAL_STATE }));
   }
   render() {
     const {
       email,
       error,
-      message,
+      showMessage,
     } = this.state;
     const isInvalid =
   email === '';
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={email}
-          onChange={event => this.setState(byPropKey('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-        />
-        <button disabled={isInvalid} type="submit">Sign In</button>
-        { error && <p>{error.message}</p> }
-        { message && <p>{message}</p> }
-      </form>
+      <LanguageContext.Consumer>
+        {lang => (
+          <React.Fragment>
+            <Form error onSubmit={this.onSubmit}>
+              <Form.Field
+                id="email"
+                fluid
+                control={Input}
+                placeholder="Mail"
+                value={email}
+                onChange={event => this.setState(byPropKey('email', event.target.value))}
+              />
+              { error &&
+                <Message error content={codes.errCode(error, lang.language)} />
+              }
+              <Button disabled={isInvalid} type="submit">Sign In</Button>
+            </Form>
+            <PopUp
+              open={showMessage}
+              messageId="feedback.passwordSent"
+              close={this.closeMessage}
+            />
+          </React.Fragment>
+        )}
+      </LanguageContext.Consumer>
     );
   }
 }

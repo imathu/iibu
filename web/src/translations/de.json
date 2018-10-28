@@ -16,5 +16,6 @@
   "feedback.nomatch": "nicht zutreffend",
   "feedback.match": "trifft zu",
   "feedback.waitForData": "Wenn sie sich korrekt angemeldet haben werden die Daten in ein paar Sekunden dargestellt",
-  "feedback.end": "Sie haben alle Fragen beantwortet, herzlichen Dank"
+  "feedback.end": "Sie haben alle Fragen beantwortet, herzlichen Dank",
+  "feedback.passwordSent": "Ein Login-Link wurde Ihnen per Mail zugestellt"
 }

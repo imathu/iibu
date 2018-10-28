@@ -16,5 +16,6 @@
   "feedback.nomatch": "inappropriate",
   "feedback.match": "applicable",
   "feedback.waitForData": "If you are authorized, the data will be loaded in a few seconds",
-  "feedback.end": "You've successfully completed the questionaire, thank you"
+  "feedback.end": "You've successfully completed the questionaire, thank you",
+  "feedback.passwordSent": "You've received an email with login link"
 }
