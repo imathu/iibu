@@ -7,7 +7,8 @@ import LanguageContext from 'components/LanguageContext';
 import Language from 'components/Language';
 import * as routes from 'constants/routes';
 import Client from './Client';
-import Menu from './Menu';
+import Footer from './Footer';
+import { Menu as ContextMenu } from './Menu';
 
 import { firebase, db } from '../../firebase';
 
@@ -19,16 +20,12 @@ class AnswersList extends React.Component {
       push: PropTypes.func,
     }).isRequired,
   };
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: null,
-      modalShow: true,
-      checkBoxToggle: false,
-      clients: [],
-      closeManually: false,
-    };
-  }
+  state = {
+    data: null,
+    modalShow: true,
+    checkBoxToggle: false,
+    clients: [],
+  };
   componentDidMount = () => {
     const { projectId, feedbackerId } = this.props;
     const API = `/api/v1/${projectId}/answers/${feedbackerId}`;
@@ -87,23 +84,22 @@ class AnswersList extends React.Component {
   }
   handleContextRef = contextRef => this.setState({ contextRef });
   render() {
-    const { projectId } = this.props;
+    const { projectId, feedbackerId } = this.props;
     const { data, clients } = this.state;
     const {
       contextRef,
       modalShow,
       checkBoxToggle,
-      closeManually,
     } = this.state;
     let totalAnswers = 0;
     Object.keys(clients).forEach((id) => {
       totalAnswers += clients[id];
     });
     if (data && data.feedbacker) {
-      const numQuestions = Object.keys(data.questions).length;
-      const end = (totalAnswers > 0
-        && totalAnswers >= numQuestions * Object.keys(clients).length)
-        && !closeManually;
+      const questionsPerFeedbacker = Object.keys(data.questions).length;
+      const numQuestions = questionsPerFeedbacker * Object.keys(clients).length;
+      const end = (totalAnswers > 0 && totalAnswers >= numQuestions);
+      // const percent = 100 * (totalAnswers / (numQuestions));
       return (
         <LanguageContext.Consumer>
           {language => (
@@ -131,24 +127,6 @@ class AnswersList extends React.Component {
                   </Button>
                 </Modal.Actions>
               </Modal>
-              <Modal size="tiny" open={end} onClose={this.close}>
-                <Modal.Content>
-                  <FormattedMessage
-                    id="feedback.end"
-                    defaultMessage="Sie haben alle Fragen beantwortet, herzlichen Dank"
-                    values={{ what: 'react-intl' }}
-                  />
-                </Modal.Content>
-                <Modal.Actions>
-                  <Button
-                    positive
-                    icon="checkmark"
-                    labelPosition="right"
-                    content="Ok"
-                    onClick={this.close}
-                  />
-                </Modal.Actions>
-              </Modal>
               <Language languages={data.languages} />
               <Grid style={{ marginTop: '5px' }} stackable columns={2} reversed="mobile vertically">
                 <Grid.Column width={12}>
@@ -174,9 +152,9 @@ class AnswersList extends React.Component {
                     <Segment style={{ backgroundColor: 'lightgray' }}>
                       {Object.keys(data.feedbacker.clients).map(id => (
                         <div key={id}>
-                          <Menu
+                          <ContextMenu
                             feedbacker={data.feedbacker}
-                            numQuestions={numQuestions}
+                            numQuestions={questionsPerFeedbacker}
                             numAnswers={clients[id] || 0}
                             projectId={projectId}
                             client={data.clients[id]}
@@ -187,6 +165,13 @@ class AnswersList extends React.Component {
                   </Sticky>
                 </Grid.Column>
               </Grid>
+              <Footer
+                end={end}
+                totalAnswers={totalAnswers}
+                numQuestions={numQuestions}
+                projectId={projectId}
+                feedbackerId={feedbackerId}
+              />
             </React.Fragment>
           )}
         </LanguageContext.Consumer>

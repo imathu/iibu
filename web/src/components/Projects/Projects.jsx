@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Table, Button, Loader } from 'semantic-ui-react';
+import { Table, Button, Loader, Radio } from 'semantic-ui-react';
 import withAuthorization from 'components/withAuthorization';
 
 import { db } from '../../firebase';
@@ -25,6 +25,13 @@ class Projects extends React.Component {
       this.getProjects();
     });
   }
+
+  toggleState = (id) => {
+    const s = !this.state.data[id].active;
+    db.doSetProjectState(id, s).then(() => {
+      this.getProjects();
+    });
+  }
   render() {
     const { data } = this.state;
     return (data) ? (
@@ -34,6 +41,7 @@ class Projects extends React.Component {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Projekt</Table.HeaderCell>
+              <Table.HeaderCell>Status</Table.HeaderCell>
               <Table.HeaderCell />
               <Table.HeaderCell />
               <Table.HeaderCell collapsing />
@@ -43,6 +51,13 @@ class Projects extends React.Component {
             {!!data && Object.keys(data).map(id => (
               <Table.Row key={id}>
                 <Table.Cell>{data[id].name}</Table.Cell>
+                <Table.Cell collapsing>
+                  <Radio
+                    toggle
+                    checked={!!data[id].active}
+                    onClick={() => this.toggleState(id)}
+                  />
+                </Table.Cell>
                 <Table.Cell collapsing textAlign="center">
                   <a href={`/project/${id}/fragen`}>Analyse</a>
                 </Table.Cell>

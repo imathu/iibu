@@ -26,6 +26,12 @@ export const onceGetProject = projectId => (
 export const getProject = projectId => (
   db.ref(`projects/${projectId}`)
 );
+export const getActiveFlag = projectId => (
+  db.ref(`projects/${projectId}/active`)
+);
+export const doSetProjectState = (projectId, activeFlag) => (
+  db.ref(`projects/${projectId}`).update(({ active: activeFlag }))
+);
 export const doRemoveProject = projectId => db.ref(`projects/${projectId}`).set({});
 export const doUpdateProjectData = (projectId, project) => (
   db.ref(`projects/${projectId}`).update(({
@@ -66,6 +72,12 @@ export const doCreateFeedbackers = (projectId, feedbackers) => (
 );
 export const doUpdateFeedbacker = (projectId, data) => (
   db.ref(`projects/${projectId}/feedbackers/${data.id}`).update(data)
+);
+export const doFinishQuestionaire = (projectId, feedbackerId, notActive) => (
+  db.ref(`projects/${projectId}/feedbackers/${feedbackerId}`).update(({ notActive }))
+);
+export const getFeedbackerActiveFlag = (projectId, feedbackerId) => (
+  db.ref(`projects/${projectId}/feedbackers/${feedbackerId}/notActive`)
 );
 export const doUpdateAnswer = (projectId, feedbackerId, clientId, questionId, score) => (
   db.ref(`projects/${projectId}/feedbackers/${feedbackerId}/clients/${clientId}/answers/${questionId}`).update({

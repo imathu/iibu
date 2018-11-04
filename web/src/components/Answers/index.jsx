@@ -1,10 +1,11 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import AuthUserContext from 'components/AuthUserContext';
-import { Loader } from 'semantic-ui-react';
+import { FormattedMessage } from 'react-intl';
+import { Loader, Segment, Header } from 'semantic-ui-react';
 
 
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
 import AnswersList from './AnswersList';
 import SignInEmail from './SignInEmail';
 
@@ -19,14 +20,20 @@ class Answers extends React.Component {
         projectId: PropTypes.string,
       }),
     }).isRequired,
-  };
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: false,
-    };
   }
+  state = {
+    loading: false,
+    activeFlag: false,
+    feedbackerNotActive: false,
+  };
   componentDidMount = () => {
+    const { projectId, feedbackerId } = this.props.match.params;
+    db.getActiveFlag(projectId).on('value', (snapshot) => {
+      this.setState(() => ({ activeFlag: snapshot.val() }));
+    });
+    db.getFeedbackerActiveFlag(projectId, feedbackerId).on('value', (snapshot) => {
+      this.setState(() => ({ feedbackerNotActive: snapshot.val() }));
+    });
     if (auth.isSignInWithEmailLink(window.location.href)) {
       this.setState(() => ({ loading: true }));
       let email = localStorage.getItem('emailForSignIn');
@@ -44,10 +51,50 @@ class Answers extends React.Component {
     }
   }
   render() {
-    const { loading } = this.state;
+    const { loading, activeFlag, feedbackerNotActive } = this.state;
     const { projectId, feedbackerId } = this.props.match.params;
     if (loading) {
       return <Loader />;
+    }
+    if (!activeFlag && !loading) {
+      return (
+        <Segment
+          style={{ margin: '10px', textAlign: 'center' }}
+        >
+          <Header as="h2">
+            <FormattedMessage
+              id="feedback.closedHeader"
+              defaultMessage="Der Feedbackbogen ist nicht aktiv"
+              values={{ what: 'react-intl' }}
+            />
+          </Header>
+          <FormattedMessage
+            id="feedback.closedContent"
+            defaultMessage="Für Fragen wenden Sie sich an den Organisator"
+            values={{ what: 'react-intl' }}
+          />
+        </Segment>
+      );
+    }
+    if (feedbackerNotActive && !loading) {
+      return (
+        <Segment
+          style={{ margin: '10px', textAlign: 'center' }}
+        >
+          <Header as="h2">
+            <FormattedMessage
+              id="feedback.finishedHeader"
+              defaultMessage="Erfolgreich abgeschlossen"
+              values={{ what: 'react-intl' }}
+            />
+          </Header>
+          <FormattedMessage
+            id="feedback.finishedContent"
+            defaultMessage="herzlichen Dank für Ihre Teilnahme"
+            values={{ what: 'react-intl' }}
+          />
+        </Segment>
+      );
     }
     return (
       <AuthUserContext.Consumer>

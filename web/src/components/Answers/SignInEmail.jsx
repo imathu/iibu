@@ -109,6 +109,8 @@ class SignInForm extends Component {
             <Form error onSubmit={this.onSubmit}>
               <Form.Field
                 id="email"
+                icon="user"
+                iconPosition="left"
                 fluid
                 control={Input}
                 placeholder="Mail"

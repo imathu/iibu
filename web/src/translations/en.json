@@ -1,7 +1,7 @@
 {
   "app.title": "realfeedback.ch",
   "app.intro": "360 feedback analysis for executives",
-  "app.contact": "contact <info at realfeedback.ch> for questions and consulting",
+  "app.contact": "for questions and consulting contact",
   "app.loginMessage": "welcome",
   "app.feedbackerThanks": "thank you for participating at realfeedback.ch",
   "app.feedbackerMessage": "to participate as feedbacker you'll receive an email from your organizer. In case of questions, please ask the organizer for help",
@@ -21,5 +21,10 @@
   "feedback.match": "applicable",
   "feedback.waitForData": "If you are authorized, the data will be loaded in a few seconds",
   "feedback.end": "You've successfully completed the questionaire, thank you",
-  "feedback.passwordSent": "You've received an email with login link"
+  "feedback.passwordSent": "You've received an email with login link",
+  "feedback.finishState": "You answered {totalAnswers} out of {numQuestions}",
+  "feedback.closedHeader": "This questionaire is closed",
+  "feedback.closedContent": "Please contact your administrator for questions",
+  "feedback.finishedHeader": "You successfully finished",
+  "feedback.finishedContent": "Thank you for partitipating"
 }

@@ -12,9 +12,9 @@ const LandingPage = ({ mobile }) => (
         <div>
           <Container text textAlign="center">
             <Header
-              as="h1"
+              as="h3"
               style={{
-                fontSize: mobile ? '2em' : '4em',
+                fontSize: mobile ? '1em' : '3em',
                 fontWeight: 'normal',
                 marginBottom: 0,
                 marginTop: mobile ? '1em' : '1em',
@@ -28,9 +28,8 @@ const LandingPage = ({ mobile }) => (
               />
             </Header>
             <Header
-              as="h2"
               style={{
-                fontSize: mobile ? '1.5em' : '1.7em',
+                fontSize: mobile ? '1em' : '1.7em',
                 fontWeight: 'normal',
                 marginTop: mobile ? '0.1em' : '1em',
                 textAlign: 'center',
@@ -44,9 +43,10 @@ const LandingPage = ({ mobile }) => (
             </Header>
             <FormattedMessage
               id="app.contact"
-              defaultMessage="kontaktiere info at realfeedback.ch"
+              defaultMessage="kontaktiere"
               values={{ what: 'react-intl' }}
             />
+            <div>info at realfeedback.ch</div>
           </Container>
         </div>
         :

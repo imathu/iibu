@@ -94,6 +94,8 @@ class SignInForm extends Component {
             <Form.Field
               id="email"
               fluid
+              icon="user"
+              iconPosition="left"
               control={Input}
               placeholder="Mail"
               value={email}
@@ -103,6 +105,8 @@ class SignInForm extends Component {
               id="password"
               fluid
               control={Input}
+              icon="lock"
+              iconPosition="left"
               type="password"
               placeholder="Password"
               value={password}

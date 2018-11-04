@@ -90,6 +90,8 @@ class SignUpForm extends Component {
             <Form.Field
               id="email"
               fluid
+              icon="user"
+              iconPosition="left"
               control={Input}
               placeholder="Mail"
               value={email}
@@ -98,6 +100,8 @@ class SignUpForm extends Component {
             <Form.Field
               id="passwordOne"
               fluid
+              icon="lock"
+              iconPosition="left"
               control={Input}
               placeholder="Passwort"
               value={passwordOne}
@@ -107,6 +111,8 @@ class SignUpForm extends Component {
             <Form.Field
               id="passwordTwo"
               fluid
+              icon="lock"
+              iconPosition="left"
               control={Input}
               placeholder="Passwort Wiederholen"
               value={passwordTwo}

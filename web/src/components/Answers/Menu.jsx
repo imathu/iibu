@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
 
-const Menu = ({ client, numQuestions, numAnswers }) => (
+export const Menu = ({ client, numQuestions, numAnswers }) => (
   <React.Fragment>
     <div>{client.name} {client.firstname}: <b>{numAnswers} / {numQuestions}</b>
       {(numAnswers === numQuestions)
