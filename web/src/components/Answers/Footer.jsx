@@ -39,7 +39,12 @@ class Footer extends React.Component {
               style={{ margin: '5px' }}
               onClick={this.close}
             >
-              <Icon name="checkmark" />Abschliessen
+              <Icon name="checkmark" />
+              <FormattedMessage
+                id="feedback.complete"
+                defaultMessage="Abschliessen"
+                values={{ what: 'react-intl' }}
+              />
             </Button>
           </Menu.Item>
         </Menu.Menu>

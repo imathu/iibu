@@ -52,6 +52,12 @@ class FeedbackerRow extends React.Component {
           {getIcon(numAnswers, numQuestions)}
         </Table.Cell>
         <Table.Cell>
+          {feedbacker.notActive
+            ? <Icon color="green" name="checkmark" style={{ paddingLeft: '8px' }} />
+            : <Icon color="red" name="exclamation circle" style={{ paddingLeft: '8px' }} />
+          }
+        </Table.Cell>
+        <Table.Cell>
           {// eslint-disable-next-line
           <Link
             to={{

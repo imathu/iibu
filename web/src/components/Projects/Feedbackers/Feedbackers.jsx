@@ -184,6 +184,7 @@ class Feedbackers extends React.Component {
               <Table.HeaderCell>Mail</Table.HeaderCell>
               <Table.HeaderCell>Geschlecht</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
+              <Table.HeaderCell>Abgeschlossen</Table.HeaderCell>
               <Table.HeaderCell>Details</Table.HeaderCell>
               <Table.HeaderCell>
                 <Checkbox

@@ -26,5 +26,6 @@
   "feedback.closedHeader": "This questionaire is closed",
   "feedback.closedContent": "Please contact your administrator for questions",
   "feedback.finishedHeader": "You successfully finished",
-  "feedback.finishedContent": "Thank you for partitipating"
+  "feedback.finishedContent": "Thank you for partitipating",
+  "feedback.complete": "complete"
 }

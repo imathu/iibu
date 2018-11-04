@@ -161,6 +161,20 @@ class AnswersList extends React.Component {
                           />
                         </div>
                       ))}
+                      <hr />
+                      <p>
+                        1 = <FormattedMessage
+                          id="feedback.nomatch"
+                          defaultMessage="trifft nicht zu"
+                          values={{ what: 'react-intl' }}
+                        />
+                        <br />
+                        5 = <FormattedMessage
+                          id="feedback.match"
+                          defaultMessage="trifft zu"
+                          values={{ what: 'react-intl' }}
+                        />
+                      </p>
                     </Segment>
                   </Sticky>
                 </Grid.Column>

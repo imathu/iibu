@@ -26,5 +26,6 @@
   "feedback.closedHeader": "Der Feedbackbogen ist nicht aktiv",
   "feedback.closedContent": "Für Fragen wenden Sie sich an den Organisator",
   "feedback.finishedHeader": "Erfolgreich abgeschlossen",
-  "feedback.finishedContent": "Herzlichen Dank für Ihre Teilnahme"
+  "feedback.finishedContent": "Herzlichen Dank für Ihre Teilnahme",
+  "feedback.complete": "Abschliessen"
 }

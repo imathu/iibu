@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Form, Checkbox, List } from 'semantic-ui-react';
+import { Form, Checkbox, List, Icon } from 'semantic-ui-react';
 
 import idx from 'idx';
 
@@ -12,13 +12,13 @@ class Answer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 0,
+      value: -1,
     };
   }
   componentDidMount = () => {
     const { feedbacker, clientId, questionId } = this.props;
     const value = idx(feedbacker, _ =>
-      _.clients[clientId].answers[questionId].score) || 0;
+      _.clients[clientId].answers[questionId].score) || -1;
     this.setState(() => ({ value }));
   }
   handleChange = (e, { value }) => {
@@ -52,6 +52,13 @@ class Answer extends React.Component {
               </Form.Field>
             </List.Item>
           ))}
+          { value >= 0 && (
+            <List.Item>
+              <Form.Field>
+                <Icon color="green" name="checkmark" style={{ margin: '8px' }} />
+              </Form.Field>
+            </List.Item>
+          )}
         </List>
       </Form>
     );
