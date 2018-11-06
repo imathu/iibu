@@ -35,7 +35,10 @@ const ClientList = ({
             <Table.Cell>{clients[id].email}</Table.Cell>
             <Table.Cell>{clients[id].gender}</Table.Cell>
             <Table.Cell>
-              <a href={`/project/${projectId}/feedbacknehmer/${id}`}>details</a>
+              {editedData
+                ? <div>details</div>
+                : <a href={`/project/${projectId}/feedbacknehmer/${id}`}>details</a>
+              }
             </Table.Cell>
           </Table.Row>
         ))}

@@ -45,7 +45,7 @@ class NoQuestions extends React.Component {
               label="UTF-8"
               name="radioGroup"
               value="UTF-8"
-              checked={this.state.encoding === 'UTF-8'}
+              checked={encoding === 'UTF-8'}
               onChange={this.handleEncoding}
               style={{ paddingRight: '10px' }}
             />
@@ -53,7 +53,7 @@ class NoQuestions extends React.Component {
               label="ISO (Windows)"
               name="radioGroup"
               value="ISO-8859-1"
-              checked={this.state.encoding === 'ISO-8859-1'}
+              checked={encoding === 'ISO-8859-1'}
               onChange={this.handleEncoding}
               style={{ paddingRight: '10px' }}
             />

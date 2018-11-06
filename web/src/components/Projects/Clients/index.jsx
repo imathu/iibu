@@ -35,7 +35,7 @@ class Clients extends React.Component {
       this.state.feedbackers,
     ))).then(() => this.setState(() => ({ editedData: false })));
   }
-  handleFileUpload = (data) => {
+  handleFileUpload = (data, encoding) => {
     const file = data.target.files[0];
     const reader = new FileReader();
     reader.onload = (() => (
@@ -51,7 +51,7 @@ class Clients extends React.Component {
         });
       }
     ))(file);
-    reader.readAsText(file, 'ISO-8859-1');
+    reader.readAsText(file, encoding);
   }
   render() {
     const { editedData, clients, feedbackers } = this.state;

@@ -133,7 +133,7 @@ class Parser {
   static parseClients(input) {
     return new Promise(((resolve, reject) => {
       const feedbackers = [];
-      csv({ noheader: false })
+      csv({ noheader: false, delimiter: 'auto' })
         .fromString(input)
         .on('csv', (csvRow) => {
           feedbackers.push(csvRow);
