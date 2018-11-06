@@ -65,7 +65,17 @@ class Project extends Component {
         <div className="admin-content">
           <Grid>
             <Grid.Column width={3}>
-              <h1>&nbsp;</h1>
+              &nbsp;
+            </Grid.Column>
+            <Grid.Column width={13}>
+              { (adminData && adminData.project && adminData.project.name)
+              && <h1>{adminData.project.name}</h1>
+              }
+              <hr />
+            </Grid.Column>
+          </Grid>
+          <Grid>
+            <Grid.Column width={3} style={{ paddingTop: '20px' }}>
               <Menu fluid vertical pointing>
                 <Menu.Item
                   name="fragen"

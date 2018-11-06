@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Segment, Table, Button, Divider } from 'semantic-ui-react';
+import { Segment, Table, Button, Divider, Radio } from 'semantic-ui-react';
 
 import { db } from '../../../firebase';
 
@@ -9,13 +9,11 @@ class NoQuestions extends React.Component {
     handleFileUpload: PropTypes.func.isRequired,
     importFromTemplate: PropTypes.func.isRequired,
   }
-  constructor(props) {
-    super(props);
-    this.state = {
-      showTemplates: false,
-      templateQuestions: {},
-    };
-  }
+  state = {
+    showTemplates: false,
+    templateQuestions: {},
+    encoding: 'UTF-8',
+  };
   showTemplates = () => {
     db.onceGetTemplates().then(snapshot =>
       this.setState({ templateQuestions: snapshot.val() }));
@@ -25,7 +23,11 @@ class NoQuestions extends React.Component {
     e.preventDefault();
     this.input.click();
   }
+  handleEncoding = (e, data) => {
+    this.setState({ encoding: data.value });
+  }
   render() {
+    const { encoding } = this.state;
     return (
       <div>
         <input
@@ -34,11 +36,29 @@ class NoQuestions extends React.Component {
           type="file"
           accept=".csv"
           ref={(ref) => { this.input = ref; }}
-          onChange={d => this.props.handleFileUpload(d)}
+          onChange={d => this.props.handleFileUpload(d, encoding)}
         />
         <br /><br />
         <Segment padded>
-          <Button to="#" fluid onClick={this.focusTextInput}>Import von File</Button>
+          <div style={{ textAlign: 'center' }}>
+            <Radio
+              label="UTF-8"
+              name="radioGroup"
+              value="UTF-8"
+              checked={this.state.encoding === 'UTF-8'}
+              onChange={this.handleEncoding}
+              style={{ paddingRight: '10px' }}
+            />
+            <Radio
+              label="ISO (Windows)"
+              name="radioGroup"
+              value="ISO-8859-1"
+              checked={this.state.encoding === 'ISO-8859-1'}
+              onChange={this.handleEncoding}
+              style={{ paddingRight: '10px' }}
+            />
+            <Button to="#" onClick={this.focusTextInput}>Import von File</Button>
+          </div>
           <Divider horizontal>Or</Divider>
           <Button fluid onClick={this.showTemplates}>Import von Template</Button>
         </Segment>

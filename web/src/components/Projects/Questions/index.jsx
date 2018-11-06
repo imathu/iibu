@@ -57,7 +57,7 @@ class Questions extends React.Component {
 
   importFromTemplate = questions => this.setState({ data: questions, editedData: true });
 
-  handleFileUpload = (data) => {
+  handleFileUpload = (data, encoding) => {
     const file = data.target.files[0];
     const reader = new FileReader();
     reader.onload = (() => (
@@ -72,7 +72,7 @@ class Questions extends React.Component {
         });
       }
     ))(file);
-    reader.readAsText(file, 'ISO-8859-1');
+    reader.readAsText(file, encoding);
   }
   render() {
     const {

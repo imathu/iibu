@@ -151,7 +151,7 @@ class Parser {
   static parseQuestions(input) {
     return new Promise(((resolve, reject) => {
       const questions = [];
-      csv({ noheader: false })
+      csv({ noheader: false, delimiter: 'auto' })
         .fromString(input)
         .on('csv', (csvRow) => {
           questions.push(csvRow);
