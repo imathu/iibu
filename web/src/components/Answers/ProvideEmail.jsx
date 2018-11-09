@@ -1,18 +1,37 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Modal, Button } from 'semantic-ui-react';
+import { Modal, Button, Form, Input } from 'semantic-ui-react';
 
 class ProvideEmail extends React.Component {
-  setEmail = () => {
-    localStorage.setItem('emailForSignIn', 'gaga@gagam');
+  state = {
+    email: '',
+  }
+  onSubmit = () => {
+    localStorage.setItem('emailForSignIn', this.state.email);
     this.props.closeModal();
   }
+  setEMail = (email) => {
+    this.setState({ email });
+  }
   render() {
+    const { email } = this.state;
+    const isInvalid = (email === '');
     return (
       <Modal open>
         <Modal.Content>
-          Geben Sie Ihre Email ein
-          <Button onClick={this.setEmail}>Send</Button>
+          <Form error onSubmit={this.onSubmit}>
+            <Form.Field
+              id="email"
+              icon="user"
+              iconPosition="left"
+              fluid
+              control={Input}
+              placeholder="Mail"
+              value={email}
+              onChange={event => this.setEMail(event.target.value)}
+            />
+            <Button disabled={isInvalid} type="submit">Sign In</Button>
+          </Form>
         </Modal.Content>
       </Modal>
     );
