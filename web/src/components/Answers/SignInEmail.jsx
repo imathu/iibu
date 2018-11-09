@@ -65,13 +65,19 @@ const INITIAL_STATE = {
   error: null,
   message: null,
   showMessage: false,
+  tokenError: null,
 };
 
 class SignInForm extends Component {
   static propTypes = {
     projectId: PropTypes.string.isRequired,
     feedbackerId: PropTypes.string.isRequired,
+    tokenError: PropTypes.shape({}),
+    clearError: PropTypes.func.isRequired,
   };
+  static defaultProps = {
+    tokenError: null,
+  }
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
@@ -81,6 +87,7 @@ class SignInForm extends Component {
       email,
     } = this.state;
     event.preventDefault();
+    this.props.clearError();
     auth.doSignInWithEmail(email, this.props.projectId, this.props.feedbackerId)
       .then(() => {
         this.setState({ showMessage: true });
@@ -100,6 +107,7 @@ class SignInForm extends Component {
       error,
       showMessage,
     } = this.state;
+    const { tokenError } = this.props;
     const isInvalid =
   email === '';
     return (
@@ -119,6 +127,9 @@ class SignInForm extends Component {
               />
               { error &&
                 <Message error content={codes.errCode(error, lang.language)} />
+              }
+              { tokenError &&
+                <Message error content={codes.errCode(tokenError, lang.language)} />
               }
               <Button disabled={isInvalid} type="submit">Sign In</Button>
             </Form>

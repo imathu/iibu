@@ -1,13 +1,14 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import AuthUserContext from 'components/AuthUserContext';
-import { FormattedMessage } from 'react-intl';
-import { Loader, Segment, Header } from 'semantic-ui-react';
+import { Loader } from 'semantic-ui-react';
 
 
-import { auth, db } from '../../firebase';
-import AnswersList from './AnswersList';
+import { auth } from '../../firebase';
+import Content from './Content';
 import SignInEmail from './SignInEmail';
+import ProvideEmail from './ProvideEmail';
 
 import './Answers.css';
 
@@ -22,97 +23,74 @@ class Answers extends React.Component {
     }).isRequired,
   }
   state = {
+    error: null,
+    modal: false,
     loading: false,
-    activeFlag: false,
-    feedbackerNotActive: false,
   };
   componentDidMount = () => {
-    const { projectId, feedbackerId } = this.props.match.params;
-    db.getActiveFlag(projectId).on('value', (snapshot) => {
-      this.setState(() => ({ activeFlag: snapshot.val() }));
-    });
-    db.getFeedbackerActiveFlag(projectId, feedbackerId).on('value', (snapshot) => {
-      this.setState(() => ({ feedbackerNotActive: snapshot.val() }));
-    });
+    this.checkMail();
+  }
+  closeModal = () => {
+    this.setState({ modal: false });
+    this.checkMail();
+  }
+  checkMail = () => {
     if (auth.isSignInWithEmailLink(window.location.href)) {
       this.setState(() => ({ loading: true }));
-      let email = localStorage.getItem('emailForSignIn');
+      const email = localStorage.getItem('emailForSignIn');
       if (!email) {
-        email = window.prompt('Please provide your email for confirmation'); // eslint-disable-line no-alert
+        this.setState({ modal: true });
       }
-      auth.signInWithEmailLink(email, window.location.href)
-        .then((result) => {
-          localStorage.removeItem('emailForSignIn');
-          this.setState(() => ({ loading: false, authUser: result.user }));
-        })
-        .catch(() => {
-          this.setState(() => ({ loading: false }));
-        });
+      if (email) {
+        auth.signInWithEmailLink(email, window.location.href)
+          .then((result) => {
+            localStorage.removeItem('emailForSignIn');
+            this.setState(() => ({ error: null, loading: false, authUser: result.user }));
+          })
+          .catch((error) => {
+            this.setState({ error, loading: false });
+            console.log(error);
+            localStorage.removeItem('emailForSignIn');
+          });
+      }
     }
   }
+  clearError = () => {
+    this.setState({ error: null });
+  }
   render() {
-    const { loading, activeFlag, feedbackerNotActive } = this.state;
+    const { error, modal, loading } = this.state;
     const { projectId, feedbackerId } = this.props.match.params;
+    if (modal) {
+      return (
+        <ProvideEmail closeModal={this.closeModal} />
+      );
+    }
     if (loading) {
       return <Loader />;
-    }
-    if (!activeFlag && !loading) {
-      return (
-        <Segment
-          style={{ margin: '10px', textAlign: 'center' }}
-        >
-          <Header as="h2">
-            <FormattedMessage
-              id="feedback.closedHeader"
-              defaultMessage="Der Feedbackbogen ist nicht aktiv"
-              values={{ what: 'react-intl' }}
-            />
-          </Header>
-          <FormattedMessage
-            id="feedback.closedContent"
-            defaultMessage="Für Fragen wenden Sie sich an den Organisator"
-            values={{ what: 'react-intl' }}
-          />
-        </Segment>
-      );
-    }
-    if (feedbackerNotActive && !loading) {
-      return (
-        <Segment
-          style={{ margin: '10px', textAlign: 'center' }}
-        >
-          <Header as="h2">
-            <FormattedMessage
-              id="feedback.finishedHeader"
-              defaultMessage="Erfolgreich abgeschlossen"
-              values={{ what: 'react-intl' }}
-            />
-          </Header>
-          <FormattedMessage
-            id="feedback.finishedContent"
-            defaultMessage="herzlichen Dank für Ihre Teilnahme"
-            values={{ what: 'react-intl' }}
-          />
-        </Segment>
-      );
     }
     return (
       <AuthUserContext.Consumer>
         {user => (user
           ?
             <div id="answers-content">
-              <AnswersList
+              <Content
                 user={user}
                 projectId={projectId}
                 feedbackerId={feedbackerId}
               />
             </div>
           :
-            <SignInEmail projectId={projectId} feedbackerId={feedbackerId} />
+            <SignInEmail
+              tokenError={error}
+              projectId={projectId}
+              feedbackerId={feedbackerId}
+              clearError={this.clearError}
+            />
         )}
       </AuthUserContext.Consumer>
     );
   }
 }
 
-export default Answers;
+export default withRouter(Answers);
