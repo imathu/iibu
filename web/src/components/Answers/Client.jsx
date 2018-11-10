@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Segment, Header, Divider, Table } from 'semantic-ui-react';
-import { getRoleContent } from 'utils';
+import { getRoleContent, getRolePhraseStart, getRoleCode } from 'utils';
 
 import LanguageContext from 'components/LanguageContext';
 import MatchText from './MatchText';
@@ -20,6 +20,7 @@ const Client = (props) => {
   } = props;
   const roleId = feedbacker.clients[client.id].role;
   const roleContent = getRoleContent(roles, roleId);
+  const rolePhrase = getRolePhraseStart(roles, roleId, getRoleCode((roleId === 'self') ? 'self' : feedbacker.gender));
   return (
     <Segment>
       <Header textAlign="left" as="h2" >
@@ -44,11 +45,7 @@ const Client = (props) => {
               Id
             </Table.HeaderCell>
             <Table.HeaderCell>
-              <FormattedMessage
-                id="feedback.question"
-                defaultMessage="Frage"
-                values={{ what: 'react-intl' }}
-              />
+              {rolePhrase}
             </Table.HeaderCell>
             <Table.HeaderCell>
               <MatchText />

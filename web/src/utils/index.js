@@ -28,6 +28,11 @@ export function getRoleContent(roles, roleId) {
   return idx(roles, _ => _[roleId][lang]) || 'undefined role';
 }
 
+export const getRolePhraseStart = (roles, id, gender) => {
+  const lang = getLanguage();
+  return idx(roles, _ => _[id].phraseStart[gender][lang]) || '';
+};
+
 export function getURL() {
   return process.env.REACT_APP_URL || 'http://localhost:3000';
 }
