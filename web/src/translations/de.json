@@ -29,5 +29,8 @@
   "feedback.finishedHeader": "Erfolgreich abgeschlossen",
   "feedback.finishedContent": "Herzlichen Dank für Ihre Teilnahme",
   "feedback.complete": "Abschliessen",
-  "feedback.verifyEMail": "Bitte bestätigen Sie ihre E-Mail Adresse"
+  "feedback.verifyEMail": "Bitte bestätigen Sie ihre E-Mail Adresse",
+  "feedback.savingHeader": "Ein kurzer Moment",
+  "feedback.savingContent": "Ihre Daten werden gespeichert",
+  "feedback.remark": "Bemerkung hinzufügen?"
 }

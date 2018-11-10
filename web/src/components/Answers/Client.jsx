@@ -4,11 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { Segment, Header, Divider, Table } from 'semantic-ui-react';
 import { getRoleContent, getRolePhraseStart, getRoleCode } from 'utils';
 
-import LanguageContext from 'components/LanguageContext';
 import MatchText from './MatchText';
-
-import Question from './Question';
-import Answer from './Answer';
+import ClientRow from './ClientRow';
 
 const Client = (props) => {
   const {
@@ -54,32 +51,16 @@ const Client = (props) => {
         </Table.Header>
         <Table.Body>
           {Object.keys(questions).map((id, idx) => (
-            <Table.Row key={id}>
-              <Table.Cell>
-                {idx}
-              </Table.Cell>
-              <Table.Cell>
-                <LanguageContext.Consumer>
-                  {language => (
-                    <Question
-                      question={questions[id]}
-                      roleId={roleId}
-                      gender={feedbacker.gender}
-                      language={language}
-                    />
-                  )}
-                </LanguageContext.Consumer>
-              </Table.Cell>
-              <Table.Cell collapsing>
-                <Answer
-                  feedbacker={feedbacker}
-                  scores={questions[id].scores}
-                  projectId={projectId}
-                  clientId={client.id}
-                  questionId={id}
-                />
-              </Table.Cell>
-            </Table.Row>
+            <ClientRow
+              key={id}
+              idx={idx}
+              id={id}
+              feedbacker={feedbacker}
+              questions={questions}
+              projectId={projectId}
+              client={client}
+              roleId={roleId}
+            />
           ))}
         </Table.Body>
       </Table>

@@ -29,5 +29,8 @@
   "feedback.finishedHeader": "You successfully finished",
   "feedback.finishedContent": "Thank you for partitipating",
   "feedback.complete": "complete",
-  "feedback.verifyEMail": "please provide your email address for confirmation"
+  "feedback.verifyEMail": "please provide your email address for confirmation",
+  "feedback.savingHeader": "just a second",
+  "feedback.savingContent": "... saving your comment",
+  "feedback.remark": "make a remark for this question"
 }

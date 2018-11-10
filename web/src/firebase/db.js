@@ -84,8 +84,16 @@ export const doUpdateAnswer = (projectId, feedbackerId, clientId, questionId, sc
     score,
   })
 );
+export const doUpdateRemark = (projectId, feedbackerId, clientId, questionId, remark) => (
+  db.ref(`projects/${projectId}/feedbackers/${feedbackerId}/clients/${clientId}/answers/${questionId}`).update({
+    remark,
+  })
+);
 export const numAnswers = (projectId, feedbackerId, clientId) => (
   db.ref(`projects/${projectId}/feedbackers/${feedbackerId}/clients/${clientId}/answers`)
+);
+export const getRemark = (projectId, feedbackerId, clientId, questionId) => (
+  db.ref(`projects/${projectId}/feedbackers/${feedbackerId}/clients/${clientId}/answers/${questionId}`)
 );
 export const doDisableBanner = (projectId, feedbackerId) => (
   db.ref(`projects/${projectId}/feedbackers/${feedbackerId}`).update({ noBanner: true })
