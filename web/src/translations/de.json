@@ -17,8 +17,9 @@
   "feedback.feedbackerin": "Feedbacknehmerin",
   "feedback.role": "Sie geben Feedback in der Rolle als",
   "feedback.question": "Frage",
-  "feedback.nomatch": "nicht zutreffend",
+  "feedback.nomatch": "trifft nicht zu",
   "feedback.match": "trifft zu",
+  "feedback.neutralMatch": "nicht beurteilen",
   "feedback.waitForData": "Wenn Sie sich korrekt angemeldet haben werden die Daten in ein paar Sekunden dargestellt",
   "feedback.end": "Sie haben alle Fragen beantwortet, herzlichen Dank",
   "feedback.passwordSent": "Ein Link für das einmalige Login wurde Ihnen per Mail zugestellt",
@@ -27,5 +28,6 @@
   "feedback.closedContent": "Für Fragen wenden Sie sich an den Organisator",
   "feedback.finishedHeader": "Erfolgreich abgeschlossen",
   "feedback.finishedContent": "Herzlichen Dank für Ihre Teilnahme",
-  "feedback.complete": "Abschliessen"
+  "feedback.complete": "Abschliessen",
+  "feedback.verifyEMail": "Bitte bestätigen Sie ihre E-Mail Adresse"
 }

@@ -30,7 +30,10 @@ class SignInForm extends React.Component {
   }
   constructor(props) {
     super(props);
-    this.state = { ...INITIAL_STATE };
+    this.state = {
+      ...INITIAL_STATE,
+      email: localStorage.getItem('emailForSignIn') || '',
+    };
   }
   onSubmit = (event) => {
     const {

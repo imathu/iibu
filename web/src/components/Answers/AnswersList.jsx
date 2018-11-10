@@ -8,6 +8,7 @@ import Language from 'components/Language';
 import * as routes from 'constants/routes';
 import Client from './Client';
 import Footer from './Footer';
+import MatchText from './MatchText';
 import { Menu as ContextMenu } from './Menu';
 
 import { firebase, db } from '../../firebase';
@@ -163,17 +164,7 @@ class AnswersList extends React.Component {
                       ))}
                       <hr />
                       <p>
-                        1 = <FormattedMessage
-                          id="feedback.nomatch"
-                          defaultMessage="trifft nicht zu"
-                          values={{ what: 'react-intl' }}
-                        />
-                        <br />
-                        5 = <FormattedMessage
-                          id="feedback.match"
-                          defaultMessage="trifft zu"
-                          values={{ what: 'react-intl' }}
-                        />
+                        <MatchText />
                       </p>
                     </Segment>
                   </Sticky>

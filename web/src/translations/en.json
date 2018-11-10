@@ -19,6 +19,7 @@
   "feedback.question": "question",
   "feedback.nomatch": "inappropriate",
   "feedback.match": "applicable",
+  "feedback.neutralMatch": "can't tell",
   "feedback.waitForData": "If you are authorized, the data will be loaded in a few seconds",
   "feedback.end": "You've successfully completed the questionaire, thank you",
   "feedback.passwordSent": "You've received an email with login link",
@@ -27,5 +28,6 @@
   "feedback.closedContent": "Please contact your administrator for questions",
   "feedback.finishedHeader": "You successfully finished",
   "feedback.finishedContent": "Thank you for partitipating",
-  "feedback.complete": "complete"
+  "feedback.complete": "complete",
+  "feedback.verifyEMail": "please provide your email address for confirmation"
 }

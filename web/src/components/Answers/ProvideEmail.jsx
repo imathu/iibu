@@ -1,6 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Modal, Button, Form, Input } from 'semantic-ui-react';
+import { FormattedMessage } from 'react-intl';
 
 class ProvideEmail extends React.Component {
   state = {
@@ -18,6 +19,13 @@ class ProvideEmail extends React.Component {
     const isInvalid = (email === '');
     return (
       <Modal open size="tiny">
+        <Modal.Header>
+          <FormattedMessage
+            id="feedback.verifyEMail"
+            defaultMessage="Bitte Email Adresse bestätigen"
+            values={{ what: 'react-intl' }}
+          />
+        </Modal.Header>
         <Modal.Content>
           <Form error onSubmit={this.onSubmit}>
             <Form.Field

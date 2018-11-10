@@ -5,6 +5,7 @@ import { Segment, Header, Divider, Table } from 'semantic-ui-react';
 import { getRoleContent } from 'utils';
 
 import LanguageContext from 'components/LanguageContext';
+import MatchText from './MatchText';
 
 import Question from './Question';
 import Answer from './Answer';
@@ -47,17 +48,7 @@ const Client = (props) => {
               />
             </Table.HeaderCell>
             <Table.HeaderCell>
-              1 = <FormattedMessage
-                id="feedback.nomatch"
-                defaultMessage="trifft nicht zu"
-                values={{ what: 'react-intl' }}
-              />
-              <br />
-              5 = <FormattedMessage
-                id="feedback.match"
-                defaultMessage="trifft zu"
-                values={{ what: 'react-intl' }}
-              />
+              <MatchText />
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
