@@ -19,7 +19,7 @@
   "feedback.question": "Frage",
   "feedback.nomatch": "trifft nicht zu",
   "feedback.match": "trifft zu",
-  "feedback.neutralMatch": "nicht beurteilen",
+  "feedback.neutralMatch": "Kann ich nicht beurteilen",
   "feedback.waitForData": "Wenn Sie sich korrekt angemeldet haben werden die Daten in ein paar Sekunden dargestellt",
   "feedback.end": "Sie haben alle Fragen beantwortet, herzlichen Dank",
   "feedback.passwordSent": "Ein Link für das einmalige Login wurde Ihnen per Mail zugestellt",

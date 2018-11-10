@@ -163,9 +163,7 @@ class AnswersList extends React.Component {
                         </div>
                       ))}
                       <hr />
-                      <p>
-                        <MatchText />
-                      </p>
+                      <MatchText />
                     </Segment>
                   </Sticky>
                 </Grid.Column>

@@ -8,6 +8,13 @@ import { db } from '../../firebase';
 
 const key = (id, index) => `${id}-${index}`;
 
+const border = (i) => {
+  if (i === 0) {
+    return { borderRight: '3px solid lightgray', padding: '5px' };
+  }
+  return {};
+};
+
 class Answer extends React.Component {
   constructor(props) {
     super(props);
@@ -18,7 +25,7 @@ class Answer extends React.Component {
   componentDidMount = () => {
     const { feedbacker, clientId, questionId } = this.props;
     const value = idx(feedbacker, _ =>
-      _.clients[clientId].answers[questionId].score) || -1;
+      _.clients[clientId].answers[questionId].score);
     this.setState(() => ({ value }));
   }
   handleChange = (e, { value }) => {
@@ -38,15 +45,22 @@ class Answer extends React.Component {
       <Form>
         <List horizontal>
           {[...Array(scores)].map((x, i) => (
-            <List.Item key={key(feedbacker.id, i)}>
+            <List.Item
+              key={key(feedbacker.id, i)}
+              style={border(i)}
+            >
               <Form.Field>
-                <label className="custom" htmlFor={i + 1}><center>{i + 1}</center></label>
+                <label
+                  className="custom"
+                  htmlFor={i}
+                ><center>{i}</center>
+                </label>
                 <Checkbox
                   fitted
                   radio
                   name="checkboxRadioGroup"
-                  value={i + 1}
-                  checked={value === (i + 1)}
+                  value={i}
+                  checked={value === (i)}
                   onChange={this.handleChange}
                 />
               </Form.Field>

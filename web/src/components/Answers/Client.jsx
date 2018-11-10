@@ -41,6 +41,9 @@ const Client = (props) => {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>
+              Id
+            </Table.HeaderCell>
+            <Table.HeaderCell>
               <FormattedMessage
                 id="feedback.question"
                 defaultMessage="Frage"
@@ -53,8 +56,11 @@ const Client = (props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {Object.keys(questions).map(id => (
+          {Object.keys(questions).map((id, idx) => (
             <Table.Row key={id}>
+              <Table.Cell>
+                {idx}
+              </Table.Cell>
               <Table.Cell>
                 <LanguageContext.Consumer>
                   {language => (

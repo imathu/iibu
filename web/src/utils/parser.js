@@ -107,7 +107,7 @@ function questionCSV2json(questionArray) {
     if (line[2] !== '') {
       const question = {
         id: `id-${index}`,
-        scores: 5,
+        scores: 6,
         context: line[2],
         content: {
           de: {

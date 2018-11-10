@@ -129,14 +129,14 @@ export class Analysis {
 
   // return the average for each answer by context
   static getAnswersByContext(answers, contextId) {
-    const filteredAnswers = answers.filter(a => a.context === contextId);
+    const filteredAnswers = answers.filter(a => a.context === contextId && a.score > 0);
     const sum = filteredAnswers.reduce((acc, val) => (acc + val.score), 0);
     return (sum > 0) ? sum / filteredAnswers.length : 0;
   }
 
   // return the average for an answer by role
   static getAnswerByRole(answers, roleId) {
-    const filteredAnswers = answers.filter(a => a.role === roleId);
+    const filteredAnswers = answers.filter(a => a.role === roleId && a.score > 0);
     const feedbackers = unique(filteredAnswers.map(a => a.feedbackerId)).length;
     const filteredArray = filteredAnswers.map(a => a.score);
     const sum = filteredArray.reduce((acc, val) => (acc + val), 0);
