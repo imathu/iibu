@@ -24,7 +24,7 @@ const message = {
     en: 'Password should be at least 6 characters',
   },
   'auth/invalid-action-code': {
-    de: 'Die E-Mail Adresse ist ungültig oder der Login Link ist abgelaufen. Führen Sie den Login Vorgang nochmals aus',
+    de: 'Ihr Login Link ist abgelaufen oder ungültig. Loggen Sie sich erneut ein',
     en: 'The action code is invalid. This can happen if the… is malformed, expired, or has already been used.',
   },
 };

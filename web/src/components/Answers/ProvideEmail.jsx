@@ -17,7 +17,7 @@ class ProvideEmail extends React.Component {
     const { email } = this.state;
     const isInvalid = (email === '');
     return (
-      <Modal open>
+      <Modal open size="tiny">
         <Modal.Content>
           <Form error onSubmit={this.onSubmit}>
             <Form.Field
