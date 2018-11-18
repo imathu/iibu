@@ -26,6 +26,7 @@
     "react-scripts": "1.1.4",
     "semantic-ui-css": "^2.3.1",
     "semantic-ui-react": "^0.79.1",
+    "throttle-debounce": "^2.0.1",
     "uuid": "^3.2.1"
   },
   "scripts": {

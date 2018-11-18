@@ -4,7 +4,7 @@
   "app.contact": "Für Fragen und Beratung wenden Sie sich an",
   "app.loginMessage": "Willkommen",
   "app.feedbackerThanks": "Danke, dass Sie sich bei realfeedback.ch angemeldet haben",
-  "app.feedbackerMessage": "Für die Teilnahme an einer Feedbackrunde haben Sie von Ihrem Organisator einen Link per E-Mail erhalten. Wenden Sie sich bei Fragen an den Organisator Ihrer Feedbackrunde",
+  "app.feedbackerMessage": "Wenn Sie als Feedbackgeber ausgewählt wurden, erhalten Sie vom Organisator der Feedbackrunde einen Link per E-Mail. Bitte folgen Sie diesem Link, um zu den Fragen zu gelangen",
   "app.pwdResetTitle": "Passwort Reset",
   "app.pwdResetQuestion": "Passwort zurücksetzen?",
   "app.signUpQuestion": "Sie haben noch keinen Account?",
@@ -17,8 +17,11 @@
   "feedback.feedbackerin": "Feedbacknehmerin",
   "feedback.role": "Sie geben Feedback in der Rolle als",
   "feedback.question": "Frage",
-  "feedback.nomatch": "trifft nicht zu",
-  "feedback.match": "trifft zu",
+  "feedback.match1": "trifft nicht zu",
+  "feedback.match2": "trifft eher nicht zu",
+  "feedback.match3": "teils teils",
+  "feedback.match4": "trifft eher zu",
+  "feedback.match5": "trifft zu",
   "feedback.neutralMatch": "Kann ich nicht beurteilen",
   "feedback.waitForData": "Wenn Sie sich korrekt angemeldet haben werden die Daten in ein paar Sekunden dargestellt",
   "feedback.end": "Sie haben alle Fragen beantwortet, herzlichen Dank",
@@ -32,5 +35,8 @@
   "feedback.verifyEMail": "Bitte bestätigen Sie ihre E-Mail Adresse",
   "feedback.savingHeader": "Ein kurzer Moment",
   "feedback.savingContent": "Ihre Daten werden gespeichert",
-  "feedback.remark": "Bemerkung hinzufügen?"
+  "feedback.remark": "Bemerkung hinzufügen?",
+  "feedback.noRemark": "Bitte beantworten Sie zuerst die Frage bevor Sie einen Kommentar schreiben",
+  "feedback.remarkDisclaimer": "Dieser Kommentar wird 1:1 in die Auswertung übernommen",
+  "feedback.BannerToggle": "Diese Nachricht nicht mehr anzeigen"
 }

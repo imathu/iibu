@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 
-import { Menu, Responsive, Segment, Container } from 'semantic-ui-react';
+import { Menu, Responsive, Segment, Container, Image } from 'semantic-ui-react';
 import { NavLink, Link } from 'react-router-dom';
 
 import * as routes from 'constants/routes';
@@ -69,9 +69,10 @@ const NavigationDesktop = () => (
             >
               <Container>
                 <Menu.Item
+                  style={{ padding: '0px' }}
                   as={Link}
                   to={routes.LANDING}
-                ><h1>realfeedback.ch</h1>
+                ><Image src="/skillsgarden-logo-rgb.png" size="medium" />
                 </Menu.Item>
                 {auth && auth.admin
                 ? <AdminMenu />

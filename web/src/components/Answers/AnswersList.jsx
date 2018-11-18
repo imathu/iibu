@@ -13,6 +13,14 @@ import { Menu as ContextMenu } from './Menu';
 
 import { firebase, db } from '../../firebase';
 
+const message = () => (
+  <FormattedMessage
+    id="feedback.BannerToggle"
+    defaultMessage="Diese Nachricht nicht mehr anzeigen"
+    values={{ what: 'react-intl' }}
+  />
+);
+
 class AnswersList extends React.Component {
   static propTypes = {
     projectId: PropTypes.string.isRequired,
@@ -119,7 +127,8 @@ class AnswersList extends React.Component {
                 </Modal.Content>
                 <Modal.Actions>
                   <Checkbox
-                    label="diese Nachricht nicht mehr anzeigen"
+                    // eslint-disable-next-line
+                    label={<label htmlFor="toggle">{message()}</label>}
                     checked={checkBoxToggle}
                     onClick={this.checkBoxToggle}
                   />

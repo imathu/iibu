@@ -46,7 +46,7 @@ const LandingPage = ({ mobile }) => (
               defaultMessage="kontaktiere"
               values={{ what: 'react-intl' }}
             />
-            <div>info at realfeedback.ch</div>
+            <div>info@realfeedback.ch</div>
           </Container>
         </div>
         :

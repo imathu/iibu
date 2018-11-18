@@ -5,6 +5,8 @@ import * as routes from 'constants/routes';
 import { Segment } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
 
+import Language from 'components/Language';
+
 import SignInForm from './SignInForm';
 import ProvideEmail from './ProvideEmail';
 
@@ -55,6 +57,7 @@ class SignInEmailPage extends React.Component {
     }
     return (
       <div>
+        <Language languages={{ en: 'true' }} />
         <Segment
           compact
           style={{

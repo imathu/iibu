@@ -2,12 +2,9 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Table, TextArea, Message, Icon, Form, Header } from 'semantic-ui-react';
+import { debounce } from 'throttle-debounce';
 
 import { db } from '../../firebase';
-
-// eslint-disable-next-line
-function debounce(a,b,c){var d,e;return function(){function h(){d=null,c||(e=a.apply(f,g))}var f=this,g=arguments;return clearTimeout(d),d=setTimeout(h,b),c&&!d&&(e=a.apply(f,g)),e}}
-
 
 class Remark extends React.Component {
   static propTypes = {
@@ -23,7 +20,7 @@ class Remark extends React.Component {
       saving: false,
       remark: '',
     };
-    this.onChange = debounce(this.onChange, 500);
+    this.onChangeDebounced = debounce(300, this.onChange);
   }
   componentDidMount = () => {
     const {
@@ -34,11 +31,11 @@ class Remark extends React.Component {
     } = this.props;
     db.getRemark(projectId, feedbackerId, clientId, questionId).on('value', (snapshot) => {
       this.setState(() => ({
-        remark: snapshot.val().remark || '',
+        remark: (snapshot.val()) ? snapshot.val().remark || '' : null,
       }));
     });
   }
-  onChange = debounce((remark) => {
+  onChange = (remark) => {
     db.doUpdateRemark(
       this.props.projectId,
       this.props.feedbackerId,
@@ -47,54 +44,66 @@ class Remark extends React.Component {
       remark,
     );
     this.setState({ saving: false });
-  }, 100);
+  }
   save = (e, data) => {
     this.setState({ saving: true, remark: data.value });
-    this.onChange(data.value);
+    this.onChangeDebounced(data.value);
   }
   render() {
     const { remark, saving } = this.state;
     const { id } = this.props;
     return (
       <Table.Row>
-        <Table.Cell colSpan="3">
-          <Form>
-            <Header as="h3" style={{ textAlign: 'center' }}>
-              <FormattedMessage
-                id="feedback.remarkDisclaimer"
-                defaultMessage="Dieser Kommentar wird 1:1 in die Auswertung übernommen"
-                values={{ what: 'react-intl' }}
-              />
-            </Header>
-            <Form.Field
-              style={{ backgroundColor: '#FEF9E7' }}
-              id="remark"
-              control={TextArea}
-              placeholder={`Bemerkung zu Frage ${id}`}
-              value={remark}
-              onChange={this.save}
-            />
-          </Form>
-          {saving &&
-            <Message icon>
-              <Icon name="circle notched" loading />
-              <Message.Content>
-                <Message.Header>
-                  <FormattedMessage
-                    id="feedback.savingHeader"
-                    defaultMessage="Ein kurzer Moment"
-                    values={{ what: 'react-intl' }}
-                  />
-                </Message.Header>
+        { (remark !== null)
+        ?
+          <Table.Cell colSpan="3">
+            <Form>
+              <Header as="h3" style={{ textAlign: 'center' }}>
                 <FormattedMessage
-                  id="feedback.savingContent"
-                  defaultMessage="Ihre Daten werden gespeichert"
+                  id="feedback.remarkDisclaimer"
+                  defaultMessage="Dieser Kommentar wird 1:1 in die Auswertung übernommen"
                   values={{ what: 'react-intl' }}
                 />
-              </Message.Content>
-            </Message>
-          }
-        </Table.Cell>
+              </Header>
+              <Form.Field
+                style={{ backgroundColor: '#FEF9E7' }}
+                id="remark"
+                control={TextArea}
+                placeholder={`Bemerkung zu Frage ${id}`}
+                value={remark}
+                onChange={this.save}
+              />
+            </Form>
+            {saving &&
+              <Message icon>
+                <Icon name="circle notched" loading />
+                <Message.Content>
+                  <Message.Header>
+                    <FormattedMessage
+                      id="feedback.savingHeader"
+                      defaultMessage="Ein kurzer Moment"
+                      values={{ what: 'react-intl' }}
+                    />
+                  </Message.Header>
+                  <FormattedMessage
+                    id="feedback.savingContent"
+                    defaultMessage="Ihre Daten werden gespeichert"
+                    values={{ what: 'react-intl' }}
+                  />
+                </Message.Content>
+              </Message>
+            }
+          </Table.Cell>
+        :
+          <Table.Cell colSpan="3">
+            <FormattedMessage
+              id="feedback.noRemark"
+              defaultMessage="Bitte beantworten Sie zuerst die Frage"
+              values={{ what: 'react-intl' }}
+            />
+          </Table.Cell>
+        }
+
       </Table.Row>
     );
   }
