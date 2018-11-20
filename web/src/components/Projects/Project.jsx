@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { Route, NavLink } from 'react-router-dom';
-import { Grid, Menu } from 'semantic-ui-react';
+import { Grid, Menu, Divider } from 'semantic-ui-react';
 import withAuthorization from 'components/withAuthorization';
 import AdminDataContext from 'components/AdminDataContext';
 
 import * as routes from 'constants/routes';
+import Language from 'components/Language';
+
 import Questions from './Questions';
 import Clients from './Clients';
 import ClientDetails from './ClientDetails';
@@ -63,19 +65,21 @@ class Project extends Component {
     return (
       <AdminDataContext.Provider value={adminData}>
         <div className="admin-content">
+          <Language languages={{ en: 'true' }} />
+          <Divider clearing hidden />
           <Grid>
             <Grid.Column width={3}>
               &nbsp;
             </Grid.Column>
             <Grid.Column width={13}>
               { (adminData && adminData.project && adminData.project.name)
-              && <h1>{adminData.project.name}</h1>
+              && <h1>Projekt: {adminData.project.name}</h1>
               }
               <hr />
             </Grid.Column>
           </Grid>
           <Grid>
-            <Grid.Column width={3} style={{ paddingTop: '20px' }}>
+            <Grid.Column width={3}>
               <Menu fluid vertical pointing>
                 <Menu.Item
                   name="fragen"

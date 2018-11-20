@@ -22,6 +22,7 @@ class ClientData extends React.Component {
     line: PropTypes.bool.isRequired,
     clientId: PropTypes.string.isRequired,
     onRef: PropTypes.func.isRequired,
+    height: PropTypes.number.isRequired,
   }
   constructor(props) {
     super(props);
@@ -42,6 +43,7 @@ class ClientData extends React.Component {
       line,
       data,
       radar,
+      height,
     } = this.props;
     return (
       <React.Fragment>
@@ -64,6 +66,7 @@ class ClientData extends React.Component {
               <ClientContextBarPerQuestion
                 {...this.props}
                 key={contextId}
+                height={height}
                 contextId={contextId}
                 onRef={(ref) => { this.barsPerQuestion[contextId] = ref; }}
               />
@@ -77,6 +80,7 @@ class ClientData extends React.Component {
                 {...this.props}
                 key={contextId}
                 contextId={contextId}
+                height={height}
                 line
                 onRef={(ref) => { this.lines[contextId] = ref; }}
               />

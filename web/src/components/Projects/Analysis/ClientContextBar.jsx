@@ -80,6 +80,7 @@ class ClientContextBar extends React.Component {
     }).isRequired,
     clientId: PropTypes.string.isRequired,
     contextId: PropTypes.string.isRequired,
+    height: PropTypes.number.isRequired,
   }
   constructor(props) {
     super(props);
@@ -109,6 +110,7 @@ class ClientContextBar extends React.Component {
       data,
       adminData,
       line,
+      height,
     } = this.props;
     const { context } = this.state;
     const a = new Analysis(data, adminData);
@@ -126,7 +128,7 @@ class ClientContextBar extends React.Component {
               data={barData}
               type="bar"
               options={options}
-              height={200}
+              style={{ height }}
             />
           </Grid.Column>
         </Grid>

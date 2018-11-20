@@ -59,7 +59,9 @@ export class PDF {
     // check if we have to paint the new chart on a new page
     if (this.yBarOffset + barHeight > (this.height - this.border)) {
       this.addPage();
+      return true;
     }
+    return false;
   }
 
   // add a new Radar chart
@@ -91,9 +93,13 @@ export class PDF {
   // add a new Bar chart
   addBarChart = (chart, label = '') => {
     const ratio = (chart.height / chart.width);
-    const barHeight = ratio * this.width;
+    // const barHeight = (ratio * this.width);
 
-    this.checkPageBreak(barHeight);
+    const imageWidth = this.width - (2 * this.border) - this.xBarOffset;
+    // const imageHeight = barHeight - this.border;
+    const barHeight = imageWidth * ratio;
+
+    this.checkPageBreak(barHeight + this.border);
 
     // draw the new chart
     this.doc.setFontSize(10);
@@ -104,10 +110,10 @@ export class PDF {
       'JPEG',
       this.border + this.xBarOffset,
       this.yBarOffset,
-      this.width - (2 * this.border) - this.xBarOffset,
-      barHeight - this.border,
+      imageWidth,
+      barHeight,
     );
-    this.yBarOffset = this.yBarOffset + (barHeight - (this.border / 2));
+    this.yBarOffset = this.yBarOffset + (barHeight + this.border);
     // draw a line after every Chart
     this.doc.line(
       this.border,

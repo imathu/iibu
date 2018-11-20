@@ -80,6 +80,7 @@ class ClientContextBarPerQuestion extends React.Component {
     }).isRequired,
     clientId: PropTypes.string.isRequired,
     contextId: PropTypes.string.isRequired,
+    height: PropTypes.number.isRequired,
   }
   constructor(props) {
     super(props);
@@ -91,6 +92,13 @@ class ClientContextBarPerQuestion extends React.Component {
   componentDidMount() {
     this.setContext();
     this.props.onRef(this);
+  }
+
+  componentDidUpdate() {
+    // Object.keys(this.barsPerQuestion).forEach((id) => {
+    //   this.barsPerQuestion[id].chart.update();
+    // });
+    // this.props.onRef(this);
   }
 
   componentWillUnmount() {
@@ -108,6 +116,7 @@ class ClientContextBarPerQuestion extends React.Component {
       clientId,
       data,
       adminData,
+      height,
     } = this.props;
     const { context } = this.state;
     const a = new Analysis(data, adminData);
@@ -116,6 +125,7 @@ class ClientContextBarPerQuestion extends React.Component {
     this.barsPerQuestion = [];
     return (
       <Segment>
+        {height}
         <Grid>
           <Grid.Row>
             <Grid.Column className="barChart" width={6}>
@@ -141,7 +151,8 @@ class ClientContextBarPerQuestion extends React.Component {
                         type="horizontalBar"
                         ref={(ref) => { this.barsPerQuestion[qId] = ref; }}
                         options={options}
-                        height={100}
+                        // height={height}
+                        style={{ height }}
                       />
                     </div>
                   </Grid.Column>
