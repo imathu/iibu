@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Menu, Responsive, Sidebar, Segment, Icon, Container } from 'semantic-ui-react';
+import { Menu, Responsive, Sidebar, Segment, Icon, Container, Image } from 'semantic-ui-react';
 import { NavLink, Link } from 'react-router-dom';
 
 import * as routes from 'constants/routes';
@@ -82,7 +82,7 @@ class NavigationMobile extends React.Component {
                       <Menu.Item
                         as={Link}
                         to={routes.LANDING}
-                      ><h3>realfeedback.ch</h3>
+                      ><Image src="/skillsgarden-logo-rgb.png" size="small" />
                       </Menu.Item>
                       {auth
                         ?

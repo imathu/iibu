@@ -1,6 +1,8 @@
 {
   "app.title": "realfeedback.ch",
   "app.intro": "360 degree feedback analysis for executives",
+  "app.errorBoundaryHeader": "An error occured",
+  "app.errorBoundaryContent": "An applicaiton problem occured, please reload your browser",
   "app.contact": "for questions and consulting contact",
   "app.loginMessage": "welcome",
   "app.feedbackerThanks": "Thank you for signing on to realfeedback.ch",

@@ -16,6 +16,8 @@ import { getLanguage, setLanguage } from 'utils/language';
 import 'semantic-ui-css/semantic.min.css';
 import './App.css';
 
+import ErrorBoundary from './ErrorBoundary';
+
 addLocaleData([...locale_en, ...locale_de]); // eslint-disable-line camelcase
 
 const messages = {
@@ -48,7 +50,9 @@ class App extends React.Component {
           value={{ language: this.state.language, setLanguage: this.setLanguage }}
         >
           <Router>
-            <PageContent />
+            <ErrorBoundary>
+              <PageContent />
+            </ErrorBoundary>
           </Router>
         </LanguageContext.Provider>
       </IntlProvider>
