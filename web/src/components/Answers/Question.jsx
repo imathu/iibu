@@ -9,9 +9,11 @@ const Question = ({
   language,
 }) => {
   const roleCode = getRoleCode(roleId, gender) || 'he';
+  const q = question.content[language.language];
+  const questionString = (q) ? q[roleCode] : question.content.de[roleCode];
   return (
     <div>
-      {question.content[language.language][roleCode]}
+      {questionString}
     </div>
   );
 };
