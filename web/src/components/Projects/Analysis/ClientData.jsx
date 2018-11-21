@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Segment, Table } from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 
 import { getAllContextIds } from 'utils/question';
 
@@ -89,14 +89,10 @@ class ClientData extends React.Component {
         )}
         {radar && (
           <Segment>
-            <Table>
-              <Table.Body>
-                <ClientContextRadar
-                  {...this.props}
-                  onRef={(ref) => { this.radar = ref; }}
-                />
-              </Table.Body>
-            </Table>
+            <ClientContextRadar
+              {...this.props}
+              onRef={(ref) => { this.radar = ref; }}
+            />
           </Segment>
         )}
       </React.Fragment>

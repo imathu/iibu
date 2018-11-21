@@ -68,18 +68,16 @@ class ClientContextRadar extends React.Component {
       },
     };
     return (
-      <tr>
-        <td>
-          <RC2
-            id="rc2"
-            ref={(ref) => { this.radar = ref; }}
-            data={radarData}
-            type="radar"
-            options={options}
-            style={{ height: '500px' }}
-          />
-        </td>
-      </tr>
+      <div>
+        <RC2
+          id="rc2"
+          ref={(ref) => { this.radar = ref; }}
+          data={radarData}
+          type="radar"
+          options={options}
+          style={{ height: '500px' }}
+        />
+      </div>
     );
   }
 }

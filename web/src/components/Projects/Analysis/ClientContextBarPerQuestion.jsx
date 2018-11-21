@@ -125,7 +125,6 @@ class ClientContextBarPerQuestion extends React.Component {
     this.barsPerQuestion = [];
     return (
       <Segment>
-        {height}
         <Grid>
           <Grid.Row>
             <Grid.Column className="barChart" width={6}>
