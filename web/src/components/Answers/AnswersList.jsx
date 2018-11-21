@@ -122,7 +122,7 @@ class AnswersList extends React.Component {
                   />
                 </Header>
                 <Modal.Content>
-                  <Language language={language} languages={data.languages} />
+                  <Language languages={{ en: 'true' }} />
                   {data.clientBanner[language.language]}
                 </Modal.Content>
                 <Modal.Actions>
@@ -137,7 +137,7 @@ class AnswersList extends React.Component {
                   </Button>
                 </Modal.Actions>
               </Modal>
-              <Language languages={data.languages} />
+              <Language languages={{ en: 'true' }} />
               <Grid style={{ marginTop: '5px' }} stackable columns={2} reversed="mobile vertically">
                 <Grid.Column width={12}>
                   <div ref={this.handleContextRef}>
