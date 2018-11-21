@@ -115,7 +115,7 @@ class PageContent extends React.Component {
               </Button>
               <Button icon labelPosition="right">
                 <Icon
-                  name={(advanced) ? 'angle double down' : 'angle double up'}
+                  name={(advanced) ? 'angle double up' : 'angle double down'}
                   onClick={this.toggleAdvanced}
                 />Optionen
               </Button>

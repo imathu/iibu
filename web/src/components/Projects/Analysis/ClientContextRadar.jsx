@@ -34,7 +34,7 @@ class ClientContextRadar extends React.Component {
     const radarData = a.getRadarData(clientId);
     const options = {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
       animation: {
         duration: 0,
       },
@@ -76,6 +76,7 @@ class ClientContextRadar extends React.Component {
             data={radarData}
             type="radar"
             options={options}
+            style={{ height: '500px' }}
           />
         </td>
       </tr>

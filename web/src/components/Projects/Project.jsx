@@ -73,7 +73,7 @@ class Project extends Component {
             </Grid.Column>
             <Grid.Column width={13}>
               { (adminData && adminData.project && adminData.project.name)
-              && <h1>Projekt: {adminData.project.name}</h1>
+              && <h4>Projekt: {adminData.project.name}</h4>
               }
               <hr />
             </Grid.Column>
