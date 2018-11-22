@@ -1,10 +1,17 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 import { Table, TextArea, Message, Icon, Form, Header } from 'semantic-ui-react';
 import { debounce } from 'throttle-debounce';
 
 import { db } from '../../firebase';
+
+const messages = defineMessages({
+  placeholder: {
+    id: 'feedback.remarkPlaceholder',
+    defaultMessage: 'Bemerkung zu Frage',
+  },
+});
 
 class Remark extends React.Component {
   static propTypes = {
@@ -13,6 +20,7 @@ class Remark extends React.Component {
     feedbackerId: PropTypes.string.isRequired,
     questionId: PropTypes.string.isRequired,
     clientId: PropTypes.string.isRequired,
+    intl: PropTypes.shape({}).isRequired,
   }
   constructor(props) {
     super(props);
@@ -51,7 +59,8 @@ class Remark extends React.Component {
   }
   render() {
     const { remark, saving } = this.state;
-    const { id } = this.props;
+    const { id, intl } = this.props;
+    const { formatMessage } = intl;
     return (
       <Table.Row>
         { (remark !== null)
@@ -69,7 +78,7 @@ class Remark extends React.Component {
                 style={{ backgroundColor: '#FEF9E7' }}
                 id="remark"
                 control={TextArea}
-                placeholder={`Bemerkung zu Frage ${id}`}
+                placeholder={formatMessage(messages.placeholder, { what: 'react-intl', id })}
                 value={remark}
                 onChange={this.save}
               />
@@ -109,5 +118,5 @@ class Remark extends React.Component {
   }
 }
 
-export default Remark;
+export default injectIntl(Remark);
 

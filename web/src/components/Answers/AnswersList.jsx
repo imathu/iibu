@@ -122,7 +122,7 @@ class AnswersList extends React.Component {
                   />
                 </Header>
                 <Modal.Content>
-                  <Language languages={{ en: 'true' }} />
+                  <Language language={language} languages={{ en: 'true' }} />
                   {data.clientBanner[language.language]}
                 </Modal.Content>
                 <Modal.Actions>
@@ -133,11 +133,16 @@ class AnswersList extends React.Component {
                     onClick={this.checkBoxToggle}
                   />
                   <Button color="green" onClick={this.closeModal}>
-                    <Icon name="checkmark" /> Gelesen
+                    <Icon name="checkmark" />
+                    <FormattedMessage
+                      id="feedback.buttonRead"
+                      defaultMessage="Gelesen"
+                      values={{ what: 'react-intl' }}
+                    />
                   </Button>
                 </Modal.Actions>
               </Modal>
-              <Language languages={{ en: 'true' }} />
+              <Language language={language} languages={{ en: 'true' }} />
               <Grid style={{ marginTop: '5px' }} stackable columns={2} reversed="mobile vertically">
                 <Grid.Column width={12}>
                   <div ref={this.handleContextRef}>

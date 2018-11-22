@@ -40,5 +40,7 @@
   "feedback.remark": "Bemerkung hinzufügen?",
   "feedback.noRemark": "Bitte beantworten Sie zuerst die Frage bevor Sie einen Kommentar schreiben",
   "feedback.remarkDisclaimer": "Dieser Kommentar wird 1:1 in die Auswertung übernommen",
-  "feedback.BannerToggle": "Diese Nachricht nicht mehr anzeigen"
+  "feedback.BannerToggle": "Diese Nachricht nicht mehr anzeigen",
+  "feedback.buttonRead": "Gelesen",
+  "feedback.remarkPlaceholder": "Bemerkung zu Frage {id}"
 }

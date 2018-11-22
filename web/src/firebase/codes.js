@@ -25,7 +25,7 @@ const message = {
   },
   'auth/invalid-action-code': {
     de: 'Ihr Login Link ist abgelaufen oder ungültig. Loggen Sie sich erneut ein',
-    en: 'The action code is invalid. This can happen if the… is malformed, expired, or has already been used.',
+    en: 'The action code is invalid. This can happen if the mail address is malformed, expired, or has already been used.',
   },
 };
 

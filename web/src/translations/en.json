@@ -27,12 +27,12 @@
   "feedback.neutralMatch": "can't tell",
   "feedback.waitForData": "If you are authorized, the data will be loaded in a few seconds",
   "feedback.end": "You've successfully completed the questionaire, thank you",
-  "feedback.passwordSent": "You've received an email with login link",
+  "feedback.passwordSent": "You've received an email with the login link",
   "feedback.finishState": "You answered {totalAnswers} out of {numQuestions}",
   "feedback.closedHeader": "This questionaire is closed",
   "feedback.closedContent": "Please contact your administrator for questions",
   "feedback.finishedHeader": "You successfully finished",
-  "feedback.finishedContent": "Thank you for partitipating",
+  "feedback.finishedContent": "Thank you for participating",
   "feedback.complete": "complete",
   "feedback.verifyEMail": "please provide your email address for confirmation",
   "feedback.savingHeader": "just a second",
@@ -40,5 +40,7 @@
   "feedback.remark": "make a remark for this question",
   "feedback.noRemark": "please answer the question before you make a comment",
   "feedback.remarkDisclaimer": "This comment will be integrated in the evaluation",
-  "feedback.BannerToggle": "Don't show this message again"
+  "feedback.BannerToggle": "Don't show this message again",
+  "feedback.buttonRead": "read",
+  "feedback.remarkPlaceholder": "remark for question {id}"
 }
