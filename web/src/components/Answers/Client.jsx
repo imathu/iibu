@@ -17,7 +17,7 @@ const Client = (props) => {
   } = props;
   const roleId = feedbacker.clients[client.id].role;
   const roleContent = getRoleContent(roles, roleId);
-  const rolePhrase = getRolePhraseStart(roles, roleId, getRoleCode((roleId === 'self') ? 'self' : feedbacker.gender));
+  const rolePhrase = getRolePhraseStart(roles, roleId, getRoleCode(roleId, client.gender));
   return (
     <Segment>
       <Header textAlign="left" as="h2" >
