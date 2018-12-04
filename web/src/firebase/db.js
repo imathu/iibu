@@ -38,6 +38,7 @@ export const doUpdateProjectData = (projectId, project) => (
     name: project.name,
     clientBanner: project.clientBanner,
     languages: project.languages,
+    company: project.company,
   }))
 );
 export const doCreateProject = (projectId, project) => (

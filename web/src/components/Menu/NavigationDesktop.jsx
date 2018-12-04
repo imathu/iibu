@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 
-import { Menu, Responsive, Segment, Container, Image } from 'semantic-ui-react';
+import { Menu, Responsive, Segment, Container, Header } from 'semantic-ui-react';
 import { NavLink, Link } from 'react-router-dom';
 
 import * as routes from 'constants/routes';
@@ -58,6 +58,7 @@ const NavigationDesktop = () => (
       {auth => (
         <React.Fragment>
           <Segment
+            basic
             inverted
             textAlign="center"
             vertical
@@ -72,7 +73,7 @@ const NavigationDesktop = () => (
                   style={{ padding: '0px' }}
                   as={Link}
                   to={routes.LANDING}
-                ><Image src="/skillsgarden-logo-rgb.png" size="medium" />
+                ><Header as="h2" style={{ color: 'white' }}>realfeedback</Header>
                 </Menu.Item>
                 {auth && auth.admin
                 ? <AdminMenu />

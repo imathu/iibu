@@ -1,6 +1,6 @@
 const fb = require('./db');
 const nodemailer = require('nodemailer');
-
+const logger = require('./../../util');
 
 const RES_200 = {
   status: '200',
@@ -86,6 +86,12 @@ async function sendMail(projectId, payload, idToken) {
   const { feedbackers } = payload;
   if (!(feedbackers && projectId)) return RES_500;
 
+  const feedbacker1 = feedbackers[0];
+  if (!feedbacker1) return RES_500;
+
+  const errMailIds = [];
+  let err = false;
+
   payload.feedbackers.forEach((feedbacker) => {
     const mailOptions = {
       from: process.env.MAIL_FROM,
@@ -95,18 +101,24 @@ async function sendMail(projectId, payload, idToken) {
     };
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.log(error); // eslint-disable-line no-console
+        logger.log(`error sending email msg=${error}`, 'error');
+        err = true;
+        errMailIds.push(feedbacker.emailAddress);
       } else {
-        console.log('Message sent: %s', info.messageId); // eslint-disable-line no-console
+        logger.log(`email successfully sent messageId=${info.messageId}`, 'info');
       }
     });
   });
+  if (err) {
+    return { status: '500', payload: errMailIds };
+  }
   return RES_200;
 }
 
 async function getFeedbackerAnswers(projectId, feedbackerId, idToken) {
   const email = await verifyIdToken(idToken);
   if (!email) {
+    logger.log(`feedbacker verification failed feedbacker=${feedbackerId} project=${projectId}`, 'error');
     return {
       status: '500',
       payload: 'Could not verify your email',
@@ -132,12 +144,16 @@ async function getFeedbackerAnswers(projectId, feedbackerId, idToken) {
             languages: project.languages,
             clients: project.clients,
             questions: project.questions,
+            company: project.company,
             feedbacker,
           },
         };
       }
+      logger.log(`fetching feedbacker email, feedbacker=${feedbackerId} project=${projectId}`, 'error');
     }
+    logger.log(`fetching feedbacker, feedbacker=${feedbackerId} project=${projectId}`, 'error');
   }
+  logger.log(`fetching project feedbackers, feedbacker=${feedbackerId} project=${projectId}`, 'error');
   return res;
 }
 

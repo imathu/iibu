@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { Route, NavLink } from 'react-router-dom';
-import { Grid, Menu, Divider } from 'semantic-ui-react';
+import { Grid, Menu, Divider, Image } from 'semantic-ui-react';
+import { LOGO } from 'constants/company';
 import withAuthorization from 'components/withAuthorization';
 import AdminDataContext from 'components/AdminDataContext';
 
@@ -62,6 +63,15 @@ class Project extends Component {
   render() {
     const { projectId } = this.state.params;
     const { adminData } = this.state;
+
+    let image = null;
+    if (adminData && adminData.project) {
+      const { company } = adminData.project || 'hrmove';
+      if (company) {
+        image = LOGO[company];
+      }
+    }
+
     return (
       <AdminDataContext.Provider value={adminData}>
         <div className="admin-content">
@@ -72,9 +82,22 @@ class Project extends Component {
               &nbsp;
             </Grid.Column>
             <Grid.Column width={13}>
-              { (adminData && adminData.project && adminData.project.name)
-              && <h4>Projekt: {adminData.project.name}</h4>
-              }
+              <div style={{ position: 'relative' }}>
+                {image &&
+                  <Image src={image} size="small" style={{ display: 'inline-block' }} />
+                }
+                { (adminData && adminData.project && adminData.project.name)
+                &&
+                <h3 style={{
+                    display: 'inline',
+                    position: 'absolute',
+                    bottom: '0',
+                    paddingLeft: '100px',
+                    }}
+                >{adminData.project.name}
+                </h3>
+                }
+              </div>
               <hr />
             </Grid.Column>
           </Grid>

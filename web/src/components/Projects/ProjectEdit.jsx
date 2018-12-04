@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Segment, Form, Input, TextArea, Button, Grid, Header, Checkbox } from 'semantic-ui-react';
+import { Segment, Form, Input, TextArea, Button, Grid, Header, Checkbox, Radio } from 'semantic-ui-react';
 
 import { db } from '../../firebase';
 
@@ -38,6 +38,7 @@ class ProjectEdit extends React.Component {
     this.state = {
       project: {
         projectId: null,
+        company: 'hrmove',
         name: '',
         clientBanner: {
           de: '',
@@ -62,6 +63,7 @@ class ProjectEdit extends React.Component {
             project: {
               id: params.get('projectId'),
               name: snapshot.val().name || '',
+              company: snapshot.val().company || 'hrmove',
               clientBanner: snapshot.val().clientBanner || {},
               languages: snapshot.val().languages || {},
             },
@@ -115,15 +117,35 @@ class ProjectEdit extends React.Component {
             <Grid.Column width={16}>
               <Segment>
                 <Form>
-                  <Form.Field
-                    id="name"
-                    control={Input}
-                    label="Name"
-                    placeholder="Name"
-                    width={8}
-                    value={project.name}
-                    onChange={event => this.setState(byPropKey(project, 'name', event.target.value))}
-                  />
+                  <Form.Group inline>
+                    <Form.Field
+                      id="name"
+                      control={Input}
+                      label="Name"
+                      placeholder="Name"
+                      width={8}
+                      value={project.name}
+                      onChange={event => this.setState(byPropKey(project, 'name', event.target.value))}
+                    />
+                    <Form.Field>
+                      <Radio
+                        label="Skillsgarden"
+                        name="radioGroup"
+                        value="skillsgarden"
+                        checked={project.company === 'skillsgarden'}
+                        onChange={(e, d) => this.setState(byPropKey(project, 'company', d.value))}
+                      />
+                    </Form.Field>
+                    <Form.Field>
+                      <Radio
+                        label="HRmove"
+                        name="radioGroup"
+                        value="hrmove"
+                        checked={project.company === 'hrmove'}
+                        onChange={(e, d) => this.setState(byPropKey(project, 'company', d.value))}
+                      />
+                    </Form.Field>
+                  </Form.Group>
                   <Form.Field>
                     <Checkbox
                       toggle

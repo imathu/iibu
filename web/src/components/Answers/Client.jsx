@@ -38,9 +38,7 @@ const Client = (props) => {
       <Table celled padded>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>
-              Id
-            </Table.HeaderCell>
+            <Table.HeaderCell />
             <Table.HeaderCell>
               {rolePhrase}
             </Table.HeaderCell>

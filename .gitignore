@@ -53,5 +53,8 @@ eeboo-skillsgarden*.json
 # configs
 config/dev.json
 
+combined.log
+error.log
+
 # nyc
 .nyc_output

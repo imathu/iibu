@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import { Loader, Divider, Grid, Sticky, Segment, Modal, Header, Button, Icon, Checkbox } from 'semantic-ui-react';
+import { Loader, Divider, Grid, Sticky, Segment, Modal, Header, Button, Icon, Checkbox, Image } from 'semantic-ui-react';
 import LanguageContext from 'components/LanguageContext';
+import { LOGO } from 'constants/company';
 import Language from 'components/Language';
 import * as routes from 'constants/routes';
 import Client from './Client';
@@ -100,6 +101,7 @@ class AnswersList extends React.Component {
       modalShow,
       checkBoxToggle,
     } = this.state;
+    const image = (data) ? LOGO[data.company] : null;
     let totalAnswers = 0;
     Object.keys(clients).forEach((id) => {
       totalAnswers += clients[id];
@@ -120,12 +122,20 @@ class AnswersList extends React.Component {
                     defaultMessage="Willkommen als Feedbackgeber"
                     values={{ what: 'react-intl' }}
                   />
+                  <Button size="mini" basic floated="right" onClick={this.closeModal}>
+                    <Icon name="close" />
+                  </Button>
                 </Header>
-                <Modal.Content>
+                <Modal.Content scrolling>
                   <Language language={language} languages={{ en: 'true' }} />
-                  {data.clientBanner[language.language]}
+                  <p style={{ whiteSpace: 'pre-wrap' }}>
+                    {data.clientBanner[language.language]}
+                  </p>
                 </Modal.Content>
                 <Modal.Actions>
+                  {image &&
+                    <Image floated="left" size="small" src={image} />
+                  }
                   <Checkbox
                     // eslint-disable-next-line
                     label={<label htmlFor="toggle">{message()}</label>}
@@ -142,7 +152,21 @@ class AnswersList extends React.Component {
                   </Button>
                 </Modal.Actions>
               </Modal>
-              <Language language={language} languages={{ en: 'true' }} />
+              <Segment>
+                <Grid stackable>
+                  <Grid.Column width={15}>
+                    {image &&
+                      <Image size="small" src={image} style={{ display: 'inline-block' }} />
+                    }
+                  </Grid.Column>
+                  <Grid.Column width={1} textAlign="right">
+                    <div style={{ float: 'right' }}>
+                      <Language language={language} languages={{ en: 'true' }} />
+                    </div>
+                  </Grid.Column>
+                </Grid>
+              </Segment>
+
               <Grid style={{ marginTop: '5px' }} stackable columns={2} reversed="mobile vertically">
                 <Grid.Column width={12}>
                   <div ref={this.handleContextRef}>

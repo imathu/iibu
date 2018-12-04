@@ -1,4 +1,5 @@
 const appState = require('./../models/app-state.js');
+const logger = require('./../../util');
 
 function getFeedbackerAnswers(req, res) {
   const idToken = req.get('Authorization');
@@ -9,6 +10,7 @@ function getFeedbackerAnswers(req, res) {
         res.json(data.payload);
       });
   } else {
+    logger.log(`no Authorization token found in ${req.url}`, 'error');
     res.status(403);
     res.json({});
   }
@@ -23,6 +25,7 @@ function sendMail(req, res) {
         res.json(data.payload);
       });
   } else {
+    logger.log(`no Authorization token found in ${req.url}`, 'error');
     res.status(403);
     res.json({});
   }
