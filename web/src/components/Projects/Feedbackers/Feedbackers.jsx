@@ -12,6 +12,40 @@ import { firebase, db } from '../../../firebase';
 
 const getURI = (projectId, feedbackerId) => `/answers/${projectId}/${feedbackerId}`;
 
+const defaultText = `
+Guten Tag
+  
+Sie wurden als Feedbackgeber für die 360 Grad Feedbackanalyse ausgewählt.
+
+Ziel der 360 Grad Feedbackanalyse ist es, Führungskräften eine umfassende Rückmeldung zu ihrem Führungsverhalten zu geben und dadurch Ansatzpunkte für die persönliche Weiterentwicklung zu ermitteln.
+
+Im Rahmen des Feedbacks erfolgt eine Einschätzung des Verhaltens durch den Vorgesetzten, die Kollegen, die Mitarbeiter und allfälligen internen und externen Kunden sowie durch die Führungskraft selbst. Die Einschätzungen der Kollegen, Mitarbeiter und Kunden werden jeweils zu Mittelwerten zusammengefasst. Rückschlüsse auf einzelne Feedbackgeber sind dadurch nicht mehr möglich. Die Vorgesetzten- und die Selbsteinschätzung werden einzeln aufgeführt.
+
+Das Feedback erfolgt mittels des folgenden Online-Fragebogens, der Aussagen zum Führungsverhalten enthält. Bitte schätzen Sie ein, in welchem Ausmass die einzelnen Aussagen auf den Feedbacknehmer zutreffen.
+
+Bitte geben Sie Ihre Einschätzung aufgrund des beobachteten Verhaltens im Arbeitsalltag und in der Zusammenarbeit ab. Geben Sie bei jeder Aussage den Wert an, der Ihrer Einschätzung am ehesten entspricht. Es geht hier nicht um richtige oder falsche Antworten, sondern um Ihre persönliche Meinung.
+
+Bitte nehmen Sie sich ca. 15 Minuten Zeit für das Feedback und bearbeiten Sie jede einzelne Aussage, andernfalls ist eine sinnvolle und objektive Auswertung Ihrer Angaben nicht möglich.
+
+Wichtig: Ihre Angaben werden laufend gespeichert, so dass Sie diese auch zu einem späteren Zeitpunkt nochmals über Ihren persönlichen Zugangslink aufrufen können. Sobald Sie mit Ihren Angaben zufrieden sind, klicken Sie bitte auf "Eingaben abschicken".
+
+Bearbeiten Sie den Fragebogen bitte bis spätestens am Donnerstag, 15.11.2018. Danach ist kein Zugang zur Berfragung mehr möglich.
+
+Die Datenerhebung und -auswertung erfolgt durch die Skillsgarden AG, die Anonymität, Datensicherheit und Vertraulichkeit sicherstellt.
+
+Mit dem folgenden personalisierten Zugangslink gelangen Sie zur Umfrage: 
+
+$LINK
+
+Bitte beachten Sie: Realfeedback ist unsere Domain für 360 Grad Feedbackanalysen und kein Drittanbieter
+
+Vielen Dank für Ihre Mitarbeit!
+Bei Fragen wenden Sie sich bitte an info@realfeedback.ch.
+
+Freundliche Grüsse 
+Ihr Feedback Team
+`;
+
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
   changedData: true,
@@ -43,7 +77,7 @@ class Feedbackers extends React.Component {
       selected: [],
       modal: false,
       emailSubject: 'Feedbackanalyse',
-      emailText: 'Guten Tag\n\nBitte rufen sie folgenden Link auf: $LINK',
+      emailText: defaultText,
     };
   }
   componentDidMount() {

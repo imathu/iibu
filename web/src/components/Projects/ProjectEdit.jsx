@@ -38,7 +38,7 @@ class ProjectEdit extends React.Component {
     this.state = {
       project: {
         projectId: null,
-        company: 'hrmove',
+        company: 'testing',
         name: '',
         clientBanner: {
           de: '',
@@ -63,7 +63,7 @@ class ProjectEdit extends React.Component {
             project: {
               id: params.get('projectId'),
               name: snapshot.val().name || '',
-              company: snapshot.val().company || 'hrmove',
+              company: snapshot.val().company || 'testing',
               clientBanner: snapshot.val().clientBanner || {},
               languages: snapshot.val().languages || {},
             },
@@ -149,6 +149,15 @@ class ProjectEdit extends React.Component {
                         name="radioGroup"
                         value="hrmove"
                         checked={project.company === 'hrmove'}
+                        onChange={(e, d) => this.setState(byPropKey(project, 'company', d.value))}
+                      />
+                    </Form.Field>
+                    <Form.Field>
+                      <Radio
+                        label="Testing"
+                        name="radioGroup"
+                        value="testing"
+                        checked={project.company === 'testing'}
                         onChange={(e, d) => this.setState(byPropKey(project, 'company', d.value))}
                       />
                     </Form.Field>

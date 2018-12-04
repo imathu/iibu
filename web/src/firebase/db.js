@@ -45,6 +45,7 @@ export const doCreateProject = (projectId, project) => (
   db.ref('projects').push({
     name: project.name,
     clientBanner: project.clientBanner,
+    company: project.company,
     clients: {},
     questions: {},
     feedbackers: {},
