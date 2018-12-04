@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import RC2 from 'react-chartjs2';
 import { getContextById } from 'utils/context';
 import { getQuestionContent } from 'utils/question';
-import { Grid, Segment } from 'semantic-ui-react';
+import { Grid, Segment, Header, List, Divider } from 'semantic-ui-react';
 
 import datalabels from 'chartjs-plugin-datalabels'; // eslint-disable-line
 
@@ -128,17 +128,17 @@ class ClientContextBarPerQuestion extends React.Component {
         <Grid>
           <Grid.Row>
             <Grid.Column className="barChart" width={6}>
-              {context}
+              <Header as="h3">{context}</Header>
             </Grid.Column>
             <Grid.Column width={10}>
               &nbsp;
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row>
-            {questionIds.map((qId) => {
-              const barData = a.getBarByQuestion(contextId, qId, clientId);
-              return (
-                <React.Fragment key={qId}>
+          {questionIds.map((qId) => {
+            const { barData, remarks } = a.getBarByQuestion(contextId, qId, clientId);
+            return (
+              <React.Fragment key={qId}>
+                <Grid.Row>
                   <Grid.Column className="barChart" width={6}>
                     {getQuestionContent(data.questions[qId], 'he')}
                   </Grid.Column>
@@ -155,11 +155,26 @@ class ClientContextBarPerQuestion extends React.Component {
                       />
                     </div>
                   </Grid.Column>
-                </React.Fragment>
-              );
-            })
-          }
-          </Grid.Row>
+                  {remarks.length > 0 &&
+                    <Grid.Row>
+                      <Segment style={{ paddingLeft: '20px' }}>
+                        <Header as="h3">Kommentare zu dieser Frage:</Header>
+                        <List>
+                          {remarks.map(r => (
+                            <List.Item key={r.questionId$ + r.feedbackerId}>
+                              {r.id} - {r.remark}
+                            </List.Item>
+                          ))}
+                        </List>
+                      </Segment>
+                    </Grid.Row>
+                  }
+                </Grid.Row>
+                <Divider />
+              </React.Fragment>
+            );
+          })
+        }
         </Grid>
       </Segment>
     );

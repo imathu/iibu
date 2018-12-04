@@ -159,12 +159,18 @@ export class Analysis {
     const { roleIds } = this;
     const values = [];
     const feedbackers = [];
+    const remarks = answersByContext
+      .filter(a => a.remark !== undefined)
+      .map(a => ({ questionId: a.questionId, feedbackerId: a.feedbackerId, remark: a.remark }));
     this.roleIds.forEach((roleId) => {
       const value = Analysis.getAnswerByRole(answersByContext, roleId);
       values.push(fix(value.avg));
       feedbackers.push(value.feedbackers);
     });
-    return barChartByQuestion(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values);
+    return ({
+      barData: barChartByQuestion(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values),
+      remarks,
+    });
   }
 
   getBarData(contextId, clientId, line = false) {
@@ -215,6 +221,7 @@ export class Analysis {
               feedbackerId: feedbacker.id,
               role,
               score: answer.score,
+              remark: answer.remark,
             });
           }
         } else {
