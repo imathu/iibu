@@ -81,6 +81,7 @@ class ProjectEdit extends React.Component {
       db.doCreateProject(project.id, project).then(() =>
         this.setState(() => ({ changedData: false })));
     }
+    this.props.history.push('/projects');
   }
   onCancel = () => {
     this.props.history.push('/projects');
@@ -99,6 +100,12 @@ class ProjectEdit extends React.Component {
       },
       changedData: true,
     }));
+  }
+  deleteProject = () => {
+    const { project } = this.state;
+    db.doRemoveProject(project.id).then(() => {
+      this.props.history.push('/projects');
+    });
   }
   render() {
     const { project, changedData } = this.state;
@@ -208,6 +215,14 @@ class ProjectEdit extends React.Component {
           </Grid.Row>
         </Grid>
         <br />
+        <Button
+          color="red"
+          content="Löschen"
+          floated="left"
+          labelPosition="left"
+          icon="trash alternate outline"
+          onClick={this.deleteProject}
+        />
         <Button
           onClick={this.onSave}
           positive

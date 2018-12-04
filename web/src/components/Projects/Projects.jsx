@@ -1,9 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Table, Button, Loader, Radio } from 'semantic-ui-react';
+import { Table, Button, Loader, Radio, Image } from 'semantic-ui-react';
+import { LOGO } from 'constants/company';
 import withAuthorization from 'components/withAuthorization';
 
 import { db } from '../../firebase';
+
+const getLogo = company => (
+  LOGO[company] || null
+);
 
 class Projects extends React.Component {
   state = {
@@ -18,12 +23,6 @@ class Projects extends React.Component {
     db.onceGetProjects().then(((snapshot) => {
       this.setState(() => ({ data: snapshot.val() }));
     }));
-  }
-
-  deleteProject = (id) => {
-    db.doRemoveProject(id).then(() => {
-      this.getProjects();
-    });
   }
 
   toggleState = (id) => {
@@ -41,16 +40,24 @@ class Projects extends React.Component {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Projekt</Table.HeaderCell>
+              <Table.HeaderCell>Firma</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
               <Table.HeaderCell />
               <Table.HeaderCell />
-              <Table.HeaderCell collapsing />
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {!!data && Object.keys(data).map(id => (
               <Table.Row key={id}>
                 <Table.Cell>{data[id].name}</Table.Cell>
+                <Table.Cell collapsing>
+                  {(data[id].company)
+                    ?
+                      <Image size="tiny" src={getLogo(data[id].company)} />
+                    :
+                      <p>n/a</p>
+                  }
+                </Table.Cell>
                 <Table.Cell collapsing>
                   <Radio
                     toggle
@@ -63,14 +70,6 @@ class Projects extends React.Component {
                 </Table.Cell>
                 <Table.Cell collapsing textAlign="center">
                   <a href={`/projects/edit?projectId=${id}`}>Details</a>
-                </Table.Cell>
-                <Table.Cell collapsing textAlign="center">
-                  <Button
-                    size="tiny"
-                    onClick={() => this.deleteProject(id)}
-                  >
-                    Löschen
-                  </Button>
                 </Table.Cell>
               </Table.Row>
             ))}
