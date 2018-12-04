@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Table, Button, Loader, Radio, Image } from 'semantic-ui-react';
+import { Table, Button, Loader, Radio, Image, Label } from 'semantic-ui-react';
 import { LOGO } from 'constants/company';
 import withAuthorization from 'components/withAuthorization';
 
@@ -49,7 +49,14 @@ class Projects extends React.Component {
           <Table.Body>
             {!!data && Object.keys(data).map(id => (
               <Table.Row key={id}>
-                <Table.Cell>{data[id].name}</Table.Cell>
+                <Table.Cell>
+                  { data[id].active &&
+                    <Label color="green" ribbon>
+                      AKTIV
+                    </Label>
+                  }
+                  {data[id].name}
+                </Table.Cell>
                 <Table.Cell collapsing>
                   {(data[id].company)
                     ?
