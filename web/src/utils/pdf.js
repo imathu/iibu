@@ -90,6 +90,25 @@ export class PDF {
     );
   }
 
+  // add a remarks
+  addRemarks = (remark) => {
+    const width = this.width - (2 * this.border);
+    const height = remark.length * 1;
+    this.doc.setFontSize(10);
+    const textArray = remark.map(r => r.remark);
+    const splitLabel = this.doc.splitTextToSize(textArray, width);
+    this.doc.text(this.border, this.yBarOffset, splitLabel);
+    this.yBarOffset = this.yBarOffset + (height + this.border);
+
+    // draw a line after every Chart
+    this.doc.line(
+      this.border,
+      this.yBarOffset - (this.border / 4),
+      this.width - this.border,
+      this.yBarOffset - (this.border / 4),
+    );
+  }
+
   // add a new Bar chart
   addBarChart = (chart, label = '') => {
     const ratio = (chart.height / chart.width);
@@ -114,13 +133,6 @@ export class PDF {
       barHeight,
     );
     this.yBarOffset = this.yBarOffset + (barHeight + this.border);
-    // draw a line after every Chart
-    this.doc.line(
-      this.border,
-      this.yBarOffset - (this.border / 4),
-      this.width - this.border,
-      this.yBarOffset - (this.border / 4),
-    );
   }
 
   // save PDF

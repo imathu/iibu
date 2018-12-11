@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import RC2 from 'react-chartjs2';
 import { getContextById } from 'utils/context';
 import { getQuestionContent } from 'utils/question';
-import { Grid, Segment, Header, List, Divider } from 'semantic-ui-react';
+import { Grid, Segment, Header, Divider } from 'semantic-ui-react';
 
 import datalabels from 'chartjs-plugin-datalabels'; // eslint-disable-line
 
 import { Analysis } from 'utils/analysis';
+
+import RemarksPerQuestion from './RemarksPerQuestion';
 
 // const position = (d) => {
 //   if (d.dataset.label === 'Votes') {
@@ -94,13 +96,6 @@ class ClientContextBarPerQuestion extends React.Component {
     this.props.onRef(this);
   }
 
-  componentDidUpdate() {
-    // Object.keys(this.barsPerQuestion).forEach((id) => {
-    //   this.barsPerQuestion[id].chart.update();
-    // });
-    // this.props.onRef(this);
-  }
-
   componentWillUnmount() {
     this.props.onRef(undefined);
   }
@@ -123,6 +118,7 @@ class ClientContextBarPerQuestion extends React.Component {
     const questionIds = Object.keys(data.questions)
       .filter(qId => data.questions[qId].context === contextId);
     this.barsPerQuestion = [];
+    this.remarksPerQuestion = [];
     return (
       <Segment>
         <Grid>
@@ -159,13 +155,10 @@ class ClientContextBarPerQuestion extends React.Component {
                     <Grid.Row>
                       <Segment style={{ paddingLeft: '20px' }}>
                         <Header as="h3">Kommentare zu dieser Frage:</Header>
-                        <List>
-                          {remarks.map(r => (
-                            <List.Item key={r.questionId$ + r.feedbackerId}>
-                              {r.id} - {r.remark}
-                            </List.Item>
-                          ))}
-                        </List>
+                        <RemarksPerQuestion
+                          remarks={remarks}
+                          ref={(ref) => { this.remarksPerQuestion[qId] = ref; }}
+                        />
                       </Segment>
                     </Grid.Row>
                   }

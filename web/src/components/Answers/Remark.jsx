@@ -78,6 +78,7 @@ class Remark extends React.Component {
                 style={{ backgroundColor: '#FEF9E7' }}
                 id="remark"
                 control={TextArea}
+                maxLength="300"
                 placeholder={formatMessage(messages.placeholder, { what: 'react-intl', id })}
                 value={remark}
                 onChange={this.save}
