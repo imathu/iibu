@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Modal } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
+import * as Sentry from '@sentry/browser';
+
+Sentry.init({
+  dsn: process.env.REACT_APP_SENTRY,
+});
 
 class ErrorBoundary extends React.Component {
   static propTypes = {
@@ -25,8 +30,14 @@ class ErrorBoundary extends React.Component {
     return { hasError: true };
   }
 
-  componentDidCatch(error) {
+  componentDidCatch(error, errorInfo) {
     this.setState({ hasError: true });
+    Sentry.withScope((scope) => {
+      Object.keys(errorInfo).forEach((key) => {
+        scope.setExtra(key, errorInfo[key]);
+      });
+      Sentry.captureException(error);
+    });
     console.log(error); // eslint-disable-line no-console
     console.log('error in component:', this.props.component); // eslint-disable-line no-console
   }
