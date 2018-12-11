@@ -97,17 +97,17 @@ export class PDF {
   // add a remarks
   addRemarks = (remark) => {
     const width = this.width - (2 * this.border);
-    this.doc.setFontSize(10);
     const textArray = remark.map(r => r.remark);
     const splitLabel = this.doc.splitTextToSize(textArray, width);
     const height = splitLabel.length * 4;
     this.checkPageBreak(height + (this.border / 2));
+    this.doc.setFontSize(10);
     this.doc.text(this.border, this.yBarOffset, splitLabel);
     this.yBarOffset = this.yBarOffset + (height + (this.border / 2));
   }
 
   // add a new Bar chart
-  addBarChart = (chart, label = '') => {
+  addBarChart = (context, chart, label = '') => {
     const ratio = (chart.height / chart.width);
     // const barHeight = (ratio * this.width);
 
@@ -115,7 +115,15 @@ export class PDF {
     // const imageHeight = barHeight - this.border;
     const barHeight = imageWidth * ratio;
 
-    this.checkPageBreak(barHeight + this.border);
+    const contextHeight = (context && context !== '') ? 8 : 0;
+
+    this.checkPageBreak(barHeight + this.border + contextHeight);
+
+    if (context && context !== '') {
+      this.doc.setFontSize(12);
+      this.doc.text(this.border, this.yBarOffset + 2, context);
+      this.yBarOffset = this.yBarOffset + contextHeight;
+    }
 
     // draw the new chart
     this.doc.setFontSize(10);

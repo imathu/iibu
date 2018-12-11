@@ -58,7 +58,7 @@ class PageContent extends React.Component {
       array.forEach((d) => {
         Object.keys(d.barsPerQuestion).forEach((qId) => {
           const chart = d.barsPerQuestion[qId];
-          pdf.addBarChart(chart.getChart(), getQuestionContent(this.props.data.questions[qId], 'he'));
+          pdf.addBarChart(d.state.context, chart.getChart(), getQuestionContent(this.props.data.questions[qId], 'he'));
           const remarks = (d.remarksPerQuestion[qId]
             && d.remarksPerQuestion[qId].props.remarks) || [];
           if (remarks && remarks.length > 0) {
@@ -71,14 +71,14 @@ class PageContent extends React.Component {
     if (this.state.barPerContext) {
       const barsArray = Object.keys(barsPerContext).map(key => (barsPerContext[key]));
       barsArray.forEach((chart) => {
-        pdf.addBarChart(chart.barPerContext.getChart(), chart.state.context);
+        pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context);
         pdf.addLine();
       });
     }
     if (this.state.line) {
       const barsArray = Object.keys(lines).map(key => (lines[key]));
       barsArray.forEach((chart) => {
-        pdf.addBarChart(chart.barPerContext.getChart(), chart.state.context);
+        pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context);
         pdf.addLine();
       });
     }
