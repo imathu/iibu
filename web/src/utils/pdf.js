@@ -82,6 +82,10 @@ export class PDF {
       barHeight - this.border,
     );
     this.yBarOffset = this.yBarOffset + (barHeight - (this.border / 2));
+  }
+
+  addLine = () => {
+    // draw a line after every Chart
     this.doc.line(
       this.border,
       this.yBarOffset - (this.border / 4),
@@ -93,20 +97,13 @@ export class PDF {
   // add a remarks
   addRemarks = (remark) => {
     const width = this.width - (2 * this.border);
-    const height = remark.length * 1;
     this.doc.setFontSize(10);
     const textArray = remark.map(r => r.remark);
     const splitLabel = this.doc.splitTextToSize(textArray, width);
+    const height = splitLabel.length * 4;
+    this.checkPageBreak(height + (this.border / 2));
     this.doc.text(this.border, this.yBarOffset, splitLabel);
-    this.yBarOffset = this.yBarOffset + (height + this.border);
-
-    // draw a line after every Chart
-    this.doc.line(
-      this.border,
-      this.yBarOffset - (this.border / 4),
-      this.width - this.border,
-      this.yBarOffset - (this.border / 4),
-    );
+    this.yBarOffset = this.yBarOffset + (height + (this.border / 2));
   }
 
   // add a new Bar chart

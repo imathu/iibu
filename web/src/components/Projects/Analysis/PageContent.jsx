@@ -64,20 +64,23 @@ class PageContent extends React.Component {
           if (remarks && remarks.length > 0) {
             pdf.addRemarks(remarks);
           }
+          pdf.addLine();
         });
       });
     }
     if (this.state.barPerContext) {
       const barsArray = Object.keys(barsPerContext).map(key => (barsPerContext[key]));
-      barsArray.forEach(chart => (
-        pdf.addBarChart(chart.barPerContext.getChart(), chart.state.context)
-      ));
+      barsArray.forEach((chart) => {
+        pdf.addBarChart(chart.barPerContext.getChart(), chart.state.context);
+        pdf.addLine();
+      });
     }
     if (this.state.line) {
       const barsArray = Object.keys(lines).map(key => (lines[key]));
-      barsArray.forEach(chart => (
-        pdf.addBarChart(chart.barPerContext.getChart(), chart.state.context)
-      ));
+      barsArray.forEach((chart) => {
+        pdf.addBarChart(chart.barPerContext.getChart(), chart.state.context);
+        pdf.addLine();
+      });
     }
     if (this.state.radar) {
       pdf.addRadarChart(radar.radar.getChart());
