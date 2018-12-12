@@ -63,7 +63,7 @@ class Answer extends React.Component {
                   radio
                   name="checkboxRadioGroup"
                   value={i}
-                  checked={value === (i)}
+                  checked={value == (i)} // eslint-disable-line
                   onChange={this.handleChange}
                 />
               </Form.Field>
