@@ -2,8 +2,6 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Form, Checkbox, List, Icon } from 'semantic-ui-react';
 
-import idx from 'idx';
-
 import { db } from '../../firebase';
 
 const key = (id, index) => `${id}-${index}`;
@@ -24,8 +22,13 @@ class Answer extends React.Component {
   }
   componentDidMount = () => {
     const { feedbacker, clientId, questionId } = this.props;
-    const value = idx(feedbacker, _ =>
-      _.clients[clientId].answers[questionId].score);
+    const value = (
+      feedbacker &&
+      feedbacker.clients &&
+      feedbacker.clients[clientId] &&
+      feedbacker.clients[clientId].answers &&
+      feedbacker.clients[clientId].answers[questionId] &&
+      feedbacker.clients[clientId].answers[questionId].score);
     this.setState(() => ({ value }));
   }
   handleChange = (e, { value }) => {
