@@ -29,7 +29,7 @@ class Answer extends React.Component {
       feedbacker.clients[clientId].answers &&
       feedbacker.clients[clientId].answers[questionId] &&
       feedbacker.clients[clientId].answers[questionId].score);
-    this.setState(() => ({ value }));
+    this.setState(() => ({ value: parseInt(value, 10) }));
   }
   handleChange = (e, { value }) => {
     this.setState(() => ({ value }));
@@ -63,7 +63,7 @@ class Answer extends React.Component {
                   radio
                   name="checkboxRadioGroup"
                   value={i}
-                  checked={value == (i)} // eslint-disable-line
+                  checked={value === parseInt(i)}
                   onChange={this.handleChange}
                 />
               </Form.Field>

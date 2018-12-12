@@ -5,15 +5,9 @@ cache:
   - node_modules
   - web/node_modules
 stages:
-  - lint
-  - build
   - deploy
 jobs:
   include:
-  - stage: lint
-    script: cd web && yarn install && yarn lint
-  - stage: build
-    script: cd web && yarn install && yarn build
   - stage: deploy
     script: skip
     deploy: &heroku

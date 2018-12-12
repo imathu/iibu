@@ -10,7 +10,7 @@ const Question = ({
 }) => {
   const roleCode = getRoleCode(roleId, gender) || 'he';
   const q = question.content[language.language];
-  const questionString = (q) ? q[roleCode] : question.content.de[roleCode];
+  const questionString = (q && q[roleCode] !== '') ? q[roleCode] : question.content.de[roleCode];
   return (
     <div>
       {questionString}
