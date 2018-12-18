@@ -14,8 +14,8 @@ export class PDF {
     this.actualPage = 1; // current page number
     this.yBarOffset = 0; // the y offset where the next bar will be painted
     this.xBarOffset = 50; // the x offset where each bar will be painted
-    this.setHeader();
-    this.setFooter();
+    // this.setHeader();
+    // this.setFooter();
   }
 
   // add a new page to the document
@@ -62,6 +62,54 @@ export class PDF {
       return true;
     }
     return false;
+  }
+
+  // add cover
+  addCover = (coverImage, logo, client) => {
+    this.doc.setFontSize(20);
+
+    // // rectangle
+    this.doc.setFillColor(99, 178, 249);
+    this.doc.rect(20, 50, this.width - 40, 180, 'F');
+    const coverTitle = 'Realfeedback - 360 Grad Feedbackanalyse';
+    this.doc.text(coverTitle, this.width / 2, 20, 'center');
+
+    // cover image
+    this.doc.addImage(
+      coverImage,
+      'JPEG',
+      30,
+      80,
+      this.width - 60,
+      120,
+      undefined,
+      'FAST',
+    );
+
+    // feedbacker name
+    this.doc.setFillColor(254, 254, 254);
+    this.doc.setDrawColor(99, 178, 249);
+    this.doc.setLineWidth(1);
+    this.doc.rect(40, 220, this.width - 80, 20, 'FD');
+    this.doc.setFillColor(99, 178, 249);
+    this.doc.setFontSize(15);
+    this.doc.text(client, this.width / 2, 230, 'center');
+
+    // logo
+    // TODO: only works for skillsgarden logo
+    this.doc.addImage(
+      logo,
+      'PNG',
+      20,
+      260,
+      40,
+      40 / 2.3,
+      undefined,
+      'FAST',
+    );
+    this.doc.setFontSize(12);
+    const partner = ' - Ihr Partner für Persönlichkeitsentwicklung';
+    this.doc.text(partner, 80, 277);
   }
 
   // add a new Radar chart

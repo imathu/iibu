@@ -36,3 +36,16 @@ export const getRolePhraseStart = (roles, id, gender) => {
 export function getURL() {
   return process.env.REACT_APP_URL || 'http://localhost:3000';
 }
+
+export function getDataUri(url, callback) {
+  const image = new Image();
+  image.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = image.width;
+    canvas.height = image.height;
+    canvas.getContext('2d').drawImage(image, 0, 0);
+    callback(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
+    // callback(canvas.toDataURL('image/png'));
+  };
+  image.src = url;
+}

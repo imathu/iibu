@@ -4,6 +4,7 @@ import { Header, Select, Button, Icon, Divider } from 'semantic-ui-react';
 import { getQuestionContent } from 'utils/question';
 
 import { PDF } from 'utils/pdf';
+import { getDataUri } from 'utils';
 
 import ClientData from './ClientData';
 import AdvancedOptions from './AdvancedOptions';
@@ -29,11 +30,25 @@ class PageContent extends React.Component {
       line: false,
       advanced: false,
       height: 200,
+      cover: false,
+      coverData: null,
+      logo: null,
     };
     this.ref = null;
   }
   setHeight = (event, data) => {
     this.setState({ height: parseInt(data.value) }); // eslint-disable-line radix
+  }
+  setCover = (event, data) => {
+    if (!this.state.cover) {
+      getDataUri('/HRmove_logo_final_farbe_Logo.png', (logo) => {
+        getDataUri('/HRmove_cover.png', (cover) => {
+          this.setState({ cover: !data.value, coverData: cover, logo });
+        });
+      });
+    } else {
+      this.setState({ cover: false, coverData: null, logo: null });
+    }
   }
   toggleDiagramm = (dia) => {
     this.setState(() => ({ [dia]: !this.state[dia] }));
@@ -53,7 +68,11 @@ class PageContent extends React.Component {
     const { clients } = this.props.data;
     const client = `${clients[clientId].firstname} ${clients[clientId].name}`;
     const pdf = new PDF(client, true, '', true);
+    if (this.state.cover) {
+      pdf.addCover(this.state.coverData, this.state.logo, client);
+    }
     if (this.state.barPerQuestion) {
+      pdf.addPage();
       const array = Object.keys(barsPerQuestion).map(key => (barsPerQuestion[key]));
       array.forEach((d) => {
         Object.keys(d.barsPerQuestion).forEach((qId) => {
@@ -69,6 +88,7 @@ class PageContent extends React.Component {
       });
     }
     if (this.state.barPerContext) {
+      pdf.addPage();
       const barsArray = Object.keys(barsPerContext).map(key => (barsPerContext[key]));
       barsArray.forEach((chart) => {
         pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context);
@@ -76,6 +96,7 @@ class PageContent extends React.Component {
       });
     }
     if (this.state.line) {
+      pdf.addPage();
       const barsArray = Object.keys(lines).map(key => (lines[key]));
       barsArray.forEach((chart) => {
         pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context);
@@ -83,6 +104,7 @@ class PageContent extends React.Component {
       });
     }
     if (this.state.radar) {
+      pdf.addPage();
       pdf.addRadarChart(radar.radar.getChart());
     }
     pdf.save(`${client}.pdf`);
@@ -96,6 +118,7 @@ class PageContent extends React.Component {
       line,
       advanced,
       height,
+      cover,
     } = this.state;
     const { data } = this.props;
     return (
@@ -130,7 +153,12 @@ class PageContent extends React.Component {
             </Button.Group>
             <Divider clearing />
             {advanced && (
-              <AdvancedOptions height={height} setHeight={this.setHeight} />
+              <AdvancedOptions
+                height={height}
+                setHeight={this.setHeight}
+                cover={cover}
+                setCover={this.setCover}
+              />
             )}
             <ClientData
               {...this.props}
