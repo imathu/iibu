@@ -7,7 +7,7 @@ export class PDF {
     this.footer = footer;
     this.date = date;
     this.page = page;
-    this.doc = new jsPDF("p", "mm", "a4"); // eslint-disable-line
+    this.doc = new jsPDF("p", "mm", "a4", true); // eslint-disable-line
     this.width = this.doc.internal.pageSize.getWidth();
     this.height = this.doc.internal.pageSize.getHeight();
     this.border = 20; // pdf page border
@@ -80,6 +80,8 @@ export class PDF {
       this.yBarOffset,
       this.width - (2 * this.border),
       barHeight - this.border,
+      undefined,
+      'FAST',
     );
     this.yBarOffset = this.yBarOffset + (barHeight - (this.border / 2));
   }
@@ -109,10 +111,8 @@ export class PDF {
   // add a new Bar chart
   addBarChart = (context, chart, label = '') => {
     const ratio = (chart.height / chart.width);
-    // const barHeight = (ratio * this.width);
 
     const imageWidth = this.width - (2 * this.border) - this.xBarOffset;
-    // const imageHeight = barHeight - this.border;
     const barHeight = imageWidth * ratio;
 
     const contextHeight = (context && context !== '') ? 8 : 0;
@@ -136,6 +136,8 @@ export class PDF {
       this.yBarOffset,
       imageWidth,
       barHeight,
+      undefined,
+      'FAST',
     );
     this.yBarOffset = this.yBarOffset + (barHeight + this.border);
   }

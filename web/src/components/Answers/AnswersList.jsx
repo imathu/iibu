@@ -187,7 +187,7 @@ class AnswersList extends React.Component {
                   </div>
                 </Grid.Column>
                 <Grid.Column width={4}>
-                  <Sticky context={contextRef} offset={10}>
+                  <Sticky context={contextRef} offset={9}>
                     <Segment style={{ backgroundColor: 'lightgray' }}>
                       {Object.keys(data.feedbacker.clients).map(id => (
                         <div key={id}>
