@@ -64,15 +64,18 @@ class PageContent extends React.Component {
       radar,
       lines,
     } = this.ref;
+    let isFirstpage = true;
     const clientId = this.state.selectedClient;
     const { clients } = this.props.data;
     const client = `${clients[clientId].firstname} ${clients[clientId].name}`;
-    const pdf = new PDF(client, true, '', true);
+    const pdf = new PDF(client, true, '', true, this.state.cover);
     if (this.state.cover) {
       pdf.addCover(this.state.coverData, this.state.logo, client);
+      isFirstpage = false;
     }
     if (this.state.barPerQuestion) {
-      pdf.addPage();
+      if (!isFirstpage) pdf.addPage();
+      isFirstpage = false;
       const array = Object.keys(barsPerQuestion).map(key => (barsPerQuestion[key]));
       array.forEach((d) => {
         Object.keys(d.barsPerQuestion).forEach((qId) => {
@@ -88,7 +91,8 @@ class PageContent extends React.Component {
       });
     }
     if (this.state.barPerContext) {
-      pdf.addPage();
+      if (!isFirstpage) pdf.addPage();
+      isFirstpage = false;
       const barsArray = Object.keys(barsPerContext).map(key => (barsPerContext[key]));
       barsArray.forEach((chart) => {
         pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context);
@@ -96,7 +100,8 @@ class PageContent extends React.Component {
       });
     }
     if (this.state.line) {
-      pdf.addPage();
+      if (!isFirstpage) pdf.addPage();
+      isFirstpage = false;
       const barsArray = Object.keys(lines).map(key => (lines[key]));
       barsArray.forEach((chart) => {
         pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context);
@@ -104,7 +109,8 @@ class PageContent extends React.Component {
       });
     }
     if (this.state.radar) {
-      pdf.addPage();
+      if (!isFirstpage) pdf.addPage();
+      isFirstpage = false;
       pdf.addRadarChart(radar.radar.getChart());
     }
     pdf.save(`${client}.pdf`);

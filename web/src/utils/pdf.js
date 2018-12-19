@@ -2,7 +2,7 @@ import jsPDF from 'jspdf';
 import moment from 'moment';
 
 export class PDF {
-  constructor(header = '', date = true, footer = '', page = true) {
+  constructor(header = '', date = true, footer = '', page = true, cover = false) {
     this.header = header;
     this.footer = footer;
     this.date = date;
@@ -14,8 +14,10 @@ export class PDF {
     this.actualPage = 1; // current page number
     this.yBarOffset = 0; // the y offset where the next bar will be painted
     this.xBarOffset = 50; // the x offset where each bar will be painted
-    // this.setHeader();
-    // this.setFooter();
+    if (!cover) {
+      this.setHeader();
+      this.setFooter();
+    }
   }
 
   // add a new page to the document
