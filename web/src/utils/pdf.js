@@ -1,6 +1,8 @@
 import jsPDF from 'jspdf';
 import moment from 'moment';
 
+import { getLanguage } from 'utils/language';
+
 export class PDF {
   constructor(header = '', date = false, footer = '', page = true, cover = false) {
     this.header = header;
@@ -14,7 +16,9 @@ export class PDF {
     this.actualPage = 1; // current page number
     this.yBarOffset = 0; // the y offset where the next bar will be painted
     this.xBarOffset = 50; // the x offset where each bar will be painted
-    this.pageOffset = 1;
+    this.firstContentPage = null; // use this to add TOC before this page
+    this.toc = [];
+    this.cover = cover;
     if (!cover) {
       this.setHeader();
       this.setFooter();
@@ -23,11 +27,36 @@ export class PDF {
 
   // add a new page to the document
   addPage = () => {
+    this.pageOffset += 1;
     this.yBarOffset = 0;
     this.doc.addPage();
     this.actualPage += 1;
     this.setHeader();
     this.setFooter();
+  }
+
+  addToc = () => {
+    this.doc.insertPage((this.cover) ? 2 : 1);
+    this.setHeader();
+    this.doc.setFontSize(14);
+    let title = 'Inhaltsverzeichnis';
+    if (getLanguage() === 'en') title = 'Table of contents';
+    this.doc.text(title, this.border, this.yBarOffset + 2);
+    this.yBarOffset = this.yBarOffset + 15;
+    this.doc.setFontSize(12);
+    this.toc.forEach((t) => {
+      this.doc.text(t.content, this.border + 20, this.yBarOffset + 2);
+      this.doc.text(t.pageNumber.toString(), this.width - this.border, this.yBarOffset + 2, 'right');
+      this.yBarOffset = this.yBarOffset + 8;
+    });
+  }
+
+  addPageContent = (content) => {
+    this.doc.setFontSize(14);
+    const t = { content, pageNumber: this.actualPage };
+    this.toc.push(t);
+    this.doc.text(content, this.border, this.yBarOffset + 2);
+    this.yBarOffset = this.yBarOffset + 10;
   }
 
   // set PDF Header including date
@@ -40,7 +69,7 @@ export class PDF {
     }
     this.doc.setDrawColor(8, 48, 107);
     this.doc.line(b, b + 2, this.width - b, b + 2);
-    this.yBarOffset = this.border + 5;
+    this.yBarOffset = this.border + 8;
   }
 
   // set PDF Footer including text and page number
@@ -75,7 +104,7 @@ export class PDF {
     this.doc.setFillColor(color[0], color[1], color[2]);
     this.doc.rect(20, 50, this.width - 40, 180, 'F');
     const coverTitle = 'Realfeedback - 360 Grad Feedbackanalyse';
-    this.doc.text(coverTitle, this.width / 2, 20, 'center');
+    this.doc.text(coverTitle, this.width / 2, 30, 'center');
 
     // cover image
     this.doc.addImage(

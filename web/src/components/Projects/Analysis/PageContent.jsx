@@ -3,6 +3,7 @@ import { PropTypes } from 'prop-types';
 import { Header, Select, Button, Icon, Divider } from 'semantic-ui-react';
 import { LOGO } from 'constants/company';
 import { getQuestionContent } from 'utils/question';
+import { getLanguage } from 'utils/language';
 
 import { PDF } from 'utils/pdf';
 import { getDataUri } from 'utils';
@@ -92,11 +93,15 @@ class PageContent extends React.Component {
     if (this.state.radar) {
       if (!isFirstpage) pdf.addPage();
       isFirstpage = false;
+      const title = (getLanguage() === 'en') ? 'general overview' : 'Gesamtübersicht';
+      pdf.addPageContent(title);
       pdf.addRadarChart(radar.radar.getChart());
     }
     if (this.state.barPerContext) {
       if (!isFirstpage) pdf.addPage();
       isFirstpage = false;
+      const title = (getLanguage() === 'en') ? 'Overview per context' : 'Übersicht pro Themengebiet';
+      pdf.addPageContent(title);
       const barsArray = Object.keys(barsPerContext).map(key => (barsPerContext[key]));
       barsArray.forEach((chart) => {
         pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context);
@@ -107,13 +112,19 @@ class PageContent extends React.Component {
       if (!isFirstpage) pdf.addPage();
       isFirstpage = false;
       const array = Object.keys(barsPerQuestion).map(key => (barsPerQuestion[key]));
-      array.forEach((d) => {
+      array.forEach((d, i) => {
+        let firstChart = true;
+        if (i > 0) pdf.addPage();
         Object.keys(d.barsPerQuestion).forEach((qId) => {
           const chart = d.barsPerQuestion[qId];
           const { data } = this.props;
           const person = (clients[clientId].gender === 'w') ? 'she' : 'he';
+          if (firstChart) {
+            pdf.addPageContent(d.state.context);
+          }
+          firstChart = false;
           pdf.addBarChart(
-            d.state.context,
+            '',
             chart.getChart(),
             getQuestionContent(data.questions[qId], person, client),
           );
@@ -135,6 +146,7 @@ class PageContent extends React.Component {
         pdf.addLine();
       });
     }
+    pdf.addToc();
     pdf.save(`${client}.pdf`);
   }
   render() {
@@ -162,7 +174,7 @@ class PageContent extends React.Component {
           <React.Fragment>
             <Button.Group>
               <Button color={barPerContext ? 'blue' : 'grey'} onClick={() => this.toggleDiagramm('barPerContext')}>Bar/Kontext</Button>
-              <Button color={line ? 'blue' : 'grey'} onClick={() => this.toggleDiagramm('line')}>Line/Kontext</Button>
+              
               <Button color={barPerQuestion ? 'blue' : 'grey'} onClick={() => this.toggleDiagramm('barPerQuestion')}>Bar/Frage</Button>
               <Button color={radar ? 'blue' : 'grey'} onClick={() => this.toggleDiagramm('radar')}>Radar</Button>
             </Button.Group>
