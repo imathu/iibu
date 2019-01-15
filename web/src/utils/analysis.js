@@ -3,6 +3,8 @@ import { getContextById } from 'utils/context';
 import { getRoleById } from 'utils/roles';
 import { getSD } from 'utils/Analysis/index';
 
+import { getLanguage } from 'utils/language';
+
 function fix(x) {
   return Number.parseFloat(x).toFixed(2);
 }
@@ -98,16 +100,23 @@ const createLineData = (labels, data, min, max) => ({
   }],
 });
 
+const radarLabel = (l) => {
+  const lang = getLanguage();
+  if (l === 'foreign') {
+    return (lang === 'en') ? 'in the estimation of others' : 'Fremdeinschätzung';
+  }
+  return (lang === 'en') ? 'self-assessment' : 'Selbsteinschätzung';
+};
 
 const createRadarData = (labels, foreign, self) => ({
   labels,
   datasets: [{
-    label: 'foreign',
+    label: radarLabel('foreign'),
     data: foreign,
     borderWidth: 3,
     borderColor: chartColor[5],
   }, {
-    label: 'self',
+    label: radarLabel('self'),
     data: self,
     borderWidth: 3,
     borderColor: chartColor[9],

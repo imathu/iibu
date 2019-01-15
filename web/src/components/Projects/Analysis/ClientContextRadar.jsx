@@ -45,6 +45,7 @@ class ClientContextRadar extends React.Component {
         ticks: {
           beginAtZero: true,
           suggestedMax: 5,
+          fontColor: '#000',
         },
       },
       plugins: {

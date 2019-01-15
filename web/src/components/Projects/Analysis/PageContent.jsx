@@ -89,6 +89,20 @@ class PageContent extends React.Component {
       );
       isFirstpage = false;
     }
+    if (this.state.radar) {
+      if (!isFirstpage) pdf.addPage();
+      isFirstpage = false;
+      pdf.addRadarChart(radar.radar.getChart());
+    }
+    if (this.state.barPerContext) {
+      if (!isFirstpage) pdf.addPage();
+      isFirstpage = false;
+      const barsArray = Object.keys(barsPerContext).map(key => (barsPerContext[key]));
+      barsArray.forEach((chart) => {
+        pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context);
+        pdf.addLine();
+      });
+    }
     if (this.state.barPerQuestion) {
       if (!isFirstpage) pdf.addPage();
       isFirstpage = false;
@@ -106,15 +120,6 @@ class PageContent extends React.Component {
         });
       });
     }
-    if (this.state.barPerContext) {
-      if (!isFirstpage) pdf.addPage();
-      isFirstpage = false;
-      const barsArray = Object.keys(barsPerContext).map(key => (barsPerContext[key]));
-      barsArray.forEach((chart) => {
-        pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context);
-        pdf.addLine();
-      });
-    }
     if (this.state.line) {
       if (!isFirstpage) pdf.addPage();
       isFirstpage = false;
@@ -123,11 +128,6 @@ class PageContent extends React.Component {
         pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context);
         pdf.addLine();
       });
-    }
-    if (this.state.radar) {
-      if (!isFirstpage) pdf.addPage();
-      isFirstpage = false;
-      pdf.addRadarChart(radar.radar.getChart());
     }
     pdf.save(`${client}.pdf`);
   }

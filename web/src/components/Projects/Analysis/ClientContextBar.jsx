@@ -64,7 +64,13 @@ const options = {
     yAxes: [{
       ticks: {
         beginAtZero: true,
-        suggestedMax: 5,
+        suggestedMax: 6,
+        fontColor: '#000',
+      },
+    }],
+    xAxes: [{
+      ticks: {
+        fontColor: '#000',
       },
     }],
   },
