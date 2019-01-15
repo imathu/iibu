@@ -110,7 +110,13 @@ class PageContent extends React.Component {
       array.forEach((d) => {
         Object.keys(d.barsPerQuestion).forEach((qId) => {
           const chart = d.barsPerQuestion[qId];
-          pdf.addBarChart(d.state.context, chart.getChart(), getQuestionContent(this.props.data.questions[qId], 'he'));
+          const { data } = this.props;
+          const person = (clients[clientId].gender === 'w') ? 'she' : 'he';
+          pdf.addBarChart(
+            d.state.context,
+            chart.getChart(),
+            getQuestionContent(data.questions[qId], person, client),
+          );
           const remarks = (d.remarksPerQuestion[qId]
             && d.remarksPerQuestion[qId].props.remarks) || [];
           if (remarks && remarks.length > 0) {

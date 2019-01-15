@@ -2,9 +2,13 @@ import idx from 'idx';
 
 import { getLanguage } from './language';
 
-export const getQuestionContent = (question, person) => {
+export const getQuestionContent = (question, person, name = null) => {
   const language = getLanguage();
-  return idx(question, _ => _.content[language][person]) || 'n/a';
+  let str = idx(question, _ => _.content[language][person]) || 'n/a';
+  if (name) {
+    str = `${name} ${str}`;
+  }
+  return str;
 };
 
 export const getAllContextIds = (questions) => {
