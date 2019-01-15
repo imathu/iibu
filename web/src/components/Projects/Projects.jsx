@@ -7,7 +7,7 @@ import withAuthorization from 'components/withAuthorization';
 import { db } from '../../firebase';
 
 const getLogo = company => (
-  LOGO[company] || null
+  (LOGO[company]) ? (LOGO[company].path || null) : null
 );
 
 class Projects extends React.Component {

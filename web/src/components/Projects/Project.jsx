@@ -68,7 +68,7 @@ class Project extends Component {
     if (adminData && adminData.project) {
       const { company } = adminData.project || 'hrmove';
       if (company) {
-        image = LOGO[company];
+        image = (LOGO[company]) ? LOGO[company].path : '';
       }
     }
 

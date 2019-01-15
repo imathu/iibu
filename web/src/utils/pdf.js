@@ -2,7 +2,7 @@ import jsPDF from 'jspdf';
 import moment from 'moment';
 
 export class PDF {
-  constructor(header = '', date = true, footer = '', page = true, cover = false) {
+  constructor(header = '', date = false, footer = '', page = true, cover = false) {
     this.header = header;
     this.footer = footer;
     this.date = date;
@@ -14,6 +14,7 @@ export class PDF {
     this.actualPage = 1; // current page number
     this.yBarOffset = 0; // the y offset where the next bar will be painted
     this.xBarOffset = 50; // the x offset where each bar will be painted
+    this.pageOffset = 1;
     if (!cover) {
       this.setHeader();
       this.setFooter();
@@ -67,11 +68,11 @@ export class PDF {
   }
 
   // add cover
-  addCover = (coverImage, logo, client) => {
+  addCover = (coverImage, logo, logoRatio, color, client) => {
     this.doc.setFontSize(20);
 
     // // rectangle
-    this.doc.setFillColor(99, 178, 249);
+    this.doc.setFillColor(color[0], color[1], color[2]);
     this.doc.rect(20, 50, this.width - 40, 180, 'F');
     const coverTitle = 'Realfeedback - 360 Grad Feedbackanalyse';
     this.doc.text(coverTitle, this.width / 2, 20, 'center');
@@ -90,10 +91,10 @@ export class PDF {
 
     // feedbacker name
     this.doc.setFillColor(254, 254, 254);
-    this.doc.setDrawColor(99, 178, 249);
+    this.doc.setDrawColor(color[0], color[1], color[2]);
     this.doc.setLineWidth(1);
     this.doc.rect(40, 220, this.width - 80, 20, 'FD');
-    this.doc.setFillColor(99, 178, 249);
+    this.doc.setFillColor(color[0], color[1], color[2]);
     this.doc.setFontSize(15);
     this.doc.text(client, this.width / 2, 230, 'center');
 
@@ -102,16 +103,18 @@ export class PDF {
     this.doc.addImage(
       logo,
       'PNG',
-      20,
+      25,
       260,
       40,
-      40 / 2.3,
+      40 / logoRatio,
       undefined,
       'FAST',
     );
     this.doc.setFontSize(12);
-    const partner = ' - Ihr Partner für Persönlichkeitsentwicklung';
-    this.doc.text(partner, 80, 277);
+    const partner = 'Ihr Partner für Persönlichkeitsentwicklung';
+    const y = 262 + ((40 / logoRatio) / 2);
+    this.doc.text(partner, this.width - 25, y, 'right');
+    this.doc.text(moment(new Date()).format('DD.MM.YYYY'), this.width - 25, y + 8, 'right');
   }
 
   // add a new Radar chart

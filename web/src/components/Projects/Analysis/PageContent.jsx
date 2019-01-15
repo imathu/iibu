@@ -1,6 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Header, Select, Button, Icon, Divider } from 'semantic-ui-react';
+import { LOGO } from 'constants/company';
 import { getQuestionContent } from 'utils/question';
 
 import { PDF } from 'utils/pdf';
@@ -33,6 +34,8 @@ class PageContent extends React.Component {
       cover: false,
       coverData: null,
       logo: null,
+      logoRatio: 3,
+      color: [1, 1, 1],
     };
     this.ref = null;
   }
@@ -40,10 +43,17 @@ class PageContent extends React.Component {
     this.setState({ height: parseInt(data.value) }); // eslint-disable-line radix
   }
   setCover = (event, data) => {
+    const { company } = (this.props.data) || 'testing';
     if (!this.state.cover) {
-      getDataUri('/HRmove_logo_final_farbe_Logo.png', (logo) => {
+      getDataUri(LOGO[company].path, (logo) => {
         getDataUri('/HRmove_cover.png', (cover) => {
-          this.setState({ cover: !data.value, coverData: cover, logo });
+          this.setState({
+            cover: !data.value,
+            coverData: cover,
+            logo,
+            logoRatio: LOGO[company].ratio || 3,
+            color: LOGO[company].color || [1, 1, 1],
+          });
         });
       });
     } else {
@@ -68,9 +78,15 @@ class PageContent extends React.Component {
     const clientId = this.state.selectedClient;
     const { clients } = this.props.data;
     const client = `${clients[clientId].firstname} ${clients[clientId].name}`;
-    const pdf = new PDF(client, true, '', true, this.state.cover);
+    const pdf = new PDF(client, false, '', true, this.state.cover);
     if (this.state.cover) {
-      pdf.addCover(this.state.coverData, this.state.logo, client);
+      pdf.addCover(
+        this.state.coverData,
+        this.state.logo,
+        this.state.logoRatio,
+        this.state.color,
+        client,
+      );
       isFirstpage = false;
     }
     if (this.state.barPerQuestion) {

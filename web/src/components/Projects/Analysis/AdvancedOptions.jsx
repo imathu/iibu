@@ -22,7 +22,7 @@ const AdvancedOptions = (props) => {
       <Segment>
         <Form.Field>
           <Checkbox
-            label="Deckblatt für HRMove"
+            label="Deckblatt"
             checked={props.cover}
             onChange={props.setCover}
           />

@@ -101,7 +101,7 @@ class AnswersList extends React.Component {
       modalShow,
       checkBoxToggle,
     } = this.state;
-    const image = (data) ? LOGO[data.company] : null;
+    const image = (data && data.company) ? LOGO[data.company].path : null;
     let totalAnswers = 0;
     Object.keys(clients).forEach((id) => {
       totalAnswers += clients[id];
