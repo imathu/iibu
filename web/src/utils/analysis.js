@@ -135,6 +135,12 @@ const createRadarData = (labels, foreign, self) => ({
   }],
 });
 
+const removeByIndexes = (data, indexes) => {
+  for (let i = indexes.length - 1; i >= 0; i -= 1) {
+    data.splice(indexes[i], 1);
+  }
+};
+
 export class Analysis {
   constructor(project, adminData) {
     this.project = project;
@@ -180,17 +186,22 @@ export class Analysis {
     const values = [];
     const sds = [];
     const feedbackers = [];
+    const labels = [];
     const remarks = answersByContext
       .filter(a => a.remark !== undefined)
       .map(a => ({ questionId: a.questionId, feedbackerId: a.feedbackerId, remark: a.remark }));
     this.roleIds.forEach((roleId) => {
       const value = Analysis.getAnswerByRole(answersByContext, roleId);
-      values.push(fix(value.avg));
-      feedbackers.push(value.feedbackers);
-      sds.push(fix(value.sd));
+      if (value.avg > 0) {
+        values.push(fix(value.avg));
+        feedbackers.push(value.feedbackers);
+        sds.push(fix(value.sd));
+        labels.push(roleId);
+      }
     });
+    // removeByIndexes(sds, zeroIdx);
     return ({
-      barData: barChartByQuestion(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values, sds),
+      barData: barChartByQuestion(labels.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values, sds),
       remarks,
     });
   }
@@ -198,20 +209,23 @@ export class Analysis {
   getBarData(contextId, clientId, line = false) {
     const answers = this.getAnswersByClient(clientId);
     const answersByContext = answers.filter(answer => answer.context === contextId);
-    const { roleIds } = this;
     const values = [];
     const mins = [];
     const maxs = [];
     const feedbackers = [];
+    const labels = [];
     this.roleIds.forEach((roleId) => {
       const value = Analysis.getAnswerByRole(answersByContext, roleId);
-      values.push(fix(value.avg));
-      mins.push(value.min);
-      maxs.push(value.max);
-      feedbackers.push(value.feedbackers);
+      if (value.avg > 0) {
+        values.push(fix(value.avg));
+        mins.push(value.min);
+        maxs.push(value.max);
+        feedbackers.push(value.feedbackers);
+        labels.push(roleId);
+      }
     });
-    if (line) return createLineData(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values, mins, maxs);
-    return createBarPerContext(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values, mins, maxs);
+    if (line) return createLineData(labels.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values, mins, maxs);
+    return createBarPerContext(labels.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values, mins, maxs);
   }
 
   getRadarData(clientId) {
