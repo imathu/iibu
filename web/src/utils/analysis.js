@@ -35,7 +35,7 @@ export const color10 = [
   'rgba(195,203,113,1)',
 ];
 
-export const barChartByQuestion = (labels, data) => ({
+export const barChartByQuestion = (labels, data, sds) => ({
   labels,
   datasets: [{
     label: 'Votes',
@@ -43,6 +43,18 @@ export const barChartByQuestion = (labels, data) => ({
     borderWidth: 1,
     backgroundColor: chartColor,
     type: 'horizontalBar',
+  }, {
+    label: 'Deviation',
+    hidden: true,
+    data,
+    sds,
+    backgroundColor: chartColor,
+    type: 'horizontalBar',
+    datalabels: {
+      formatter: (value, context) => (
+        (value, `+/- ${context.dataset.sds[context.dataIndex]}`)
+      ),
+    },
   }],
 });
 
@@ -150,13 +162,12 @@ export class Analysis {
     const filteredArray = filteredAnswers.map(a => a.score);
     const sum = filteredArray.reduce((acc, val) => (acc + val), 0);
     const avg = (sum > 0) ? sum / filteredArray.length : 0;
-    // const max = filteredArray.reduce((a, b) => Math.max(a, b), 0);
-    // const min = filteredArray.reduce((a, b) => Math.min(a, b), 1000);
-    const sd = getSD(filteredArray);
+    const sd = (filteredArray.length > 1) ? getSD(filteredArray) : 0;
     return ({
       avg,
       max: avg + sd,
       min: avg - sd,
+      sd,
       feedbackers,
     });
   }
@@ -167,6 +178,7 @@ export class Analysis {
       ((a.questionId === questionId) && (a.context === contextId)));
     const { roleIds } = this;
     const values = [];
+    const sds = [];
     const feedbackers = [];
     const remarks = answersByContext
       .filter(a => a.remark !== undefined)
@@ -175,9 +187,10 @@ export class Analysis {
       const value = Analysis.getAnswerByRole(answersByContext, roleId);
       values.push(fix(value.avg));
       feedbackers.push(value.feedbackers);
+      sds.push(fix(value.sd));
     });
     return ({
-      barData: barChartByQuestion(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values),
+      barData: barChartByQuestion(roleIds.map((id, i) => `${getRoleById(this.roles, id)} (${feedbackers[i]})`), values, sds),
       remarks,
     });
   }

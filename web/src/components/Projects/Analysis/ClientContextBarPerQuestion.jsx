@@ -11,29 +11,53 @@ import { Analysis } from 'utils/analysis';
 
 import RemarksPerQuestion from './RemarksPerQuestion';
 
-// const position = (d) => {
-//   if (d.dataset.label === 'Votes') {
-//     return true;
+const position = (d) => {
+  switch (d.dataset.label) {
+    case 'Deviation':
+      return (d.dataset.data[d.dataIndex] >= 0.5);
+    case 'Votes':
+      return true;
+    default:
+      return false;
+  }
+};
+
+const align = (d) => {
+  switch (d.dataset.label) {
+    case 'Deviation': return 'right';
+    case 'Votes':
+      return (d.dataset.data[d.dataIndex] < 1.5) ? 'right' : 'left';
+    default: return 'left';
+  }
+};
+
+const offset = d => (
+  (d.dataset.type === 'bar') ? 12 : 5
+);
+
+// const backgroundColor = (d) => {
+//   switch (d.dataset.label) {
+//     case 'Deviation':
+//       return 'white';
+//     case 'Votes':
+//       if (d.dataset.backgroundColor) return d.dataset.backgroundColor[d.dataIndex];
+//       return d.dataset.borderColor;
+//     default:
+//       return 'white';
 //   }
-//   return false;
 // };
 
-// const color = (d) => {
-//   if (d.dataset.backgroundColor) return d.dataset.backgroundColor[d.dataIndex];
-//   return d.dataset.borderColor;
-// };
-//
-// const align = (d) => {
-//   if (d.dataset.type === 'bar') {
-//     if (d.dataset.data[d.dataIndex] <= 1.5) return 220;
-//     return 140;
-//   }
-//   return 'left';
-// };
-//
-// const offset = d => (
-//   (d.dataset.type === 'bar') ? 12 : 5
-// );
+const anchor = d => (
+  d.dataset.label === 'Deviation' ? 'start' : 'end'
+);
+
+const color = (d) => {
+  switch (d.dataset.label) {
+    case 'Deviation': return 'white';
+    case 'Votes': return (d.dataset.data[d.dataIndex] < 1.5) ? d.dataset.backgroundColor[d.dataIndex] : 'white';
+    default: return 'black';
+  }
+};
 
 const options = {
   responsive: true,
@@ -46,23 +70,17 @@ const options = {
   },
   plugins: {
     datalabels: {
-      display: false,
+      display: position,
+      anchor,
+      align,
+      offset,
+      borderRadius: 4,
+      color,
+      font: {
+        weight: 'bold',
+      },
     },
   },
-  // plugins: {
-  //   datalabels: {
-  //     display: position,
-  //     anchor: 'end',
-  //     align,
-  //     offset,
-  //     backgroundColor: color,
-  //     borderRadius: 4,
-  //     color: 'white',
-  //     font: {
-  //       weight: 'bold',
-  //     },
-  //   },
-  // },
   scales: {
     xAxes: [{
       ticks: {
