@@ -135,12 +135,6 @@ const createRadarData = (labels, foreign, self) => ({
   }],
 });
 
-const removeByIndexes = (data, indexes) => {
-  for (let i = indexes.length - 1; i >= 0; i -= 1) {
-    data.splice(indexes[i], 1);
-  }
-};
-
 export class Analysis {
   constructor(project, adminData) {
     this.project = project;
@@ -182,7 +176,6 @@ export class Analysis {
     const answers = this.getAnswersByClient(clientId);
     const answersByContext = answers.filter(a =>
       ((a.questionId === questionId) && (a.context === contextId)));
-    const { roleIds } = this;
     const values = [];
     const sds = [];
     const feedbackers = [];
