@@ -27,8 +27,8 @@ class PageContent extends React.Component {
     this.state = {
       selectedClient: null,
       radar: false,
-      barPerContext: false,
-      barPerQuestion: true,
+      barPerContext: true,
+      barPerQuestion: false,
       line: false,
       advanced: false,
       height: 200,
@@ -37,6 +37,8 @@ class PageContent extends React.Component {
       logo: null,
       logoRatio: 3,
       color: [1, 1, 1],
+      description: '',
+      hasDescription: false,
     };
     this.ref = null;
   }
@@ -60,6 +62,12 @@ class PageContent extends React.Component {
     } else {
       this.setState({ cover: false, coverData: null, logo: null });
     }
+  }
+  enableDescription = () => (
+    this.setState(() => ({ hasDescription: !this.state.hasDescription }))
+  )
+  updateDescription = (description) => {
+    this.setState(() => ({ description }));
   }
   toggleDiagramm = (dia) => {
     this.setState(() => ({ [dia]: !this.state[dia] }));
@@ -89,6 +97,15 @@ class PageContent extends React.Component {
         client,
       );
       isFirstpage = false;
+    }
+    if (this.state.hasDescription) {
+      // const title = (getLanguage() === 'en') ? 'de' : 'Beschreibung';
+      // pdf.addPageContent(title);
+      if (!isFirstpage) pdf.addPage();
+      isFirstpage = false;
+      const title = (getLanguage() === 'en') ? 'description' : 'Beschreibung';
+      pdf.addPageContent(title);
+      pdf.addDescription(this.state.description);
     }
     if (this.state.radar) {
       if (!isFirstpage) pdf.addPage();
@@ -159,6 +176,8 @@ class PageContent extends React.Component {
       advanced,
       height,
       cover,
+      description,
+      hasDescription,
     } = this.state;
     const { data } = this.props;
     return (
@@ -179,6 +198,7 @@ class PageContent extends React.Component {
             </Button.Group>
             <Button.Group floated="right">
               <Button
+                disabled={advanced}
                 positive
                 onClick={this.generatePDF}
               >PDF
@@ -197,18 +217,24 @@ class PageContent extends React.Component {
                 setHeight={this.setHeight}
                 cover={cover}
                 setCover={this.setCover}
+                hasDescription={hasDescription}
+                enableDescription={this.enableDescription}
+                updateDescription={this.updateDescription}
+                description={description}
               />
             )}
-            <ClientData
-              {...this.props}
-              height={height}
-              clientId={selectedClient}
-              radar={radar}
-              barPerContext={barPerContext}
-              barPerQuestion={barPerQuestion}
-              line={line}
-              onRef={(ref) => { this.ref = ref; }}
-            />
+            {!advanced &&
+              <ClientData
+                {...this.props}
+                height={height}
+                clientId={selectedClient}
+                radar={radar}
+                barPerContext={barPerContext}
+                barPerQuestion={barPerQuestion}
+                line={line}
+                onRef={(ref) => { this.ref = ref; }}
+              />
+            }
           </React.Fragment>
         }
       </div>

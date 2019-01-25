@@ -146,6 +146,17 @@ export class PDF {
     this.doc.text(moment(new Date()).format('DD.MM.YYYY'), this.width - 25, y + 8, 'right');
   }
 
+  addDescription = (description) => {
+    const t = `<div style="font-family: Helvetica">${description}</div>`;
+    const margins = {
+      top: this.border + 16,
+      bottom: 60,
+      left: this.border,
+      width: this.width - (2 * this.border),
+    };
+    this.doc.fromHTML(t, margins.left, margins.top, { width: margins.width, bottom: 60 });
+  }
+
   // add a new Radar chart
   addRadarChart = (chart) => {
     const ratio = (chart.height / chart.width);
