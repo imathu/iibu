@@ -61,7 +61,7 @@ export const barChartByQuestion = (labels, data, sds) => ({
 const createBarPerContext = (labels, data, min, max) => ({
   labels,
   datasets: [{
-    label: 'max',
+    label: 'sd',
     data: max,
     type: 'line',
     borderColor: chartColor[1],
@@ -71,7 +71,7 @@ const createBarPerContext = (labels, data, min, max) => ({
     pointRadius: 5,
     pointHoverRadius: 8,
   }, {
-    label: 'min',
+    label: 'sd',
     data: min,
     type: 'line',
     borderColor: chartColor[1],
@@ -115,7 +115,7 @@ const createLineData = (labels, data, min, max) => ({
 const radarLabel = (l) => {
   const lang = getLanguage();
   if (l === 'foreign') {
-    return (lang === 'en') ? 'in the estimation of others' : 'Fremdeinschätzung';
+    return (lang === 'en') ? 'external assessment' : 'Fremdeinschätzung';
   }
   return (lang === 'en') ? 'self-assessment' : 'Selbsteinschätzung';
 };
@@ -182,7 +182,7 @@ export class Analysis {
     const labels = [];
     const remarks = answersByContext
       .filter(a => a.remark !== undefined)
-      .map(a => ({ questionId: a.questionId, feedbackerId: a.feedbackerId, remark: a.remark }));
+      .map((a, i) => ({ questionId: a.questionId, feedbackerId: a.feedbackerId, remark: `${i}. ${a.remark}` }));
     this.roleIds.forEach((roleId) => {
       const value = Analysis.getAnswerByRole(answersByContext, roleId);
       if (value.avg > 0) {

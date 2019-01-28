@@ -103,7 +103,8 @@ export class PDF {
     // // rectangle
     this.doc.setFillColor(color[0], color[1], color[2]);
     this.doc.rect(20, 50, this.width - 40, 180, 'F');
-    const coverTitle = 'Realfeedback - 360 Grad Feedbackanalyse';
+    let coverTitle = 'Realfeedback - 360 Grad Feedbackanalyse';
+    if (getLanguage() === 'en') coverTitle = 'Realfeedback - 360 Degrees Feedback Analysis';
     this.doc.text(coverTitle, this.width / 2, 30, 'center');
 
     // cover image
@@ -140,7 +141,8 @@ export class PDF {
       'FAST',
     );
     this.doc.setFontSize(12);
-    const partner = 'Ihr Partner für Persönlichkeitsentwicklung';
+    let partner = 'Ihr Partner für Persönlichkeitsentwicklung';
+    if (getLanguage() === 'en') partner = 'Your partner for personal development';
     const y = 262 + ((40 / logoRatio) / 2);
     this.doc.text(partner, this.width - 25, y, 'right');
     this.doc.text(moment(new Date()).format('DD.MM.YYYY'), this.width - 25, y + 8, 'right');

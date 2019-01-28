@@ -103,21 +103,21 @@ class PageContent extends React.Component {
       // pdf.addPageContent(title);
       if (!isFirstpage) pdf.addPage();
       isFirstpage = false;
-      const title = (getLanguage() === 'en') ? 'description' : 'Beschreibung';
+      const title = (getLanguage() === 'en') ? 'Introduction' : 'Einleitung';
       pdf.addPageContent(title);
       pdf.addDescription(this.state.description);
     }
     if (this.state.radar) {
       if (!isFirstpage) pdf.addPage();
       isFirstpage = false;
-      const title = (getLanguage() === 'en') ? 'general overview' : 'Gesamtübersicht';
+      const title = (getLanguage() === 'en') ? 'General overview' : 'Gesamtübersicht';
       pdf.addPageContent(title);
       pdf.addRadarChart(radar.radar.getChart());
     }
     if (this.state.barPerContext) {
       if (!isFirstpage) pdf.addPage();
       isFirstpage = false;
-      const title = (getLanguage() === 'en') ? 'Overview per context' : 'Übersicht pro Themengebiet';
+      const title = (getLanguage() === 'en') ? 'Overview of the areas of competence' : 'Übersicht pro Dimension';
       pdf.addPageContent(title);
       const barsArray = Object.keys(barsPerContext).map(key => (barsPerContext[key]));
       barsArray.forEach((chart) => {

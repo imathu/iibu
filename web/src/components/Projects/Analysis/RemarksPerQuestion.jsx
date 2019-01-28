@@ -16,7 +16,7 @@ class RemarksPerQuestion extends React.Component {
             key={r.questionId$ + r.feedbackerId}
             ref={(ref) => { this.remarkItemPerQuestion = ref; }}
           >
-            {r.id} - {r.remark}
+            {r.remark}
           </List.Item>
         ))}
       </List>
