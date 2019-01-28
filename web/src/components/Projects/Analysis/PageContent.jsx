@@ -42,6 +42,10 @@ class PageContent extends React.Component {
     };
     this.ref = null;
   }
+  componentDidMount = () => {
+    const description = localStorage.getItem('description');
+    this.setState({ description });
+  }
   setHeight = (event, data) => {
     this.setState({ height: parseInt(data.value) }); // eslint-disable-line radix
   }
@@ -67,6 +71,7 @@ class PageContent extends React.Component {
     this.setState(() => ({ hasDescription: !this.state.hasDescription }))
   )
   updateDescription = (description) => {
+    localStorage.setItem('description', description);
     this.setState(() => ({ description }));
   }
   toggleDiagramm = (dia) => {
