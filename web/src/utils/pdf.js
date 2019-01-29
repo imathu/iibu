@@ -41,11 +41,12 @@ export class PDF {
     this.doc.setFontSize(14);
     let title = 'Inhaltsverzeichnis';
     if (getLanguage() === 'en') title = 'Table of contents';
-    this.doc.text(title, this.border, this.yBarOffset + 2);
+    this.doc.text(title.replace('’', '\''), this.border, this.yBarOffset + 2);
     this.yBarOffset = this.yBarOffset + 15;
     this.doc.setFontSize(12);
     this.toc.forEach((t) => {
-      this.doc.text(t.content, this.border + 20, this.yBarOffset + 2);
+      const text = (t.content) ? t.content.replace('’', '\'') : '';
+      this.doc.text(text, this.border + 20, this.yBarOffset + 2);
       this.doc.text(t.pageNumber.toString(), this.width - this.border, this.yBarOffset + 2, 'right');
       this.yBarOffset = this.yBarOffset + 8;
     });
@@ -55,7 +56,7 @@ export class PDF {
     this.doc.setFontSize(14);
     const t = { content, pageNumber: this.actualPage };
     this.toc.push(t);
-    this.doc.text(content, this.border, this.yBarOffset + 2);
+    this.doc.text(content.replace('’', '\''), this.border, this.yBarOffset + 2);
     this.yBarOffset = this.yBarOffset + 10;
   }
 
@@ -63,7 +64,9 @@ export class PDF {
   setHeader = () => {
     const b = this.border;
     this.doc.setFontSize(8);
-    this.doc.text(this.header, b, b);
+    const { header } = this || '';
+    const text = header.replace('’', '\'');
+    this.doc.text(text, b, b);
     if (this.date) {
       this.doc.text(moment(new Date()).format('DD.MM.YYYY'), this.width - b, b, 'right');
     }
@@ -77,7 +80,9 @@ export class PDF {
     const x = this.border;
     const y = this.height - this.border;
     this.doc.setFontSize(8);
-    this.doc.text(this.footer, x, y);
+    const { footer } = this || '';
+    const text = footer.replace('’', '\'');
+    this.doc.text(text, x, y);
     if (this.page) {
       const pageString = `${this.actualPage}`;
       this.doc.text(pageString, this.width - x, y, 'right');
@@ -105,7 +110,7 @@ export class PDF {
     this.doc.rect(20, 50, this.width - 40, 180, 'F');
     let coverTitle = 'Realfeedback - 360 Grad Feedbackanalyse';
     if (getLanguage() === 'en') coverTitle = 'Realfeedback - 360 Degrees Feedback Analysis';
-    this.doc.text(coverTitle, this.width / 2, 30, 'center');
+    this.doc.text(coverTitle.replace('’', '\''), this.width / 2, 30, 'center');
 
     // cover image
     this.doc.addImage(
@@ -126,7 +131,7 @@ export class PDF {
     this.doc.rect(40, 220, this.width - 80, 20, 'FD');
     this.doc.setFillColor(color[0], color[1], color[2]);
     this.doc.setFontSize(15);
-    this.doc.text(client, this.width / 2, 230, 'center');
+    this.doc.text(client.replace('’', '\''), this.width / 2, 230, 'center');
 
     // logo
     // TODO: only works for skillsgarden logo
@@ -144,7 +149,7 @@ export class PDF {
     let partner = 'Ihr Partner für Persönlichkeitsentwicklung';
     if (getLanguage() === 'en') partner = 'Your partner for personal development';
     const y = 262 + ((40 / logoRatio) / 2);
-    this.doc.text(partner, this.width - 25, y, 'right');
+    this.doc.text(partner.replace('’', '\''), this.width - 25, y, 'right');
     this.doc.text(moment(new Date()).format('DD.MM.YYYY'), this.width - 25, y + 8, 'right');
   }
 
@@ -194,7 +199,7 @@ export class PDF {
   // add a remarks
   addRemarks = (remark) => {
     const width = this.width - (2 * this.border);
-    const textArray = remark.map(r => r.remark);
+    const textArray = remark.map(r => (r.remark) ? r.remark.replace('’', '\'') : ''); // eslint-disable-line
     const splitLabel = this.doc.splitTextToSize(textArray, width);
     const height = splitLabel.length * 4;
     this.checkPageBreak(height + (this.border / 2));
@@ -216,13 +221,14 @@ export class PDF {
 
     if (context && context !== '') {
       this.doc.setFontSize(12);
-      this.doc.text(this.border, this.yBarOffset + 2, context);
+      this.doc.text(this.border, this.yBarOffset + 2, context.replace('’', '\''));
       this.yBarOffset = this.yBarOffset + contextHeight;
     }
 
     // draw the new chart
     this.doc.setFontSize(10);
-    const splitLabel = this.doc.splitTextToSize(label, this.xBarOffset);
+    const t = label.replace('’', '\'');
+    const splitLabel = this.doc.splitTextToSize(t, this.xBarOffset);
     this.doc.text(this.border, this.yBarOffset + 5, splitLabel);
     this.doc.addImage(
       chart.toBase64Image(),

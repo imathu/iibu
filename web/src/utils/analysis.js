@@ -182,7 +182,7 @@ export class Analysis {
     const labels = [];
     const remarks = answersByContext
       .filter(a => a.remark !== undefined)
-      .map((a, i) => ({ questionId: a.questionId, feedbackerId: a.feedbackerId, remark: `${i}. ${a.remark}` }));
+      .map(a => ({ questionId: a.questionId, feedbackerId: a.feedbackerId, remark: `- ${a.remark}` }));
     this.roleIds.forEach((roleId) => {
       const value = Analysis.getAnswerByRole(answersByContext, roleId);
       if (value.avg > 0) {
