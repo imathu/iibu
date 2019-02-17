@@ -1,6 +1,6 @@
 const fb = require('./db');
-const nodemailer = require('nodemailer');
 const logger = require('./../../util');
+const Mail = require('./mail');
 
 const RES_200 = {
   status: '200',
@@ -17,15 +17,7 @@ const RES_500 = {
   payload: 'Internal Server Error',
 };
 
-const transporter = nodemailer.createTransport({
-  host: process.env.MAIL_SMTP,
-  port: 587,
-  secure: false, // true for 465, false for other ports
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PWD,
-  },
-});
+const mail = new Mail.Mail('hrmove');
 
 const getContexts = () => (
   new Promise((resolve) => {
@@ -80,7 +72,7 @@ const isAdmin = idToken => (
   })
 );
 
-async function sendMail(projectId, payload, idToken) {
+async function sendMail(company, projectId, payload, idToken) {
   const admin = await isAdmin(idToken);
   if (!admin) return RES_403;
   const { feedbackers } = payload;
@@ -92,9 +84,16 @@ async function sendMail(projectId, payload, idToken) {
   const errMailIds = [];
   let err = false;
 
+  if (!mail.getCompany() === company) {
+    mail.setCompany(company);
+  }
+  const transporter = mail.getTransporter();
+
+  console.log(mail.getMail());
+
   payload.feedbackers.forEach((feedbacker) => {
     const mailOptions = {
-      from: process.env.MAIL_FROM,
+      from: process.env[mail.mail],
       to: feedbacker.emailAddress,
       subject: feedbacker.emailSubject,
       text: feedbacker.emailText,

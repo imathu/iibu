@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'web/build')));
 app.route('/api/v1/:projectId/answers/:feedbackerId')
   .get(feedbacker.getFeedbackerAnswers);
 
-app.route('/api/v1/:projectId/mail')
+app.route('/api/v1/:company/:projectId/mail')
   .post(feedbacker.sendMail);
 
 // The "catchall" handler: for any request that doesn't

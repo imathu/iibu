@@ -122,7 +122,7 @@ class PageContent extends React.Component {
     if (this.state.barPerContext) {
       if (!isFirstpage) pdf.addPage();
       isFirstpage = false;
-      const title = (getLanguage() === 'en') ? 'Overview of the areas of competence' : 'Übersicht pro Dimension';
+      const title = (getLanguage() === 'en') ? 'Overview of the areas of competence' : 'Übersicht pro Kompetenzbereich';
       pdf.addPageContent(title);
       const barsArray = Object.keys(barsPerContext).map(key => (barsPerContext[key]));
       barsArray.forEach((chart) => {
