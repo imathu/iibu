@@ -59,13 +59,14 @@ class Mail {
 
   setTransporter(company) {
     const mc = mailConfig(company);
+    const pass = Buffer.from(process.env[mc.pwd], 'base64').toString().replace(/\n$/, '');
     const transporter = nodemailer.createTransport({
       host: process.env[mc.smtp],
       port: process.env[mc.port],
       secure: false, // true for 465, false for other ports
       auth: {
         user: process.env[mc.user],
-        pass: process.env[mc.pwd],
+        pass,
       },
     });
     this.transporter = transporter;

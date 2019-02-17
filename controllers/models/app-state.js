@@ -2,18 +2,13 @@ const fb = require('./db');
 const logger = require('./../../util');
 const Mail = require('./mail');
 
-const RES_200 = {
-  status: '200',
-  payload: 'ok',
-};
-
 const RES_403 = {
   status: '403',
   payload: 'Forbidden',
 };
 
 const RES_500 = {
-  status: '403',
+  status: '500',
   payload: 'Internal Server Error',
 };
 
@@ -81,37 +76,45 @@ async function sendMail(company, projectId, payload, idToken) {
   const feedbacker1 = feedbackers[0];
   if (!feedbacker1) return RES_500;
 
-  const errMailIds = [];
-  let err = false;
-
   if (!mail.getCompany() === company) {
     mail.setCompany(company);
   }
   const transporter = mail.getTransporter();
 
-  console.log(mail.getMail());
+  const okMails = [];
+  const errMails = [];
 
-  payload.feedbackers.forEach((feedbacker) => {
+  const t = await Promise.all(payload.feedbackers.map((feedbacker) => {
     const mailOptions = {
       from: process.env[mail.mail],
       to: feedbacker.emailAddress,
       subject: feedbacker.emailSubject,
       text: feedbacker.emailText,
     };
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        logger.log(`error sending email msg=${error}`, 'error');
-        err = true;
-        errMailIds.push(feedbacker.emailAddress);
-      } else {
-        logger.log(`email successfully sent messageId=${info.messageId}`, 'info');
-      }
-    });
-  });
-  if (err) {
-    return { status: '500', payload: errMailIds };
-  }
-  return RES_200;
+    return transporter.sendMail(mailOptions)
+      .then((info) => {
+        okMails.push(feedbacker.emailAddress);
+        return new Promise(resolve => resolve(info));
+      })
+      .catch(() => {
+        errMails.push(feedbacker.emailAddress);
+      });
+  }))
+    .then(() => ({
+      status: '200',
+      payload: {
+        okMails,
+        errMails,
+      },
+    }))
+    .catch(() => ({
+      status: '200',
+      payload: {
+        okMails,
+        errMails,
+      },
+    }));
+  return (t);
 }
 
 async function getFeedbackerAnswers(projectId, feedbackerId, idToken) {

@@ -4,6 +4,7 @@ import { Button, Modal, Form, Input, TextArea, List } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import * as routes from 'constants/routes';
 import { getURL } from 'utils';
+import { LOGO } from 'constants/company';
 
 import { firebase } from '../../../firebase';
 
@@ -14,7 +15,7 @@ const byPropKey = (propertyName, value) => () => ({
   changedData: true,
 });
 
-const defaultText = `
+const defaultText = mail => `
 Guten Tag
   
 Sie wurden als Feedbackgeber für die 360 Grad Feedbackanalyse ausgewählt.
@@ -42,7 +43,7 @@ $LINK
 Bitte beachten Sie: Realfeedback ist unsere Domain für 360 Grad Feedbackanalysen und kein Drittanbieter
 
 Vielen Dank für Ihre Mitarbeit!
-Bei Fragen wenden Sie sich bitte an info@realfeedback.ch.
+Bei Fragen wenden Sie sich bitte an ${mail}.
 
 Freundliche Grüsse 
 Ihr Feedback Team
@@ -55,7 +56,9 @@ class MailModal extends React.Component {
     close: PropTypes.func.isRequired,
     data: PropTypes.shape({}).isRequired,
     selected: PropTypes.arrayOf(PropTypes.string).isRequired,
-    project: PropTypes.shape({}).isRequired,
+    project: PropTypes.shape({
+      company: PropTypes.string,
+    }).isRequired,
     projectId: PropTypes.string.isRequired,
     history: PropTypes.shape({
       push: PropTypes.func,
@@ -63,7 +66,7 @@ class MailModal extends React.Component {
   }
   state = {
     emailSubject: 'Feedbackanalyse',
-    emailText: defaultText,
+    emailText: defaultText(LOGO[this.props.project.company].mail),
   }
   send = () => {
     const { emailText, emailSubject } = this.state;

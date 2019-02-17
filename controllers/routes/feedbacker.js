@@ -23,7 +23,7 @@ function sendMail(req, res) {
       .then((data) => {
         res.status(data.status);
         res.json(data.payload);
-      });
+      }).catch(() => { res.status(403); });
   } else {
     logger.log(`no Authorization token found in ${req.url}`, 'error');
     res.status(403);
