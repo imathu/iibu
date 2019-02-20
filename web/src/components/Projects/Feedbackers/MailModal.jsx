@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Button, Modal, Form, Input, TextArea, List } from 'semantic-ui-react';
+import { Button, Modal, Form, Input, TextArea, List, Loader, Dimmer } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import * as routes from 'constants/routes';
 import { getURL } from 'utils';
@@ -17,7 +17,7 @@ const byPropKey = (propertyName, value) => () => ({
 
 const defaultText = mail => `
 Guten Tag
-  
+
 Sie wurden als Feedbackgeber für die 360 Grad Feedbackanalyse ausgewählt.
 
 Ziel der 360 Grad Feedbackanalyse ist es, Führungskräften eine umfassende Rückmeldung zu ihrem Führungsverhalten zu geben und dadurch Ansatzpunkte für die persönliche Weiterentwicklung zu ermitteln.
@@ -67,6 +67,12 @@ class MailModal extends React.Component {
   state = {
     emailSubject: 'Feedbackanalyse',
     emailText: defaultText(LOGO[this.props.project.company].mail),
+    mailStatus: null,
+    mailResult: {},
+  }
+  close = () => {
+    this.setState({ mailStatus: null });
+    this.props.close();
   }
   send = () => {
     const { emailText, emailSubject } = this.state;
@@ -93,6 +99,7 @@ class MailModal extends React.Component {
       feedbackers,
     };
     const API = `/api/v1/${project.company}/${projectId}/mail`;
+    this.setState({ mailStatus: 'sending' });
     firebase.auth.currentUser.getIdToken(true).then((idToken) => {
       fetch(API, {
         method: 'POST',
@@ -106,10 +113,9 @@ class MailModal extends React.Component {
           if (response.ok) return response.json();
           throw new Error('Server Error', response.status, ' ', response.statusText);
         })
-        .then((t) => {
-          // TODO: generate user output
-          console.log(t);  // eslint-disable-line
-          this.props.close();
+        .then((mailResult) => {
+          this.setState({ mailStatus: 'done', mailResult });
+          // this.props.close();
         })
         .catch((e) => {
           alert(e); // eslint-disable-line
@@ -127,50 +133,109 @@ class MailModal extends React.Component {
       modal,
       close,
     } = this.props;
-    const { emailText, emailSubject } = this.state;
+    const {
+      emailText,
+      emailSubject,
+      mailStatus,
+      mailResult,
+    } = this.state;
     return (
-      <Modal open={modal}>
-        <Modal.Header>E-Mail an Feedbacker Senden</Modal.Header>
-        <Modal.Content image>
-          <Modal.Description>
-            <Form>
-              <Form.Field
-                id="subject"
-                control={Input}
-                label="Subject"
-                value={emailSubject}
-                onChange={event => this.setState(byPropKey('emailSubject', event.target.value))}
-              />
-              <Form.Field
-                id="text"
-                control={TextArea}
-                label="Text"
-                value={emailText}
-                onChange={event => this.setState(byPropKey('emailText', event.target.value))}
-              />
-            </Form>
-            <br /><br />
-            <b>Emails werden gesendet an folgende Feedbacker:</b>
-            <List>
-              {!!data && !!selected && selected.map(id => (
-                <List.Item key={id}>{data[id].email}</List.Item>
-              ))}
-            </List>
-          </Modal.Description>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button color="black" onClick={close}>
-            Abbrechen
-          </Button>
-          <Button
-            positive
-            icon="checkmark"
-            labelPosition="right"
-            content="Senden"
-            onClick={this.send}
-          />
-        </Modal.Actions>
-      </Modal>
+      <React.Fragment>
+        <Modal open={modal && !mailStatus}>
+          <Modal.Header>E-Mail an Feedbacker Senden</Modal.Header>
+          <Modal.Content image>
+            <Modal.Description>
+              <Form>
+                <Form.Field
+                  id="subject"
+                  control={Input}
+                  label="Subject"
+                  value={emailSubject}
+                  onChange={event => this.setState(byPropKey('emailSubject', event.target.value))}
+                />
+                <Form.Field
+                  id="text"
+                  control={TextArea}
+                  label="Text"
+                  value={emailText}
+                  onChange={event => this.setState(byPropKey('emailText', event.target.value))}
+                />
+              </Form>
+              <br /><br />
+              <b>Emails werden gesendet an folgende Feedbacker:</b>
+              <List>
+                {!!data && !!selected && selected.map(id => (
+                  <List.Item key={id}>{data[id].email}</List.Item>
+                ))}
+              </List>
+            </Modal.Description>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button color="black" onClick={close}>
+              Abbrechen
+            </Button>
+            <Button
+              positive
+              icon="checkmark"
+              labelPosition="right"
+              content="Senden"
+              onClick={this.send}
+            />
+          </Modal.Actions>
+        </Modal>
+        <Modal open={modal && (mailStatus === 'sending')}>
+          <Modal.Header>E-Mail an Feedbacker Senden</Modal.Header>
+          <Modal.Content>
+            <Modal.Description>
+              <br />
+              <Dimmer active inverted>
+                <Loader size="medium" />
+              </Dimmer>
+              <br />
+            </Modal.Description>
+          </Modal.Content>
+        </Modal>
+        <Modal open={modal && (mailStatus === 'done')}>
+          <Modal.Header>E-Mail Sending Status</Modal.Header>
+          <Modal.Content>
+            {mailResult.okMails && mailResult.okMails.length > 0 && (
+              <div>
+                <h2>gesendete Mails</h2>
+                <List>
+                  {mailResult.okMails.map(mail => (
+                    <List.Item key={mail}>
+                      <List.Icon name="thumbs up outline" color="green" />
+                      <List.Content>{mail}</List.Content>
+                    </List.Item>
+                  ))}
+                </List>
+              </div>
+            )}
+            {mailResult.errMails && mailResult.errMails.length > 0 && (
+              <div>
+                <h2>nicht gesendet</h2>
+                <List>
+                  {mailResult.errMails.map(mail => (
+                    <List.Item key={mail}>
+                      <List.Icon name="x" color="red" />
+                      <List.Content>{mail}</List.Content>
+                    </List.Item>
+                  ))}
+                </List>
+              </div>
+            )}
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              positive
+              icon="checkmark"
+              labelPosition="right"
+              content="OK"
+              onClick={this.close}
+            />
+          </Modal.Actions>
+        </Modal>
+      </React.Fragment>
     );
   }
 }
