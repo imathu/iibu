@@ -110,7 +110,7 @@ async function sendMail(company, projectId, payload, idToken) {
         return new Promise(resolve => resolve(info));
       })
       .catch((e) => {
-        console.log(e);
+        console.log(e); // eslint-disable-line
         errMails.push(feedbacker.emailAddress);
       });
   }))
