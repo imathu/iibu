@@ -35,17 +35,21 @@ export class PDF {
     this.setFooter();
   }
 
+  fixQuote = str => (
+    str.replace('’', '\'').replace('“', '"').replace('„', '"')
+  );
+
   addToc = () => {
     this.doc.insertPage((this.cover) ? 2 : 1);
     this.setHeader();
     this.doc.setFontSize(14);
     let title = 'Inhaltsverzeichnis';
     if (getLanguage() === 'en') title = 'Table of contents';
-    this.doc.text(title.replace('’', '\''), this.border, this.yBarOffset + 2);
+    this.doc.text(this.fixQuote(title), this.border, this.yBarOffset + 2);
     this.yBarOffset = this.yBarOffset + 15;
     this.doc.setFontSize(12);
     this.toc.forEach((t) => {
-      const text = (t.content) ? t.content.replace('’', '\'') : '';
+      const text = (t.content) ? this.fixQuote(t.content) : '';
       this.doc.text(text, this.border + 20, this.yBarOffset + 2);
       this.doc.text(t.pageNumber.toString(), this.width - this.border, this.yBarOffset + 2, 'right');
       this.yBarOffset = this.yBarOffset + 8;
@@ -56,7 +60,7 @@ export class PDF {
     this.doc.setFontSize(14);
     const t = { content, pageNumber: this.actualPage };
     this.toc.push(t);
-    this.doc.text(content.replace('’', '\''), this.border, this.yBarOffset + 2);
+    this.doc.text(this.fixQuote(content), this.border, this.yBarOffset + 2);
     this.yBarOffset = this.yBarOffset + 10;
   }
 
@@ -65,7 +69,7 @@ export class PDF {
     const b = this.border;
     this.doc.setFontSize(8);
     const { header } = this || '';
-    const text = header.replace('’', '\'');
+    const text = this.fixQuote(header);
     this.doc.text(text, b, b);
     if (this.date) {
       this.doc.text(moment(new Date()).format('DD.MM.YYYY'), this.width - b, b, 'right');
@@ -81,7 +85,7 @@ export class PDF {
     const y = this.height - this.border;
     this.doc.setFontSize(8);
     const { footer } = this || '';
-    const text = footer.replace('’', '\'');
+    const text = this.fixQuote(footer);
     this.doc.text(text, x, y);
     if (this.page) {
       const pageString = `${this.actualPage}`;
@@ -110,7 +114,7 @@ export class PDF {
     this.doc.rect(20, 50, this.width - 40, 180, 'F');
     let coverTitle = 'Realfeedback - 360 Grad Feedbackanalyse';
     if (getLanguage() === 'en') coverTitle = 'Realfeedback - 360 Degrees Feedback Analysis';
-    this.doc.text(coverTitle.replace('’', '\''), this.width / 2, 30, 'center');
+    this.doc.text(this.fixQuote(coverTitle), this.width / 2, 30, 'center');
 
     // cover image
     this.doc.addImage(
@@ -131,7 +135,7 @@ export class PDF {
     this.doc.rect(40, 220, this.width - 80, 20, 'FD');
     this.doc.setFillColor(color[0], color[1], color[2]);
     this.doc.setFontSize(15);
-    this.doc.text(client.replace('’', '\''), this.width / 2, 230, 'center');
+    this.doc.text(this.fixQuote(client), this.width / 2, 230, 'center');
 
     // logo
     // TODO: only works for skillsgarden logo
@@ -149,7 +153,7 @@ export class PDF {
     let partner = 'Ihr Partner für Persönlichkeitsentwicklung';
     if (getLanguage() === 'en') partner = 'Your partner for personal development';
     const y = 262 + ((40 / logoRatio) / 2);
-    this.doc.text(partner.replace('’', '\''), this.width - 25, y, 'right');
+    this.doc.text(this.fixQuote(partner), this.width - 25, y, 'right');
     this.doc.text(moment(new Date()).format('DD.MM.YYYY'), this.width - 25, y + 8, 'right');
   }
 
@@ -199,7 +203,7 @@ export class PDF {
   // add a remarks
   addRemarks = (remark) => {
     const width = this.width - (2 * this.border);
-    const textArray = remark.map(r => (r.remark) ? r.remark.replace('’', '\'') : ''); // eslint-disable-line
+    const textArray = remark.map(r => (r.remark) ? this.fixQuote(r.remark) : ''); // eslint-disable-line
     const splitLabel = this.doc.splitTextToSize(textArray, width);
     const height = splitLabel.length * 4;
     this.checkPageBreak(height + (this.border / 2));
@@ -221,13 +225,13 @@ export class PDF {
 
     if (context && context !== '') {
       this.doc.setFontSize(12);
-      this.doc.text(this.border, this.yBarOffset + 2, context.replace('’', '\''));
+      this.doc.text(this.border, this.yBarOffset + 2, this.fixQuote(context));
       this.yBarOffset = this.yBarOffset + contextHeight;
     }
 
     // draw the new chart
     this.doc.setFontSize(10);
-    const t = label.replace('’', '\'');
+    const t = this.fixQuote(label);
     const splitLabel = this.doc.splitTextToSize(t, this.xBarOffset);
     this.doc.text(this.border, this.yBarOffset + 5, splitLabel);
     this.doc.addImage(

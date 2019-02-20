@@ -12,7 +12,11 @@ const RES_500 = {
   payload: 'Internal Server Error',
 };
 
-const mail = new Mail.Mail('hrmove');
+const mailer = {
+  hrmove: new Mail.Mail('hrmove'),
+  skillsgarden: new Mail.Mail('skillsgarden'),
+  default: new Mail.Mail('hrmove'),
+};
 
 const getContexts = () => (
   new Promise((resolve) => {
@@ -76,9 +80,18 @@ async function sendMail(company, projectId, payload, idToken) {
   const feedbacker1 = feedbackers[0];
   if (!feedbacker1) return RES_500;
 
-  if (!mail.getCompany() === company) {
-    mail.setCompany(company);
+  let mail = null;
+  switch (company) {
+    case 'hrmove':
+      mail = mailer.hrmove;
+      break;
+    case 'skillsgarden':
+      mail = mailer.skillsgarden;
+      break;
+    default:
+      mail = mailer.dummy;
   }
+
   const transporter = mail.getTransporter();
 
   const okMails = [];
@@ -96,7 +109,8 @@ async function sendMail(company, projectId, payload, idToken) {
         okMails.push(feedbacker.emailAddress);
         return new Promise(resolve => resolve(info));
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e);
         errMails.push(feedbacker.emailAddress);
       });
   }))
