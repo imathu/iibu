@@ -13,7 +13,7 @@ export const Admin = () => (
   <div className="admin-content">
     <Grid>
       <Grid.Column width={4}>
-        <h1>admin menu</h1>
+        <h1>&nbsp;</h1>
         <Menu fluid vertical pointing>
           <Menu.Item
             name="Rollen"
