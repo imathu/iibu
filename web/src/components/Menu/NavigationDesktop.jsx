@@ -69,6 +69,7 @@ const NavigationDesktop = () => (
               secondary
             >
               <Container>
+                {console.log(auth)}
                 <Menu.Item
                   style={{ padding: '0px' }}
                   as={Link}
