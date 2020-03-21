@@ -29,20 +29,27 @@ const AdminMenu = () => (
       exact
     />
     <Menu.Item onClick={() => fbAuth.doSignOut()}>Logout</Menu.Item>
+    <Menu.Item onClick={() => {
+            console.log(fbAuth.getCurrentUser());
+            fbAuth.sendMailVerification();
+        }}
+    >Send Mailverifikation
+    </Menu.Item>
   </Menu.Menu>
 );
 
 const NonAdminMenu = ({ auth }) => (
   <Menu.Menu position="right">
+    <Menu.Item onClick={() => console.log(fbAuth.getCurrentUser())}>Test</Menu.Item>
     {auth
-      ? <Menu.Item onClick={() => fbAuth.doSignOut()}>Logout</Menu.Item>
-      : <Menu.Item
-        position="right"
-        name="login"
-        as={Link}
-        to={routes.SIGN_IN}
-      />
-    }
+            ? <Menu.Item onClick={() => fbAuth.doSignOut()}>Logout</Menu.Item>
+            : <Menu.Item
+              position="right"
+              name="login"
+              as={Link}
+              to={routes.SIGN_IN}
+            />
+        }
   </Menu.Menu>
 );
 NonAdminMenu.propTypes = {
@@ -56,7 +63,9 @@ const NavigationDesktop = () => (
   <Responsive minWidth={Responsive.onlyTablet.minWidth}>
     <AuthUserContext.Consumer>
       {auth => (
+
         <React.Fragment>
+          {console.log(auth)}
           <Segment
             basic
             inverted
@@ -76,15 +85,15 @@ const NavigationDesktop = () => (
                 ><Header as="h2" style={{ color: 'white' }}>realfeedback</Header>
                 </Menu.Item>
                 {auth && auth.admin
-                ? <AdminMenu />
-                : <NonAdminMenu auth={auth} />
-                }
+                                    ? <AdminMenu />
+                                    : <NonAdminMenu auth={auth} />
+                                }
               </Container>
             </Menu>
           </Segment>
           <Content />
         </React.Fragment>
-      )}
+            )}
     </AuthUserContext.Consumer>
   </Responsive>
 );
