@@ -58,7 +58,6 @@ const NavigationDesktop = () => (
       {auth => (
 
         <React.Fragment>
-          {console.log(auth)}
           <Segment
             basic
             inverted
