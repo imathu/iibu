@@ -40,7 +40,12 @@ const AdminMenu = () => (
 
 const NonAdminMenu = ({ auth }) => (
   <Menu.Menu position="right">
-    <Menu.Item onClick={() => console.log(fbAuth.getCurrentUser())}>Test</Menu.Item>
+      <Menu.Item onClick={() => {
+          console.log(fbAuth.getCurrentUser());
+          fbAuth.sendMailVerification();
+      }}
+      >Send Mailverifikation
+      </Menu.Item>
     {auth
             ? <Menu.Item onClick={() => fbAuth.doSignOut()}>Logout</Menu.Item>
             : <Menu.Item
