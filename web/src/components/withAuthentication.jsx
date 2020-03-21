@@ -15,6 +15,7 @@ const withAuthentication = (Component) => {
         if (authUser) {
           authUser.getIdTokenResult()
             .then((idTokenResult) => {
+              console.log(idTokenResult);
               this.setState(() => ({
                 auth: {
                   authUser,
