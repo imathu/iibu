@@ -33,7 +33,7 @@ export class PDF {
     this.actualPage += 1;
     this.setHeader();
     this.setFooter();
-  }
+  };
 
   fixQuote = str => (
     str.replace('’', '\'').replace('“', '"').replace('„', '"')
@@ -54,7 +54,7 @@ export class PDF {
       this.doc.text(t.pageNumber.toString(), this.width - this.border, this.yBarOffset + 2, 'right');
       this.yBarOffset = this.yBarOffset + 8;
     });
-  }
+  };
 
   addPageContent = (content) => {
     this.doc.setFontSize(14);
@@ -62,7 +62,7 @@ export class PDF {
     this.toc.push(t);
     this.doc.text(this.fixQuote(content), this.border, this.yBarOffset + 2);
     this.yBarOffset = this.yBarOffset + 10;
-  }
+  };
 
   // set PDF Header including date
   setHeader = () => {
@@ -77,7 +77,7 @@ export class PDF {
     this.doc.setDrawColor(8, 48, 107);
     this.doc.line(b, b + 2, this.width - b, b + 2);
     this.yBarOffset = this.border + 8;
-  }
+  };
 
   // set PDF Footer including text and page number
   setFooter = () => {
@@ -93,7 +93,7 @@ export class PDF {
     }
     this.doc.setDrawColor(8, 48, 107);
     this.doc.line(x, y - 4, this.width - x, y - 4);
-  }
+  };
 
   // check if we have to do a page break
   checkPageBreak = (barHeight) => {
@@ -103,7 +103,7 @@ export class PDF {
       return true;
     }
     return false;
-  }
+  };
 
   // add cover
   addCover = (coverImage, logo, logoRatio, color, client) => {
@@ -155,7 +155,7 @@ export class PDF {
     const y = 262 + ((40 / logoRatio) / 2);
     this.doc.text(this.fixQuote(partner), this.width - 25, y, 'right');
     this.doc.text(moment(new Date()).format('DD.MM.YYYY'), this.width - 25, y + 8, 'right');
-  }
+  };
 
   addDescription = (description) => {
     const t = `<div style="font-family: Helvetica">${description}</div>`;
@@ -166,12 +166,13 @@ export class PDF {
       width: this.width - (2 * this.border),
     };
     this.doc.fromHTML(t, margins.left, margins.top, { width: margins.width, bottom: 60 });
-  }
+  };
 
   // add a new Radar chart
   addRadarChart = (chart) => {
     const ratio = (chart.height / chart.width);
     const barHeight = ratio * this.width;
+    const halfBorder = 0.5 * this.border;
 
     this.checkPageBreak(barHeight);
 
@@ -180,15 +181,15 @@ export class PDF {
     this.doc.addImage(
       chart.toBase64Image(),
       'JPEG',
-      this.border,
+      -1,
       this.yBarOffset,
-      this.width - (2 * this.border),
-      barHeight - this.border,
+      (this.width - (halfBorder)),
+      barHeight,
       undefined,
       'FAST',
     );
     this.yBarOffset = this.yBarOffset + (barHeight - (this.border / 2));
-  }
+  };
 
   addLine = () => {
     // draw a line after every Chart
@@ -198,7 +199,7 @@ export class PDF {
       this.width - this.border,
       this.yBarOffset - (this.border / 4),
     );
-  }
+  };
 
   // add a remarks
   addRemarks = (remark) => {
@@ -210,7 +211,7 @@ export class PDF {
     this.doc.setFontSize(10);
     this.doc.text(this.border, this.yBarOffset, splitLabel);
     this.yBarOffset = this.yBarOffset + (height + (this.border / 2));
-  }
+  };
 
   // add a new Bar chart
   addBarChart = (context, chart, label = '') => {
@@ -245,7 +246,7 @@ export class PDF {
       'FAST',
     );
     this.yBarOffset = this.yBarOffset + (barHeight + this.border);
-  }
+  };
 
   // save PDF
   save = (filename = 'eeboo.pdf') => {
