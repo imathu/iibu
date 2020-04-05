@@ -138,7 +138,7 @@ class PageContent extends React.Component {
       const array = Object.keys(barsPerQuestion).map(key => (barsPerQuestion[key]));
       array.forEach((d, i) => {
         let firstChart = true;
-        if (i > 0) pdf.yaddPage();
+        if (i > 0) pdf.addPage();
         Object.keys(d.barsPerQuestion).forEach((qId) => {
           const chart = d.barsPerQuestion[qId];
           const { data } = this.props;
