@@ -34,10 +34,10 @@ const offset = d => (
 
 const options = {
   responsive: true,
+  maintainAspectRatio: false,
   animation: {
     duration: 0,
   },
-  maintainAspectRatio: false,
   legend: {
     display: false,
   },
@@ -76,6 +76,45 @@ const options = {
   },
 };
 
+
+const optionsPDF = {
+  responsive: true,
+  animation: {
+    ...options.animation,
+  },
+  legend: {
+    ...options.legend,
+  },
+  plugins: {
+    datalabels: {
+      ...options.plugins.datalabels,
+      font: {
+        ...options.plugins.datalabels.font,
+        size: 20,
+      },
+    },
+  },
+  elements: {
+    point: {
+      ...options.elements.point,
+    },
+  },
+  scales: {
+    yAxes: [{
+      ticks: {
+        ...options.scales.yAxes[0].ticks,
+        fontSize: 20,
+      },
+    }],
+    xAxes: [{
+      ticks: {
+        ...options.scales.xAxes[0].ticks,
+        fontSize: 20,
+      },
+    }],
+  },
+};
+
 class ClientContextBar extends React.Component {
   static propTypes = {
     onRef: PropTypes.func.isRequired,
@@ -87,7 +126,8 @@ class ClientContextBar extends React.Component {
     clientId: PropTypes.string.isRequired,
     contextId: PropTypes.string.isRequired,
     height: PropTypes.number.isRequired,
-  }
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -107,7 +147,7 @@ class ClientContextBar extends React.Component {
   setContext = () => (
     this.setState(() =>
       ({ context: getContextById(this.props.adminData.contexts, this.props.contextId) }))
-  )
+  );
 
   render() {
     const {
@@ -129,12 +169,24 @@ class ClientContextBar extends React.Component {
           </Grid.Column>
           <Grid.Column width={13}>
             <RC2
-              id="rc2"
-              ref={(ref) => { this.barPerContext = ref; }}
+              id="rcView"
               data={barData}
               type="bar"
               options={options}
               style={{ height }}
+            />
+          </Grid.Column>
+          <Grid.Column width={13}>
+            <RC2
+              id="rcPDF"
+              data={barData}
+              type="bar"
+              height={69}
+              options={optionsPDF}
+              ref={(ref) => {
+                this.barPerContext = ref;
+              }}
+              style={{ display: 'none' }}
             />
           </Grid.Column>
         </Grid>

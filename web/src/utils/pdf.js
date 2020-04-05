@@ -105,6 +105,10 @@ export class PDF {
     return false;
   };
 
+  // check if is the laste Element on this page, if we add one more.
+  checkLastBeforePageBreak =
+    barHeight => this.yBarOffset + (barHeight) > (this.height - this.border);
+
   // add cover
   addCover = (coverImage, logo, logoRatio, color, client) => {
     this.doc.setFontSize(20);
@@ -246,6 +250,7 @@ export class PDF {
       'FAST',
     );
     this.yBarOffset = this.yBarOffset + (barHeight + this.border);
+    return !this.checkLastBeforePageBreak(barHeight);
   };
 
   // save PDF
