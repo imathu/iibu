@@ -9,6 +9,25 @@ const CSVMap = {
   role: 4,
 };
 
+const questionCSVMap = {
+  context_de: 0,
+  contextDescription_de: 1,
+  he_de: 2,
+  heCount_de: 3,
+  she_de: 4,
+  sheCount_de: 5,
+  me_de: 6,
+  meCount_de: 7,
+  context_en: 8,
+  contextDescription_en: 9,
+  he_en: 10,
+  heCount_en: 11,
+  she_en: 12,
+  sheCount_en: 13,
+  me_en: 14,
+  meCount_en: 15,
+};
+
 const createClient = line => ({
   id: uuidv4(),
   firstname: (line[CSVMap.firstname]),
@@ -101,24 +120,24 @@ function feedbackerCSV2JJSON(feedbackerArray) {
 
 // parse a CSV string of questionaires to json
 // return an isArray
-function questionCSV2json(questionArray) {
+export function questionCSV2json(questionArray) {
   const questions = [];
   questionArray.forEach((line, index) => {
-    if (line[2] !== '') {
+    if (line[questionCSVMap.context_de] !== '') {
       const question = {
         id: `id-${index}`,
         scores: 6,
-        context: line[2],
+        context: line[questionCSVMap.context_de],
         content: {
           de: {
-            he: (line[5] === '') ? line[7] : line[5],
-            she: (line[7] === '') ? line[5] : line[7],
-            me: line[9],
+            he: (line[questionCSVMap.he_de] === '') ? line[questionCSVMap.she_de] : line[questionCSVMap.he_de],
+            she: (line[questionCSVMap.she_de] === '') ? line[questionCSVMap.he_de] : line[questionCSVMap.she_de],
+            me: line[questionCSVMap.me_de],
           },
           en: {
-            he: (line[16] === '') ? line[18] : line[16],
-            she: (line[18] === '') ? line[16] : line[18],
-            me: line[20],
+            he: (line[questionCSVMap.he_en] === '') ? line[questionCSVMap.she_en] : line[questionCSVMap.he_en],
+            she: (line[questionCSVMap.she_en] === '') ? line[questionCSVMap.he_en] : line[questionCSVMap.she_en],
+            me: line[questionCSVMap.me_en],
           },
         },
       };
@@ -127,6 +146,7 @@ function questionCSV2json(questionArray) {
   });
   return questions;
 }
+
 
 class Parser {
   // return an object with a client array and a feedbacker array
