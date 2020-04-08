@@ -39,21 +39,32 @@ class Questions extends React.Component {
       data: this.props.data,
       editedData: false,
       open: false,
+      contexts: [],
     };
   }
+
+  componentDidMount = () => {
+    db.onceGetContexts().then((snapshot) => {
+      this.setState({
+        contexts: (snapshot.val()) ? snapshot.val() : {},
+      });
+    });
+  };
+
   onQuestionsSave = () => {
     db.doCreateQuestions(this.props.match.params.projectId, this.state.data).then(() =>
       this.setState(() => ({ editedData: false })));
-  }
+  };
+
   onQuestionsDelete = () => {
     db.doRemoveQuestions(this.props.match.params.projectId).then(() =>
       this.setState(() => ({ data: {} })));
-  }
+  };
 
-  showModal = () => this.setState({ open: true })
+  showModal = () => this.setState({ open: true });
   closeModal = () => {
     this.setState({ open: false });
-  }
+  };
 
   importFromTemplate = questions => this.setState({ data: questions, editedData: true });
 
@@ -62,6 +73,14 @@ class Questions extends React.Component {
     const reader = new FileReader();
     reader.onload = (() => (
       (e) => {
+        Parser.parseContextes(e.target.result).then((contexts) => {
+          const newContextes = [];
+          // this.setState({ contexts });
+          console.log('contexts on index', contexts, this.state.contexts);
+          contexts.forEach((context) => {
+            console.log(context);
+          });
+        });
         Parser.parseQuestions(e.target.result).then((questions) => {
           if (questions) {
             this.setState(() => ({
@@ -73,7 +92,8 @@ class Questions extends React.Component {
       }
     ))(file);
     reader.readAsText(file, encoding);
-  }
+  };
+
   render() {
     const {
       data,
@@ -86,24 +106,24 @@ class Questions extends React.Component {
           ?
             <div>
               {this.state.editedData &&
-                <Button
-                  color="green"
-                  onClick={() => this.onQuestionsSave()}
-                >Fragen speichern
-                </Button>
-              }
+              <Button
+                color="green"
+                onClick={() => this.onQuestionsSave()}
+              >Fragen speichern
+              </Button>
+            }
               <Button.Group size="tiny" basic floated="right">
                 <Button basic onClick={() => this.onQuestionsDelete()}>Löschen</Button>
                 {!this.state.editedData &&
-                  <Button basic onClick={() => this.showModal()}>als Template speichern</Button>
-                }
+                <Button basic onClick={() => this.showModal()}>als Template speichern</Button>
+              }
               </Button.Group>
               <TemplateModal open={open} closeModal={this.closeModal} data={data} />
               <AdminDataContext.Consumer>
                 {adminData => (adminData && adminData.contexts
-                  ? <QuestionList data={data} adminData={adminData} />
-                  : null)
-                }
+                ? <QuestionList data={data} adminData={adminData} />
+                : null)
+              }
               </AdminDataContext.Consumer>
             </div>
           : <NoQuestions

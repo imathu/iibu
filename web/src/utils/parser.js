@@ -147,6 +147,24 @@ export function questionCSV2json(questionArray) {
   return questions;
 }
 
+export function questionCSV2Context(questionArray) {
+  const contexts = [];
+
+  questionArray.forEach((line) => {
+    const context = {
+      id: line[questionCSVMap.context_de],
+      de: line[questionCSVMap.contextDescription_de],
+      en: line[questionCSVMap.contextDescription_en],
+      fr: '',
+    };
+
+    if (!(contexts.filter(cont => cont.de === context.de).length > 0)) {
+      contexts.push(context);
+    }
+  });
+
+  return contexts;
+}
 
 class Parser {
   // return an object with a client array and a feedbacker array
@@ -181,6 +199,24 @@ class Parser {
             return reject(new Error('CSV File invalid'));
           }
           return resolve(questionCSV2json(questions));
+        });
+    }));
+  }
+
+  // return an array of contextes found in questions csv
+  static parseContextes(input) {
+    return new Promise(((resolve, reject) => {
+      const questions = [];
+      csv({ noheader: false, delimiter: 'auto' })
+        .fromString(input)
+        .on('csv', (csvRow) => {
+          questions.push(csvRow);
+        })
+        .on('done', (error) => {
+          if (error) {
+            return reject(new Error('CSV File invalid'));
+          }
+          return resolve(questionCSV2Context(questions));
         });
     }));
   }
