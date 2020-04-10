@@ -1,14 +1,6 @@
 import csv from 'csvtojson';
 import uuidv4 from 'uuid/v4';
 
-const CSVMap = {
-  firstname: 10,
-  name: 11,
-  gender: 12,
-  mail: 13,
-  role: 4,
-};
-
 const questionCSVMap = {
   context_de: 0,
   contextDescription_de: 1,
@@ -26,6 +18,33 @@ const questionCSVMap = {
   sheCount_en: 13,
   me_en: 14,
   meCount_en: 15,
+};
+
+const CSVMap = {
+  firstname: 10,
+  name: 11,
+  gender: 12,
+  mail: 13,
+  role: 4,
+};
+
+const clientCSVMap = {
+  status: 0,
+  index: 1,
+  number: 2,
+  feedbackId: 3,
+  status_einschaetzung: 4,
+  status_i: 5,
+  fb_nehmer_vorname: 6,
+  fb_nehmer_name: 7,
+  fb_nehmer_geschlecht: 8,
+  fb_nehmer_mail: 9,
+  fb_geber_vorname: 10,
+  fb_geber_name: 11,
+  fb_geber_geschlecht: 12,
+  fb_geber_mail: 13,
+  benutzername: 14,
+  passwort: 15,
 };
 
 const createClient = line => ({
@@ -94,7 +113,7 @@ const feedbackersToObject = (feedbackers) => {
 
 // parse the list of clients and feedbackers to JSON
 // return an object containing an array of clients and an array of feedbackers
-function feedbackerCSV2JJSON(feedbackerArray) {
+export function feedbackerCSV2JJSON(feedbackerArray) {
   let clients = {};
   let clientId = -1;
   let feedbackers = [];

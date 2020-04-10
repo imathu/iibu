@@ -45,9 +45,19 @@ class Questions extends React.Component {
 
   componentDidMount = () => {
     db.onceGetContexts().then((snapshot) => {
-      this.setState({
-        contexts: (snapshot.val()) ? snapshot.val() : {},
-      });
+      if (snapshot.val()) {
+        const contextArray = [];
+        const contextsObject = snapshot.val();
+        Object.keys(contextsObject).forEach((key) => {
+          contextArray.push({
+            id: key,
+            de: contextsObject[key].de,
+            en: contextsObject[key].en,
+            fr: contextsObject[key].fr,
+          });
+        });
+        this.setState({ contexts: contextArray });
+      }
     });
   };
 
@@ -75,10 +85,11 @@ class Questions extends React.Component {
       (e) => {
         Parser.parseContextes(e.target.result).then((contexts) => {
           const newContextes = [];
-          // this.setState({ contexts });
-          console.log('contexts on index', contexts, this.state.contexts);
           contexts.forEach((context) => {
-            console.log(context);
+            if (this.state.contexts.filter(existingContext => existingContext.id === context.id
+              || existingContext.de === context.de).length === 0) {
+              newContextes.push(context);
+            }
           });
         });
         Parser.parseQuestions(e.target.result).then((questions) => {
