@@ -40,6 +40,7 @@ class Questions extends React.Component {
       editedData: false,
       open: false,
       contexts: [],
+      newContexts: [],
     };
   }
 
@@ -62,6 +63,11 @@ class Questions extends React.Component {
   };
 
   onQuestionsSave = () => {
+    if (this.state.newContexts) {
+      this.state.newContexts.forEach((context) => {
+        db.doCreateContext(context).catch(() => console.log('Fehler beim Speichern vom Context', context));
+      });
+    }
     db.doCreateQuestions(this.props.match.params.projectId, this.state.data).then(() =>
       this.setState(() => ({ editedData: false })));
   };
@@ -83,21 +89,32 @@ class Questions extends React.Component {
     const reader = new FileReader();
     reader.onload = (() => (
       (e) => {
-        Parser.parseContextes(e.target.result).then((contexts) => {
-          const newContextes = [];
-          contexts.forEach((context) => {
-            if (this.state.contexts.filter(existingContext => existingContext.id === context.id
-              || existingContext.de === context.de).length === 0) {
-              newContextes.push(context);
-            }
-          });
-        });
-        Parser.parseQuestions(e.target.result).then((questions) => {
-          if (questions) {
-            this.setState(() => ({
-              data: parseQuestionsToState(questions),
-              editedData: true,
-            }));
+        Parser.checkQuestionCSV(e.target.result).then((found) => {
+          if (!found) {
+            alert('Bitte prüfen Sie, dass Sie die richtige Vorlage verwenden');
+          } else {
+            Parser.parseContextes(e.target.result).then((contexts) => {
+              const newContexts = [];
+              contexts.forEach((context) => {
+                if (this.state.contexts.filter(existingContext => existingContext.id === context.id
+                  || existingContext.de === context.de).length === 0) {
+                  if (context.id === '') {
+                    newContexts.push({ ...context, id: context.de });
+                  } else {
+                    newContexts.push(context);
+                  }
+                }
+              });
+              this.setState(() => ({ newContexts }));
+            });
+            Parser.parseQuestions(e.target.result, this.state.contexts).then((questions) => {
+              if (questions) {
+                this.setState(() => ({
+                  data: parseQuestionsToState(questions),
+                  editedData: true,
+                }));
+              }
+            });
           }
         });
       }
@@ -109,6 +126,7 @@ class Questions extends React.Component {
     const {
       data,
       open,
+      newContexts,
     } = this.state;
     return (
       <React.Fragment>
@@ -132,7 +150,7 @@ class Questions extends React.Component {
               <TemplateModal open={open} closeModal={this.closeModal} data={data} />
               <AdminDataContext.Consumer>
                 {adminData => (adminData && adminData.contexts
-                ? <QuestionList data={data} adminData={adminData} />
+                ? <QuestionList data={data} adminData={adminData} newContexts={newContexts} />
                 : null)
               }
               </AdminDataContext.Consumer>

@@ -28,25 +28,6 @@ const CSVMap = {
   role: 4,
 };
 
-const clientCSVMap = {
-  status: 0,
-  index: 1,
-  number: 2,
-  feedbackId: 3,
-  status_einschaetzung: 4,
-  status_i: 5,
-  fb_nehmer_vorname: 6,
-  fb_nehmer_name: 7,
-  fb_nehmer_geschlecht: 8,
-  fb_nehmer_mail: 9,
-  fb_geber_vorname: 10,
-  fb_geber_name: 11,
-  fb_geber_geschlecht: 12,
-  fb_geber_mail: 13,
-  benutzername: 14,
-  passwort: 15,
-};
-
 const createClient = line => ({
   id: uuidv4(),
   firstname: (line[CSVMap.firstname]),
@@ -139,14 +120,38 @@ export function feedbackerCSV2JJSON(feedbackerArray) {
 
 // parse a CSV string of questionaires to json
 // return an isArray
-export function questionCSV2json(questionArray) {
+export function questionCSV2json(questionArray, contexts) {
   const questions = [];
   questionArray.forEach((line, index) => {
-    if (line[questionCSVMap.context_de] !== '') {
+    let contextFound;
+    if (line[questionCSVMap.context_de] === '') {
+      const filterContext =
+        contexts.filter(existingContext =>
+          existingContext.de === line[questionCSVMap.contextDescription_de]);
+      if (filterContext.length > 0) {
+        [contextFound] = filterContext;
+      }
+    }
+
+    if (line[questionCSVMap.context_de] !== ''
+      || line[questionCSVMap.me_de] !== ''
+      || line[questionCSVMap.me_en] !== ''
+      || line[questionCSVMap.she_de] !== ''
+      || line[questionCSVMap.she_en] !== ''
+      || line[questionCSVMap.he_de] !== ''
+      || line[questionCSVMap.he_en] !== '') {
+      let contextForQuestion;
+      if (line[questionCSVMap.context_de] !== '') {
+        contextForQuestion = line[questionCSVMap.context_de];
+      } else {
+        contextForQuestion = (contextFound && (contextFound.id)) ?
+          (contextFound.id) : line[questionCSVMap.contextDescription_de];
+      }
+
       const question = {
         id: `id-${index}`,
         scores: 6,
-        context: line[questionCSVMap.context_de],
+        context: contextForQuestion,
         content: {
           de: {
             he: (line[questionCSVMap.he_de] === '') ? line[questionCSVMap.she_de] : line[questionCSVMap.he_de],
@@ -170,15 +175,17 @@ export function questionCSV2Context(questionArray) {
   const contexts = [];
 
   questionArray.forEach((line) => {
-    const context = {
-      id: line[questionCSVMap.context_de],
-      de: line[questionCSVMap.contextDescription_de],
-      en: line[questionCSVMap.contextDescription_en],
-      fr: '',
-    };
+    if (line[questionCSVMap.context_de] !== '' || line[questionCSVMap.contextDescription_de] !== '' || line[questionCSVMap.contextDescription_en]) {
+      const context = {
+        id: line[questionCSVMap.context_de],
+        de: line[questionCSVMap.contextDescription_de],
+        en: line[questionCSVMap.contextDescription_en],
+        fr: '',
+      };
 
-    if (!(contexts.filter(cont => cont.de === context.de).length > 0)) {
-      contexts.push(context);
+      if (!(contexts.filter(cont => cont.de === context.de).length > 0)) {
+        contexts.push(context);
+      }
     }
   });
 
@@ -205,7 +212,7 @@ class Parser {
   }
 
   // return an array of question objects
-  static parseQuestions(input) {
+  static parseQuestions(input, contexts) {
     return new Promise(((resolve, reject) => {
       const questions = [];
       csv({ noheader: false, delimiter: 'auto' })
@@ -217,7 +224,7 @@ class Parser {
           if (error) {
             return reject(new Error('CSV File invalid'));
           }
-          return resolve(questionCSV2json(questions));
+          return resolve(questionCSV2json(questions, contexts));
         });
     }));
   }
@@ -236,6 +243,27 @@ class Parser {
             return reject(new Error('CSV File invalid'));
           }
           return resolve(questionCSV2Context(questions));
+        });
+    }));
+  }
+
+  static checkQuestionCSV(input) {
+    return new Promise(((resolve, reject) => {
+      const questions = [];
+      csv({ noheader: false, delimiter: 'auto' })
+        .fromString(input)
+        .on('csv', (csvRow) => {
+          questions.push(csvRow);
+        })
+        .on('done', (error) => {
+          if (error) {
+            return reject(new Error('CSV File invalid'));
+          }
+          let valueToReturn = false;
+          if (questions[0].length === 16) {
+            valueToReturn = true;
+          }
+          return resolve(valueToReturn);
         });
     }));
   }
