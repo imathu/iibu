@@ -20,30 +20,32 @@ const questionCSVMap = {
   meCount_en: 15,
 };
 
-const CSVMap = {
-  firstname: 10,
-  name: 11,
-  gender: 12,
-  mail: 13,
-  role: 4,
+const clientCSVMap = {
+  role: 0,
+  fb_nehmer_firstname: 1,
+  fb_nehmer_name: 2,
+  firstname: 3,
+  name: 4,
+  gender: 5,
+  mail: 6,
 };
 
 const createClient = line => ({
   id: uuidv4(),
-  firstname: (line[CSVMap.firstname]),
-  name: (line[CSVMap.name]),
-  gender: (line[CSVMap.gender]),
-  email: (line[CSVMap.mail]),
+  firstname: (line[clientCSVMap.firstname]),
+  name: (line[clientCSVMap.name]),
+  gender: (line[clientCSVMap.gender]),
+  email: (line[clientCSVMap.mail]),
   role: '',
 });
 
 const createFeedbacker = (line, role) => ({
   id: uuidv4(),
-  firstname: (line[CSVMap.firstname]),
-  name: (line[CSVMap.name]),
-  gender: ((line[CSVMap.gender])).toLowerCase(),
-  email: (line[CSVMap.mail]),
-  role: (!role) ? ((line[CSVMap.role])).toLowerCase() : role.toLowerCase(),
+  firstname: (line[clientCSVMap.firstname]),
+  name: (line[clientCSVMap.name]),
+  gender: ((line[clientCSVMap.gender])).toLowerCase(),
+  email: (line[clientCSVMap.mail]),
+  role: (!role) ? ((line[clientCSVMap.role])).toLowerCase() : role.toLowerCase(),
 });
 
 const addFeedbacker = (feedbackerArray, feedbacker, clientId) => {
@@ -99,8 +101,8 @@ export function feedbackerCSV2JJSON(feedbackerArray) {
   let clientId = -1;
   let feedbackers = [];
   feedbackerArray.forEach((line) => {
-    if (line[10] !== '') {
-      if ((line[4]).toLowerCase() === 'selbsteinschätzung') {
+    if (line[clientCSVMap.firstname] !== '') {
+      if ((line[clientCSVMap.role]).toLowerCase() === 'selbsteinschätzung') {
         // add a new client
         const client = createClient(line);
         clients = {
@@ -247,7 +249,7 @@ class Parser {
     }));
   }
 
-  static checkQuestionCSV(input) {
+  static checkCSVColumnCount(input, count) {
     return new Promise(((resolve, reject) => {
       const questions = [];
       csv({ noheader: false, delimiter: 'auto' })
@@ -260,7 +262,7 @@ class Parser {
             return reject(new Error('CSV File invalid'));
           }
           let valueToReturn = false;
-          if (questions[0].length === 16) {
+          if (questions[0].length === count) {
             valueToReturn = true;
           }
           return resolve(valueToReturn);

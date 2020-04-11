@@ -34,25 +34,31 @@ class Clients extends React.Component {
       this.props.match.params.projectId,
       this.state.feedbackers,
     ))).then(() => this.setState(() => ({ editedData: false })));
-  }
+  };
   handleFileUpload = (data, encoding) => {
     const file = data.target.files[0];
     const reader = new FileReader();
     reader.onload = (() => (
       (e) => {
-        Parser.parseClients(e.target.result).then((d) => {
-          if (d) {
-            this.setState(() => ({
-              feedbackers: d.feedbackers,
-              clients: d.clients,
-              editedData: true,
-            }));
+        Parser.checkCSVColumnCount(e.target.result, 7).then((found) => {
+          if (!found) {
+            alert('Bitte prüfen Sie, dass Sie die richtige Vorlage verwenden');
+          } else {
+            Parser.parseClients(e.target.result).then((d) => {
+              if (d) {
+                this.setState(() => ({
+                  feedbackers: d.feedbackers,
+                  clients: d.clients,
+                  editedData: true,
+                }));
+              }
+            });
           }
         });
       }
     ))(file);
     reader.readAsText(file, encoding);
-  }
+  };
   render() {
     const { editedData, clients, feedbackers } = this.state;
     return (

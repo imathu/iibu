@@ -89,7 +89,7 @@ class Questions extends React.Component {
     const reader = new FileReader();
     reader.onload = (() => (
       (e) => {
-        Parser.checkQuestionCSV(e.target.result).then((found) => {
+        Parser.checkCSVColumnCount(e.target.result, 16).then((found) => {
           if (!found) {
             alert('Bitte prüfen Sie, dass Sie die richtige Vorlage verwenden');
           } else {

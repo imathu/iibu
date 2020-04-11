@@ -3,12 +3,15 @@ const ParserMock = require('./parser.mock');
 
 
 it('question csv test', () => {
+  // muss noch gefixt werden
   expect(Parser.questionCSV2json(ParserMock.questionCSVMockNew)).toEqual(ParserMock.questionResult);
 });
 
 it('client csv test', () => {
-  const returnValue = Parser.feedbackerCSV2JJSON(ParserMock.clientCSVMock);
-  const [clients, feedbackers] = returnValue;
+  const returnValue = Parser.feedbackerCSV2JJSON(ParserMock.clientCSVMockNew);
+
+  const clients = returnValue.clients;
+  const feedbackers = returnValue.feedbackers;
 
   const clientsArray = [];
   const feedbackersArray = [];
