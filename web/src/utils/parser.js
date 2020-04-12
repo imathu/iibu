@@ -135,13 +135,7 @@ export function questionCSV2json(questionArray, contexts) {
       }
     }
 
-    if (line[questionCSVMap.context_de] !== ''
-      || line[questionCSVMap.me_de] !== ''
-      || line[questionCSVMap.me_en] !== ''
-      || line[questionCSVMap.she_de] !== ''
-      || line[questionCSVMap.she_en] !== ''
-      || line[questionCSVMap.he_de] !== ''
-      || line[questionCSVMap.he_en] !== '') {
+    if (line[questionCSVMap.context_de] !== '' || line[questionCSVMap.contextDescription_de] !== '') {
       let contextForQuestion;
       if (line[questionCSVMap.context_de] !== '') {
         contextForQuestion = line[questionCSVMap.context_de];
