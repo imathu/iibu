@@ -37,7 +37,7 @@ class PageContent extends React.Component {
       logo: null,
       logoRatio: 3,
       color: [1, 1, 1],
-      descriptions: ['test', 'test2'],
+      descriptions: [''],
       hasDescription: false,
     };
     this.ref = null;
