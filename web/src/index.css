@@ -9,6 +9,7 @@ body {
 }
 
 .ql-editor {
+    overflow: hidden;
     width: 570px;
     height: 807px;
 }
