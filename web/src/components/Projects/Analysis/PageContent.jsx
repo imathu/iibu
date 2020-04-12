@@ -72,12 +72,12 @@ class PageContent extends React.Component {
       this.setState({ descriptions: [''] });
     }
     this.setState((state) => {
-      const newEls = state.descriptions;
-      newEls[index] = description;
-      localStorage.setItem('descriptions', JSON.stringify(newEls));
+      const newDescriptions = state.descriptions;
+      newDescriptions[index] = description;
+      localStorage.setItem('descriptions', JSON.stringify(newDescriptions));
       return {
         ...state,
-        descriptions: newEls,
+        descriptions: newDescriptions,
       };
     });
   };
@@ -179,7 +179,6 @@ class PageContent extends React.Component {
     pdf.addToc();
     pdf.save(`${client}.pdf`);
   };
-
   render() {
     const {
       selectedClient,
@@ -265,7 +264,6 @@ class PageContent extends React.Component {
     );
   }
 }
-
 PageContent.propTypes = {
   data: PropTypes.shape({
     clients: PropTypes.shape({}),
