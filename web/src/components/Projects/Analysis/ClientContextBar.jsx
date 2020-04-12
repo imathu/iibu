@@ -181,7 +181,7 @@ class ClientContextBar extends React.Component {
               id="rcPDF"
               data={barData}
               type="bar"
-              height={69}
+              height={(69 / 200) * height}
               options={optionsPDF}
               ref={(ref) => {
                 this.barPerContext = ref;
