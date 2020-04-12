@@ -153,7 +153,7 @@ class PageContent extends React.Component {
             pdf.addPageContent(d.state.context);
           }
           firstChart = false;
-          pdf.addBarChart(
+          const notLastOnThisPage = pdf.addBarChart(
             '',
             chart.getChart(),
             getQuestionContent(data.questions[qId], person, client),
@@ -163,7 +163,9 @@ class PageContent extends React.Component {
           if (remarks && remarks.length > 0) {
             pdf.addRemarks(remarks);
           }
-          pdf.addLine();
+          if (notLastOnThisPage) {
+            pdf.addLine();
+          }
         });
       });
     }
@@ -172,8 +174,9 @@ class PageContent extends React.Component {
       isFirstpage = false;
       const barsArray = Object.keys(lines).map(key => (lines[key]));
       barsArray.forEach((chart) => {
-        pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context);
-        pdf.addLine();
+        if (pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context)) {
+          pdf.addLine();
+        }
       });
     }
     pdf.addToc();

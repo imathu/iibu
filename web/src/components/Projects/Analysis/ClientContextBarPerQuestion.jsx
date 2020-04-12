@@ -218,7 +218,7 @@ class ClientContextBarPerQuestion extends React.Component {
                         data={barData}
                         type="horizontalBar"
                         options={optionsPDF}
-                        height={80}
+                        height={(69 / 200) * height}
                         ref={(ref) => {
                           this.barsPerQuestion[qId] = ref;
                         }}
