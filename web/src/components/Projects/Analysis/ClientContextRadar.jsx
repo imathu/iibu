@@ -4,15 +4,6 @@ import RC2 from 'react-chartjs2';
 
 import { Analysis } from 'utils/analysis';
 
-import datalabels from 'chartjs-plugin-datalabels'; // eslint-disable-line
-
-const f = context => (
-  context.dataset.borderColor
-);
-
-const position = d => (
-  (d.dataset.label === 'foreign') ? 'end' : 'start'
-);
 
 class ClientContextRadar extends React.Component {
   static propTypes = {
@@ -20,7 +11,8 @@ class ClientContextRadar extends React.Component {
     adminData: PropTypes.shape({}).isRequired,
     clientId: PropTypes.string.isRequired,
     onRef: PropTypes.func.isRequired,
-  }
+  };
+
   componentDidMount() {
     this.props.onRef(this);
   }
@@ -28,13 +20,13 @@ class ClientContextRadar extends React.Component {
   componentWillUnmount() {
     this.props.onRef(undefined);
   }
+
   render() {
     const { clientId, data, adminData } = this.props;
     const a = new Analysis(data, adminData);
     const radarData = a.getRadarData(clientId);
     const options = {
       responsive: true,
-      maintainAspectRatio: false,
       animation: {
         duration: 0,
       },
@@ -51,15 +43,6 @@ class ClientContextRadar extends React.Component {
       plugins: {
         datalabels: {
           display: false,
-          backgroundColor: f,
-          borderRadius: 4,
-          color: 'white',
-          scale: 'radial',
-          anchor: 'end',
-          align: position,
-          font: {
-            weight: 'bold',
-          },
         },
       },
       elements: {
@@ -68,15 +51,54 @@ class ClientContextRadar extends React.Component {
         },
       },
     };
+    const optionsPDF = {
+      ...options,
+      animation: { ...options.animation },
+      scale: {
+        pointLabels: {
+          ...options.scale.pointLabels,
+          fontSize: 20,
+        },
+        ticks: {
+          ...options.scale.ticks,
+          fontSize: 20,
+        },
+      },
+      plugins: {
+        datalabels: {
+          ...options.plugins.datalabels,
+        },
+      },
+      elements: {
+        point: {
+          ...options.elements.point,
+        },
+      },
+      legend: {
+        display: true,
+        labels: {
+          fontSize: 20,
+        },
+      },
+    };
     return (
       <div>
         <RC2
-          id="rc2"
-          ref={(ref) => { this.radar = ref; }}
+          id="rcPDF"
+          ref={(ref) => {
+            this.radar = ref;
+          }}
+          data={radarData}
+          type="radar"
+          options={optionsPDF}
+          style={{ height: '400px', width: '800px', display: 'none' }}
+        />
+        <RC2
+          id="rcView"
           data={radarData}
           type="radar"
           options={options}
-          style={{ height: '500px' }}
+          style={{ height: '400px' }}
         />
       </div>
     );
