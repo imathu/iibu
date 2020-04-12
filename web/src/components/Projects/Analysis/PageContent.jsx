@@ -37,16 +37,11 @@ class PageContent extends React.Component {
       logo: null,
       logoRatio: 3,
       color: [1, 1, 1],
-      description: '',
+      descriptions: ['test', 'test2'],
       hasDescription: false,
     };
     this.ref = null;
   }
-
-  componentDidMount = () => {
-    const description = localStorage.getItem('description');
-    this.setState({ description });
-  };
   setHeight = (event, data) => {
     this.setState({ height: parseInt(data.value) }); // eslint-disable-line radix
   };
@@ -71,9 +66,20 @@ class PageContent extends React.Component {
   enableDescription = () => (
     this.setState(() => ({ hasDescription: !this.state.hasDescription }))
   );
-  updateDescription = (description) => {
-    localStorage.setItem('description', description);
-    this.setState(() => ({ description }));
+
+  updateDescriptions = (description, index, deleteAll = false) => {
+    if (deleteAll) {
+      this.setState({ descriptions: [''] });
+    }
+    this.setState((state) => {
+      const newEls = state.descriptions;
+      newEls[index] = description;
+      localStorage.setItem('descriptions', JSON.stringify(newEls));
+      return {
+        ...state,
+        descriptions: newEls,
+      };
+    });
   };
   toggleDiagramm = (dia) => {
     this.setState(() => ({ [dia]: !this.state[dia] }));
@@ -111,7 +117,7 @@ class PageContent extends React.Component {
       isFirstpage = false;
       const title = (getLanguage() === 'en') ? 'Introduction' : 'Einleitung';
       pdf.addPageContent(title);
-      pdf.addDescription(this.state.description);
+      pdf.addDescription(this.state.descriptions);
     }
     if (this.state.radar) {
       if (!isFirstpage) pdf.addPage();
@@ -184,7 +190,7 @@ class PageContent extends React.Component {
       advanced,
       height,
       cover,
-      description,
+      descriptions,
       hasDescription,
     } = this.state;
     const { data } = this.props;
@@ -235,8 +241,8 @@ class PageContent extends React.Component {
               setCover={this.setCover}
               hasDescription={hasDescription}
               enableDescription={this.enableDescription}
-              updateDescription={this.updateDescription}
-              description={description}
+              updateDescription={this.updateDescriptions}
+              descriptions={descriptions}
             />
           )}
           {!advanced &&

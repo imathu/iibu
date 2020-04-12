@@ -161,15 +161,20 @@ export class PDF {
     this.doc.text(moment(new Date()).format('DD.MM.YYYY'), this.width - 25, y + 8, 'right');
   };
 
-  addDescription = (description) => {
-    const t = `<div style="font-family: Helvetica">${description}</div>`;
-    const margins = {
-      top: this.border + 16,
-      bottom: 60,
-      left: this.border,
-      width: this.width - (2 * this.border),
-    };
-    this.doc.fromHTML(t, margins.left, margins.top, { width: margins.width, bottom: 60 });
+  addDescription = (descriptions) => {
+    descriptions.forEach((description, index) => {
+      const t = `<div style="font-family: Helvetica">${description}</div>`;
+      const margins = {
+        top: index === 0 ? this.border + 16 : this.border + 2,
+        bottom: 60,
+        left: this.border,
+        width: this.width - (2 * this.border),
+      };
+      this.doc.fromHTML(t, margins.left, margins.top, { width: margins.width, bottom: 60 });
+      if (index < descriptions.length - 1) {
+        this.addPage();
+      }
+    });
   };
 
   // add a new Radar chart
