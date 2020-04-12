@@ -1,30 +1,51 @@
 import csv from 'csvtojson';
 import uuidv4 from 'uuid/v4';
 
-const CSVMap = {
-  firstname: 10,
-  name: 11,
-  gender: 12,
-  mail: 13,
-  role: 4,
+const questionCSVMap = {
+  context_de: 0,
+  contextDescription_de: 1,
+  he_de: 2,
+  heCount_de: 3,
+  she_de: 4,
+  sheCount_de: 5,
+  me_de: 6,
+  meCount_de: 7,
+  context_en: 8,
+  contextDescription_en: 9,
+  he_en: 10,
+  heCount_en: 11,
+  she_en: 12,
+  sheCount_en: 13,
+  me_en: 14,
+  meCount_en: 15,
+};
+
+const clientCSVMap = {
+  role: 0,
+  fb_nehmer_firstname: 1,
+  fb_nehmer_name: 2,
+  firstname: 3,
+  name: 4,
+  gender: 5,
+  mail: 6,
 };
 
 const createClient = line => ({
   id: uuidv4(),
-  firstname: (line[CSVMap.firstname]),
-  name: (line[CSVMap.name]),
-  gender: (line[CSVMap.gender]),
-  email: (line[CSVMap.mail]),
+  firstname: (line[clientCSVMap.firstname]),
+  name: (line[clientCSVMap.name]),
+  gender: (line[clientCSVMap.gender]),
+  email: (line[clientCSVMap.mail]),
   role: '',
 });
 
 const createFeedbacker = (line, role) => ({
   id: uuidv4(),
-  firstname: (line[CSVMap.firstname]),
-  name: (line[CSVMap.name]),
-  gender: ((line[CSVMap.gender])).toLowerCase(),
-  email: (line[CSVMap.mail]),
-  role: (!role) ? ((line[CSVMap.role])).toLowerCase() : role.toLowerCase(),
+  firstname: (line[clientCSVMap.firstname]),
+  name: (line[clientCSVMap.name]),
+  gender: ((line[clientCSVMap.gender])).toLowerCase(),
+  email: (line[clientCSVMap.mail]),
+  role: (!role) ? ((line[clientCSVMap.role])).toLowerCase() : role.toLowerCase(),
 });
 
 const addFeedbacker = (feedbackerArray, feedbacker, clientId) => {
@@ -75,13 +96,13 @@ const feedbackersToObject = (feedbackers) => {
 
 // parse the list of clients and feedbackers to JSON
 // return an object containing an array of clients and an array of feedbackers
-function feedbackerCSV2JJSON(feedbackerArray) {
+export function feedbackerCSV2JJSON(feedbackerArray) {
   let clients = {};
   let clientId = -1;
   let feedbackers = [];
   feedbackerArray.forEach((line) => {
-    if (line[10] !== '') {
-      if ((line[4]).toLowerCase() === 'selbsteinschätzung') {
+    if (line[clientCSVMap.firstname] !== '') {
+      if ((line[clientCSVMap.role]).toLowerCase() === 'selbsteinschätzung') {
         // add a new client
         const client = createClient(line);
         clients = {
@@ -101,24 +122,48 @@ function feedbackerCSV2JJSON(feedbackerArray) {
 
 // parse a CSV string of questionaires to json
 // return an isArray
-function questionCSV2json(questionArray) {
+export function questionCSV2json(questionArray, contexts) {
   const questions = [];
   questionArray.forEach((line, index) => {
-    if (line[2] !== '') {
+    let contextFound;
+    if (line[questionCSVMap.context_de] === '') {
+      const filterContext =
+        contexts.filter(existingContext =>
+          existingContext.de === line[questionCSVMap.contextDescription_de]);
+      if (filterContext.length > 0) {
+        [contextFound] = filterContext;
+      }
+    }
+
+    if (line[questionCSVMap.context_de] !== ''
+      || line[questionCSVMap.me_de] !== ''
+      || line[questionCSVMap.me_en] !== ''
+      || line[questionCSVMap.she_de] !== ''
+      || line[questionCSVMap.she_en] !== ''
+      || line[questionCSVMap.he_de] !== ''
+      || line[questionCSVMap.he_en] !== '') {
+      let contextForQuestion;
+      if (line[questionCSVMap.context_de] !== '') {
+        contextForQuestion = line[questionCSVMap.context_de];
+      } else {
+        contextForQuestion = (contextFound && (contextFound.id)) ?
+          (contextFound.id) : line[questionCSVMap.contextDescription_de];
+      }
+
       const question = {
         id: `id-${index}`,
         scores: 6,
-        context: line[2],
+        context: contextForQuestion,
         content: {
           de: {
-            he: (line[5] === '') ? line[7] : line[5],
-            she: (line[7] === '') ? line[5] : line[7],
-            me: line[9],
+            he: (line[questionCSVMap.he_de] === '') ? line[questionCSVMap.she_de] : line[questionCSVMap.he_de],
+            she: (line[questionCSVMap.she_de] === '') ? line[questionCSVMap.he_de] : line[questionCSVMap.she_de],
+            me: line[questionCSVMap.me_de],
           },
           en: {
-            he: (line[16] === '') ? line[18] : line[16],
-            she: (line[18] === '') ? line[16] : line[18],
-            me: line[20],
+            he: (line[questionCSVMap.he_en] === '') ? line[questionCSVMap.she_en] : line[questionCSVMap.he_en],
+            she: (line[questionCSVMap.she_en] === '') ? line[questionCSVMap.he_en] : line[questionCSVMap.she_en],
+            me: line[questionCSVMap.me_en],
           },
         },
       };
@@ -126,6 +171,27 @@ function questionCSV2json(questionArray) {
     }
   });
   return questions;
+}
+
+export function questionCSV2Context(questionArray) {
+  const contexts = [];
+
+  questionArray.forEach((line) => {
+    if (line[questionCSVMap.context_de] !== '' || line[questionCSVMap.contextDescription_de] !== '' || line[questionCSVMap.contextDescription_en]) {
+      const newContext = {
+        id: line[questionCSVMap.context_de],
+        de: line[questionCSVMap.contextDescription_de],
+        en: line[questionCSVMap.contextDescription_en],
+        fr: '',
+      };
+
+      if (!(contexts.filter(foundContext => foundContext.de === newContext.de).length > 0)) {
+        contexts.push(newContext);
+      }
+    }
+  });
+
+  return contexts;
 }
 
 class Parser {
@@ -148,7 +214,7 @@ class Parser {
   }
 
   // return an array of question objects
-  static parseQuestions(input) {
+  static parseQuestions(input, contexts) {
     return new Promise(((resolve, reject) => {
       const questions = [];
       csv({ noheader: false, delimiter: 'auto' })
@@ -160,7 +226,46 @@ class Parser {
           if (error) {
             return reject(new Error('CSV File invalid'));
           }
-          return resolve(questionCSV2json(questions));
+          return resolve(questionCSV2json(questions, contexts));
+        });
+    }));
+  }
+
+  // return an array of contextes found in questions csv
+  static parseContextes(input) {
+    return new Promise(((resolve, reject) => {
+      const questions = [];
+      csv({ noheader: false, delimiter: 'auto' })
+        .fromString(input)
+        .on('csv', (csvRow) => {
+          questions.push(csvRow);
+        })
+        .on('done', (error) => {
+          if (error) {
+            return reject(new Error('CSV File invalid'));
+          }
+          return resolve(questionCSV2Context(questions));
+        });
+    }));
+  }
+
+  static checkCSVColumnCount(input, count) {
+    return new Promise(((resolve, reject) => {
+      const questions = [];
+      csv({ noheader: false, delimiter: 'auto' })
+        .fromString(input)
+        .on('csv', (csvRow) => {
+          questions.push(csvRow);
+        })
+        .on('done', (error) => {
+          if (error) {
+            return reject(new Error('CSV File invalid'));
+          }
+          let valueToReturn = false;
+          if (questions[0] && questions[0].length === count) {
+            valueToReturn = true;
+          }
+          return resolve(valueToReturn);
         });
     }));
   }

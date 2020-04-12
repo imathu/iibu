@@ -62,6 +62,14 @@ export const onceGetContexts = () => (
   db.ref('contexts').once('value')
 );
 
+export const doCreateContext = context => (
+  db.ref('contexts').child(context.id).set({
+    de: context.de,
+    en: context.en,
+    fr: context.fr,
+  })
+);
+
 // feedbacker data
 export const onceGetFeedbackers = projectId => (
   db.ref(`projects/${projectId}/feedbackers`).once('value')
