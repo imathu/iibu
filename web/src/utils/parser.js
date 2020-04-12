@@ -178,15 +178,15 @@ export function questionCSV2Context(questionArray) {
 
   questionArray.forEach((line) => {
     if (line[questionCSVMap.context_de] !== '' || line[questionCSVMap.contextDescription_de] !== '' || line[questionCSVMap.contextDescription_en]) {
-      const context = {
+      const newContext = {
         id: line[questionCSVMap.context_de],
         de: line[questionCSVMap.contextDescription_de],
         en: line[questionCSVMap.contextDescription_en],
         fr: '',
       };
 
-      if (!(contexts.filter(cont => cont.de === context.de).length > 0)) {
-        contexts.push(context);
+      if (!(contexts.filter(foundContext => foundContext.de === newContext.de).length > 0)) {
+        contexts.push(newContext);
       }
     }
   });
@@ -262,7 +262,7 @@ class Parser {
             return reject(new Error('CSV File invalid'));
           }
           let valueToReturn = false;
-          if (questions[0].length === count) {
+          if (questions[0] && questions[0].length === count) {
             valueToReturn = true;
           }
           return resolve(valueToReturn);

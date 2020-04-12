@@ -40,8 +40,8 @@ class Clients extends React.Component {
     const reader = new FileReader();
     reader.onload = (() => (
       (e) => {
-        Parser.checkCSVColumnCount(e.target.result, 7).then((found) => {
-          if (!found) {
+        Parser.checkCSVColumnCount(e.target.result, 7).then((isCorrect) => {
+          if (!isCorrect) {
             alert('Bitte prüfen Sie, dass Sie die richtige Vorlage verwenden');
           } else {
             Parser.parseClients(e.target.result).then((d) => {

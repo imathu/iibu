@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { List, Table } from 'semantic-ui-react';
+import { Table, List } from 'semantic-ui-react';
 
 import { getContextById } from 'utils/context';
 import { getQuestionContent } from 'utils/question';
@@ -11,7 +11,7 @@ const QuestionList = (props) => {
   const { contexts } = adminData;
   return (
     <React.Fragment key="overall">
-      {newContexts.length > 0 && (
+      {!!newContexts && newContexts.length > 0 && (
         <React.Fragment key="contexts">
           <br /><h2>Neue Contexte</h2>
           <Table size="small">
@@ -86,7 +86,6 @@ const QuestionList = (props) => {
 QuestionList.propTypes = {
   data: PropTypes.shape({}).isRequired,
   adminData: PropTypes.shape({ contexts: PropTypes.shape({}) }).isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
   newContexts: PropTypes.array,
 };
 
