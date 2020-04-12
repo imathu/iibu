@@ -11,7 +11,7 @@ const QuestionList = (props) => {
     <Table celled padded size="small">
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell>Id #</Table.HeaderCell>
+          <Table.HeaderCell>Id</Table.HeaderCell>
           <Table.HeaderCell>Thema</Table.HeaderCell>
           <Table.HeaderCell>Skore</Table.HeaderCell>
           <Table.HeaderCell>Formulierung</Table.HeaderCell>
