@@ -13,8 +13,8 @@ const RES_500 = {
 };
 
 const mailer = {
-  // hrmove: new Mail.Mail('hrmove'),
-  // skillsgarden: new Mail.Mail('skillsgarden'),
+  hrmove: new Mail.Mail('hrmove'),
+  skillsgarden: new Mail.Mail('skillsgarden'),
   default: new Mail.Mail('hrmove'),
 };
 
