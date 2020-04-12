@@ -37,18 +37,14 @@ class PageContent extends React.Component {
       logo: null,
       logoRatio: 3,
       color: [1, 1, 1],
-      description: '',
+      descriptions: [''],
       hasDescription: false,
     };
     this.ref = null;
   }
-  componentDidMount = () => {
-    const description = localStorage.getItem('description');
-    this.setState({ description });
-  }
   setHeight = (event, data) => {
     this.setState({ height: parseInt(data.value) }); // eslint-disable-line radix
-  }
+  };
   setCover = (event, data) => {
     const { company } = (this.props.data) || 'testing';
     if (!this.state.cover) {
@@ -66,20 +62,31 @@ class PageContent extends React.Component {
     } else {
       this.setState({ cover: false, coverData: null, logo: null });
     }
-  }
+  };
   enableDescription = () => (
     this.setState(() => ({ hasDescription: !this.state.hasDescription }))
-  )
-  updateDescription = (description) => {
-    localStorage.setItem('description', description);
-    this.setState(() => ({ description }));
-  }
+  );
+
+  updateDescriptions = (description, index, deleteAll = false) => {
+    if (deleteAll) {
+      this.setState({ descriptions: [''] });
+    }
+    this.setState((state) => {
+      const newDescriptions = state.descriptions;
+      newDescriptions[index] = description;
+      localStorage.setItem('descriptions', JSON.stringify(newDescriptions));
+      return {
+        ...state,
+        descriptions: newDescriptions,
+      };
+    });
+  };
   toggleDiagramm = (dia) => {
     this.setState(() => ({ [dia]: !this.state[dia] }));
-  }
+  };
   toggleAdvanced = () => {
     this.setState({ advanced: !this.state.advanced });
-  }
+  };
   // generate a pdf, including all selected Chart types
   generatePDF = () => {
     const {
@@ -110,7 +117,7 @@ class PageContent extends React.Component {
       isFirstpage = false;
       const title = (getLanguage() === 'en') ? 'Introduction' : 'Einleitung';
       pdf.addPageContent(title);
-      pdf.addDescription(this.state.description);
+      pdf.addDescription(this.state.descriptions);
     }
     if (this.state.radar) {
       if (!isFirstpage) pdf.addPage();
@@ -126,8 +133,9 @@ class PageContent extends React.Component {
       pdf.addPageContent(title);
       const barsArray = Object.keys(barsPerContext).map(key => (barsPerContext[key]));
       barsArray.forEach((chart) => {
-        pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context);
-        pdf.addLine();
+        if (pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context)) {
+          pdf.addLine();
+        }
       });
     }
     if (this.state.barPerQuestion) {
@@ -145,7 +153,7 @@ class PageContent extends React.Component {
             pdf.addPageContent(d.state.context);
           }
           firstChart = false;
-          pdf.addBarChart(
+          const notLastOnThisPage = pdf.addBarChart(
             '',
             chart.getChart(),
             getQuestionContent(data.questions[qId], person, client),
@@ -155,7 +163,9 @@ class PageContent extends React.Component {
           if (remarks && remarks.length > 0) {
             pdf.addRemarks(remarks);
           }
-          pdf.addLine();
+          if (notLastOnThisPage) {
+            pdf.addLine();
+          }
         });
       });
     }
@@ -164,13 +174,14 @@ class PageContent extends React.Component {
       isFirstpage = false;
       const barsArray = Object.keys(lines).map(key => (lines[key]));
       barsArray.forEach((chart) => {
-        pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context);
-        pdf.addLine();
+        if (pdf.addBarChart(null, chart.barPerContext.getChart(), chart.state.context)) {
+          pdf.addLine();
+        }
       });
     }
     pdf.addToc();
     pdf.save(`${client}.pdf`);
-  }
+  };
   render() {
     const {
       selectedClient,
@@ -181,7 +192,7 @@ class PageContent extends React.Component {
       advanced,
       height,
       cover,
-      description,
+      descriptions,
       hasDescription,
     } = this.state;
     const { data } = this.props;
@@ -195,52 +206,62 @@ class PageContent extends React.Component {
           onChange={(event, d) => this.setState(() => ({ selectedClient: d.value }))}
         />
         {(selectedClient) &&
-          <React.Fragment>
-            <Button.Group>
-              <Button color={barPerContext ? 'blue' : 'grey'} onClick={() => this.toggleDiagramm('barPerContext')}>Bar/Kontext</Button>
-              <Button color={barPerQuestion ? 'blue' : 'grey'} onClick={() => this.toggleDiagramm('barPerQuestion')}>Bar/Frage</Button>
-              <Button color={radar ? 'blue' : 'grey'} onClick={() => this.toggleDiagramm('radar')}>Radar</Button>
-            </Button.Group>
-            <Button.Group floated="right">
-              <Button
-                disabled={advanced}
-                positive
-                onClick={this.generatePDF}
-              >PDF
-              </Button>
-              <Button icon labelPosition="right">
-                <Icon
-                  name={(advanced) ? 'angle double up' : 'angle double down'}
-                  onClick={this.toggleAdvanced}
-                />Optionen
-              </Button>
-            </Button.Group>
-            <Divider clearing />
-            {advanced && (
-              <AdvancedOptions
-                height={height}
-                setHeight={this.setHeight}
-                cover={cover}
-                setCover={this.setCover}
-                hasDescription={hasDescription}
-                enableDescription={this.enableDescription}
-                updateDescription={this.updateDescription}
-                description={description}
-              />
-            )}
-            {!advanced &&
-              <ClientData
-                {...this.props}
-                height={height}
-                clientId={selectedClient}
-                radar={radar}
-                barPerContext={barPerContext}
-                barPerQuestion={barPerQuestion}
-                line={line}
-                onRef={(ref) => { this.ref = ref; }}
-              />
-            }
-          </React.Fragment>
+        <React.Fragment>
+          <Button.Group>
+            <Button
+              color={barPerContext ? 'blue' : 'grey'}
+              onClick={() => this.toggleDiagramm('barPerContext')}
+            >Bar/Kontext
+            </Button>
+            <Button
+              color={barPerQuestion ? 'blue' : 'grey'}
+              onClick={() => this.toggleDiagramm('barPerQuestion')}
+            >Bar/Frage
+            </Button>
+            <Button color={radar ? 'blue' : 'grey'} onClick={() => this.toggleDiagramm('radar')}>Radar</Button>
+          </Button.Group>
+          <Button.Group floated="right">
+            <Button
+              disabled={advanced}
+              positive
+              onClick={this.generatePDF}
+            >PDF
+            </Button>
+            <Button icon labelPosition="right">
+              <Icon
+                name={(advanced) ? 'angle double up' : 'angle double down'}
+                onClick={this.toggleAdvanced}
+              />Optionen
+            </Button>
+          </Button.Group>
+          <Divider clearing />
+          {advanced && (
+            <AdvancedOptions
+              height={height}
+              setHeight={this.setHeight}
+              cover={cover}
+              setCover={this.setCover}
+              hasDescription={hasDescription}
+              enableDescription={this.enableDescription}
+              updateDescription={this.updateDescriptions}
+              descriptions={descriptions}
+            />
+          )}
+          {!advanced &&
+          <ClientData
+            {...this.props}
+            height={height}
+            clientId={selectedClient}
+            radar={radar}
+            barPerContext={barPerContext}
+            barPerQuestion={barPerQuestion}
+            line={line}
+            onRef={(ref) => {
+              this.ref = ref;
+            }}
+          />
+          }
+        </React.Fragment>
         }
       </div>
     );

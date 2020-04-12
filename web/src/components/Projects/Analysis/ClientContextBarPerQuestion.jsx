@@ -24,10 +24,12 @@ const position = (d) => {
 
 const align = (d) => {
   switch (d.dataset.label) {
-    case 'Deviation': return 'right';
+    case 'Deviation':
+      return 'right';
     case 'Votes':
       return (d.dataset.data[d.dataIndex] < 1.5) ? 'right' : 'left';
-    default: return 'left';
+    default:
+      return 'left';
   }
 };
 
@@ -53,9 +55,12 @@ const anchor = d => (
 
 const color = (d) => {
   switch (d.dataset.label) {
-    case 'Deviation': return 'white';
-    case 'Votes': return (d.dataset.data[d.dataIndex] < 1.5) ? d.dataset.backgroundColor[d.dataIndex] : 'white';
-    default: return 'black';
+    case 'Deviation':
+      return 'white';
+    case 'Votes':
+      return (d.dataset.data[d.dataIndex] < 1.5) ? d.dataset.backgroundColor[d.dataIndex] : 'white';
+    default:
+      return 'black';
   }
 };
 
@@ -97,6 +102,39 @@ const options = {
   },
 };
 
+const optionsPDF = {
+  responsive: true,
+  animation: {
+    ...options.animation,
+  },
+  legend: {
+    ...options.legend,
+  },
+  plugins: {
+    datalabels: {
+      ...options.plugins.datalabels,
+      font: {
+        ...options.plugins.datalabels.font,
+        size: 16,
+      },
+    },
+  },
+  scales: {
+    xAxes: [{
+      ticks: {
+        ...options.scales.xAxes[0].ticks,
+        fontSize: 16,
+      },
+    }],
+    yAxes: [{
+      ticks: {
+        ...options.scales.yAxes[0].ticks,
+        fontSize: 16,
+      },
+    }],
+  },
+};
+
 class ClientContextBarPerQuestion extends React.Component {
   static propTypes = {
     onRef: PropTypes.func.isRequired,
@@ -107,7 +145,8 @@ class ClientContextBarPerQuestion extends React.Component {
     clientId: PropTypes.string.isRequired,
     contextId: PropTypes.string.isRequired,
     height: PropTypes.number.isRequired,
-  }
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -127,7 +166,7 @@ class ClientContextBarPerQuestion extends React.Component {
   setContext = () => (
     this.setState(() =>
       ({ context: getContextById(this.props.adminData.contexts, this.props.contextId) }))
-  )
+  );
 
   render() {
     const {
@@ -168,30 +207,44 @@ class ClientContextBarPerQuestion extends React.Component {
                         id={qId}
                         data={barData}
                         type="horizontalBar"
-                        ref={(ref) => { this.barsPerQuestion[qId] = ref; }}
                         options={options}
                         // height={height}
                         style={{ height }}
                       />
                     </div>
+                    <div>
+                      <RC2
+                        id={`${qId}PDF`}
+                        data={barData}
+                        type="horizontalBar"
+                        options={optionsPDF}
+                        height={(69 / 200) * height}
+                        ref={(ref) => {
+                          this.barsPerQuestion[qId] = ref;
+                        }}
+                        style={{ display: 'none' }}
+                      />
+                    </div>
                   </Grid.Column>
                   {remarks.length > 0 &&
-                    <Grid.Row>
-                      <Segment style={{ paddingLeft: '20px' }}>
-                        <Header as="h3">Kommentare zu dieser Frage:</Header>
-                        <RemarksPerQuestion
-                          remarks={remarks}
-                          ref={(ref) => { this.remarksPerQuestion[qId] = ref; }}
-                        />
-                      </Segment>
-                    </Grid.Row>
+                  <Grid.Row>
+                    <Segment style={{ paddingLeft: '20px' }}>
+                      <Header as="h3">Kommentare zu dieser Frage:</Header>
+                      <RemarksPerQuestion
+                        remarks={remarks}
+                        ref={(ref) => {
+                          this.remarksPerQuestion[qId] = ref;
+                        }}
+                      />
+                    </Segment>
+                  </Grid.Row>
                   }
                 </Grid.Row>
                 <Divider />
               </React.Fragment>
             );
           })
-        }
+          }
         </Grid>
       </Segment>
     );

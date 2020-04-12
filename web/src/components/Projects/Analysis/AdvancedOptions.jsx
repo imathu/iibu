@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Header, Segment, Form, Checkbox } from 'semantic-ui-react';
+import { Header, Segment, Form, Checkbox, Button } from 'semantic-ui-react';
 import ReactQuill from 'react-quill';
 
 import 'react-quill/dist/quill.snow.css';
@@ -14,12 +14,30 @@ class AdvancedOptions extends React.Component {
     hasDescription: PropTypes.bool.isRequired,
     enableDescription: PropTypes.func.isRequired,
     updateDescription: PropTypes.func.isRequired,
-    description: PropTypes.string.isRequired,
+    descriptions: PropTypes.array.isRequired,
   };
 
-  handleChange = (value) => {
-    this.props.updateDescription(value);
-  }
+  componentDidMount = () => {
+    const existingDesciptions = localStorage.getItem('descriptions') ? JSON.parse(localStorage.getItem('descriptions')) : [' '];
+    existingDesciptions.forEach((existingDescription, index) => this.props.updateDescription(existingDescription, index));
+  };
+
+  handleChange = (value, index) => {
+    this.props.updateDescription(value, index);
+  };
+
+  addNewPage = () => {
+    const newIndex = this.props.descriptions.length;
+    this.props.updateDescription(' ', newIndex);
+  };
+
+  removePage = (number) => {
+    const existingDescriptions = this.props.descriptions;
+    existingDescriptions.splice(number, 1);
+    existingDescriptions.forEach((desc, index) => {
+      this.props.updateDescription(desc, index, index === 0);
+    });
+  };
 
   render() {
     const {
@@ -29,7 +47,7 @@ class AdvancedOptions extends React.Component {
       enableDescription,
       cover,
       setCover,
-      description,
+      descriptions,
     } = this.props;
     return (
       <Segment>
@@ -63,11 +81,69 @@ class AdvancedOptions extends React.Component {
               onChange={enableDescription}
             />
           </Form.Field>
-          {hasDescription &&
-            <React.Fragment>
-              <ReactQuill value={description} onChange={this.handleChange} />
-            </React.Fragment>
-          }
+          <div className="descriptions">
+            {hasDescription && descriptions && descriptions[0] && (
+              // Kein for loop weil sonst bei jeder Änderung des Descriptions
+              // alles neu instanziert wird und das zu einem Memory Leak führt
+              <div className="pageEditor">
+                <div>Seite 1 <button onClick={() => this.removePage(0)}>Löschen</button></div>
+                <ReactQuill
+                  value={descriptions[0]}
+                  onChange={value => this.handleChange(value, 0)}
+                />
+              </div>
+            )}
+            {hasDescription && descriptions && descriptions[1] && (
+              <div className="pageEditor">
+                <div>Seite 2 <button onClick={() => this.removePage(1)}>Löschen</button></div>
+                <ReactQuill
+                  value={descriptions[1]}
+                  onChange={value => this.handleChange(value, 1)}
+                />
+              </div>
+            )}
+            {hasDescription && descriptions && descriptions[2] && (
+              <div className="pageEditor">
+                <div>Seite 3 <button onClick={() => this.removePage(2)}>Löschen</button></div>
+                <ReactQuill
+                  value={descriptions[2]}
+                  onChange={value => this.handleChange(value, 2)}
+                />
+              </div>
+            )}
+            {hasDescription && descriptions && descriptions[3] && (
+              <div className="pageEditor">
+                <div>Seite 4 <button onClick={() => this.removePage(3)}>Löschen</button></div>
+                <ReactQuill
+                  value={descriptions[3]}
+                  onChange={value => this.handleChange(value, 3)}
+                />
+              </div>
+            )}
+            {hasDescription && descriptions && descriptions[4] && (
+              <div className="pageEditor">
+                <div>Seite 5 <button onClick={() => this.removePage(4)}>Löschen</button></div>
+                <ReactQuill
+                  value={descriptions[4]}
+                  onChange={value => this.handleChange(value, 4)}
+                />
+              </div>
+            )}
+            {hasDescription && descriptions && descriptions[5] && (
+              <div className="pageEditor">
+                <div>Seite 6 <button onClick={() => this.removePage(5)}>Löschen</button></div>
+                <ReactQuill
+                  value={descriptions[5]}
+                  onChange={value => this.handleChange(value, 5)}
+                />
+              </div>
+            )}
+            {hasDescription && descriptions.length < 6 && (
+              <Button onClick={() => this.addNewPage()}>
+                Weitere Seite hinzufügen
+              </Button>
+            )}
+          </div>
         </Segment>
       </Segment>
     );
