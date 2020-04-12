@@ -171,7 +171,7 @@ export function questionCSV2Context(questionArray) {
   const contexts = [];
 
   questionArray.forEach((line) => {
-    if (line[questionCSVMap.context_de] !== '' || line[questionCSVMap.contextDescription_de] !== '' || line[questionCSVMap.contextDescription_en]) {
+    if (line[questionCSVMap.context_de] !== '' || line[questionCSVMap.contextDescription_de] !== '') {
       const newContext = {
         id: line[questionCSVMap.context_de],
         de: line[questionCSVMap.contextDescription_de],
