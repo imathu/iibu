@@ -13,7 +13,7 @@ const QuestionList = (props) => {
     <React.Fragment key="overall">
       {newContexts.length > 0 && (
         <React.Fragment key="contexts">
-          <h2>Neue Contexte</h2>
+          <h2>Neue Contexte ;)</h2>
           <Table size="small">
             <Table.Header>
               <Table.Row>
