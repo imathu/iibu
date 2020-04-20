@@ -1,6 +1,5 @@
 const express = require('express');
 const enforce = require('express-sslify');
-const admin = require('firebase-admin');
 
 
 const app = express();
@@ -29,17 +28,6 @@ app.route('/api/v1/:projectId/answers/:feedbackerId')
 
 app.route('/api/v1/:company/:projectId/mail')
   .post(feedbacker.sendMail);
-
-app.route('/api/:id')
-  .get((req, res) => {
-    console.log('request', req.params.id);
-    const customClaims = {
-      admin: true,
-    };
-    admin.auth().setCustomUserClaims(req.params.id, customClaims).then(() => console.log('customClaim set')).catch(err => console.log('Error', err));
-    res.status(202);
-    res.json(req.params);
-  });
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
