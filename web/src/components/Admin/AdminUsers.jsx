@@ -5,7 +5,7 @@ import { Table, Button } from 'semantic-ui-react';
 
 import * as routes from 'constants/routes';
 
-import { db } from '../../firebase';
+import { db, firebase } from '../../firebase';
 
 class AdminUsers extends React.Component {
   static propTypes = {
@@ -42,6 +42,21 @@ class AdminUsers extends React.Component {
       });
     event.preventDefault();
   }
+
+  onSetClaim = (event, id) => {
+    console.log(id);
+    const API = `/api/${id}`;
+    firebase.auth.currentUser.getIdToken(true).then((idToken) => {
+      fetch(API, { headers: { Authorization: idToken } })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('not authorized');
+        }).then(json => console.log('Respons', json));
+    });
+  }
+
   render() {
     const { admins } = this.state;
     return (
@@ -63,6 +78,7 @@ class AdminUsers extends React.Component {
                 <Table.Cell>{admin.email}</Table.Cell>
                 <Table.Cell>{admin.username}</Table.Cell>
                 <Table.Cell><Button size="tiny" onClick={ev => this.onAdminRemove(ev, admin.id)}>remove</Button></Table.Cell>
+                <Table.Cell><Button size="tiny" onClick={ev => this.onSetClaim(ev, admin.id)}>set Claim</Button> </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
