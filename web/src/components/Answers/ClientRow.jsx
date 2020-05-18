@@ -20,6 +20,7 @@ class ClientRow extends React.Component {
     projectId: PropTypes.string.isRequired,
     client: PropTypes.shape({
       id: PropTypes.string,
+      gender: PropTypes.string,
     }).isRequired,
     roleId: PropTypes.string.isRequired,
   }
@@ -52,7 +53,7 @@ class ClientRow extends React.Component {
                 <Question
                   question={questions[id]}
                   roleId={roleId}
-                  gender={feedbacker.gender}
+                  gender={client.gender}
                   language={language}
                 />
               )}
