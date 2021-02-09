@@ -9,7 +9,6 @@ import * as routes from 'constants/routes';
 import Content from 'components/Content';
 
 import AuthUserContext from 'components/AuthUserContext';
-
 import { auth as fbAuth } from '../../firebase';
 
 const AdminMenu = () => (
