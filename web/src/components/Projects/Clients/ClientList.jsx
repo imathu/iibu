@@ -22,7 +22,7 @@ const ClientList = ({
         <Table.Row>
           <Table.HeaderCell>Name</Table.HeaderCell>
           <Table.HeaderCell>Vorname</Table.HeaderCell>
-          <Table.HeaderCell>Mail</Table.HeaderCell>
+          <Table.HeaderCell>Mail Adresse</Table.HeaderCell>
           <Table.HeaderCell>Geschlecht</Table.HeaderCell>
           <Table.HeaderCell />
         </Table.Row>
